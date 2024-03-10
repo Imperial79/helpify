@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  margin: 0;
+  padding: 0;
+}
+
+.pageTitle {
+  @apply text-black md:text-5xl text-4xl;
+}
+
+.navLink {
+  @apply px-3 py-1.5 hover:bg-gray-100 rounded-full text-sm truncate;
+}
+
+.active {
+  @apply bg-blue-700 text-white font-medium hover:bg-blue-700;
+}
