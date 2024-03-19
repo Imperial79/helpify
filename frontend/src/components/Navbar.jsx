@@ -10,6 +10,12 @@ export default function Navbar() {
         <NavLink to="/" className="navLink">
           Home
         </NavLink>
+        <NavLink to="/register" className="navLink">
+          Register
+        </NavLink>
+        <NavLink to="/login" className="navLink">
+          Login
+        </NavLink>
         <NavLink to="/contact" className="navLink">
           Contact Us
         </NavLink>

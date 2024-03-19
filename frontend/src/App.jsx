@@ -5,8 +5,11 @@ import ContentArea from "./components/ContentArea";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { Routes, Route } from "react-router-dom";
+import { Register } from "./Screens/Authentication/Register";
+import { Login } from "./Screens/Authentication/Login";
 
 import Geolocation from "./Screens/GeoLocation";
+
 
 function App() {
   return (
@@ -15,6 +18,8 @@ function App() {
       <ContentArea>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/geo" element={<Geolocation />} />
