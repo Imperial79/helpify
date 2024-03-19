@@ -6,6 +6,8 @@ import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { Routes, Route } from "react-router-dom";
 
+import Geolocation from "./Screens/GeoLocation";
+
 function App() {
   return (
     <div className="flex flex-col justify-between min-h-screen">
@@ -15,6 +17,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/about" element={<AboutUs />} />
+          <Route path="/geo" element={<Geolocation />} />
         </Routes>
       </ContentArea>
       <Footer />
