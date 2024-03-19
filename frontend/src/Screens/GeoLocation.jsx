@@ -2,30 +2,6 @@ import React from "react";
 import { useGeolocated } from "react-geolocated";
 
 
-// function getLocation() {
-//   if (!navigator.geolocation) {
-//     console.log('Geolocation API not supported by this browser.');
-//   } else {
-//     console.log('Checking location...');
-//     navigator.geolocation.getCurrentPosition(success, error);
-//   }
-// }
-
-// // function success(position) {
-// //   console.log(position);
-// // }
-
-// function success(position) {
-//   console.log('Latitude:', position.coords.latitude);
-//   console.log('Longitude:', position.coords.longitude);
-// }
-
-// function error() {
-//   console.log('Geolocation error!');
-// }
-
-// document.getElementById('get-location').addEventListener('click', getLocation);
-
 function Geolocation() {
 
     const { coords, isGeolocationAvailable, isGeolocationEnabled } =
