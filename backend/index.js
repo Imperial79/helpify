@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import { userRouter } from "./routes/Users.js";
+import { postRouter } from "./routes/Post.js";
+
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -11,6 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use("/users", userRouter);
+app.use("/posts", postRouter);
 
 mongoose
   .connect(
