@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
@@ -17,7 +17,7 @@ router.post('/register',async (req,res)=>{
             return res.json({message: "User already exists!"});
         }
         const hashPWD = bcrypt.hash(password.toString(),10);
-        const newUser = new UserModel({name,email,password,latitude,longitude});
+        const newUser = new UserModel({name,email,hashPWD,latitude,longitude});
         await newUser.save();
         res.status(200).json({message:"success"});
     }catch(e){
