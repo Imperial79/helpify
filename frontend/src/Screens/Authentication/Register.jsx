@@ -8,7 +8,7 @@ export const Register = () => {
   const [password, setPassword] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
-  const [displayAddress, setDisplayAddress] = useState("");
+  const [addressList, setAddressList] = useState([]);
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
@@ -30,11 +30,18 @@ export const Register = () => {
           // console.log("first");
           // console.log(res1);
 
+          // var res2 = await axios.get(
+          //   `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${coords.latitude}&lon=${coords.longitude}&zoom=18&addressdetails=1`
+          // );
+          // setDisplayAddress(res2.data.display_name);
           var res2 = await axios.get(
-            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${coords.latitude}&lon=${coords.longitude}&zoom=18&addressdetails=1`
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=AIzaSyCTmYUgaN2Y2Yhs9ALqa8nXjhTD93ibMyU`
           );
-          setDisplayAddress(res2.data.display_name);
-          console.log(res2.data);
+          // setDisplayAddress(res2.data.display_name);
+          res2.data.results.map((_, index) => {
+            // console.log(res2.data.results[index].formatted_address);
+            setAddressList(res2.data.results);
+          });
         } else {
           console.error("Geolocation is not enabled.");
         }
@@ -121,7 +128,10 @@ export const Register = () => {
           />
         </div>
 
-        <h1>{displayAddress}</h1>
+        {addressList &&
+          addressList.map((data, index) => (
+            <li key={index}>{data.formatted_address}</li>
+          ))}
 
         <p>{latitude}</p>
         <p>{longitude}</p>
