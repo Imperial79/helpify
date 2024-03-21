@@ -35,7 +35,7 @@ export const Register = () => {
           // );
           // setDisplayAddress(res2.data.display_name);
           var res2 = await axios.get(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=AIzaSyCTmYUgaN2Y2Yhs9ALqa8nXjhTD93ibMyU`
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=${process.env.GMAPS_API}`
           );
           // setDisplayAddress(res2.data.display_name);
           res2.data.results.map((_, index) => {
