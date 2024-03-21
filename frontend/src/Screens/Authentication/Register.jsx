@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useGeolocated } from "react-geolocated";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const Register = () => {
   const [name, setName] = useState("");
@@ -9,7 +12,7 @@ export const Register = () => {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [addressList, setAddressList] = useState([]);
-
+  console.log(process.env.GMAPS_API);
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
       positionOptions: {
@@ -35,7 +38,7 @@ export const Register = () => {
           // );
           // setDisplayAddress(res2.data.display_name);
           var res2 = await axios.get(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=${process.env.GMAPS_API}`
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=${process.env.REACT_APP_GMAPS_API}`
           );
           // setDisplayAddress(res2.data.display_name);
           res2.data.results.map((_, index) => {
