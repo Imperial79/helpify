@@ -42,6 +42,8 @@ export const Register = () => {
             // console.log(res2.data.results[index].formatted_address);
             setAddressList(res2.data.results);
           });
+
+          console.log(res2);
         } else {
           console.error("Geolocation is not enabled.");
         }
@@ -129,9 +131,25 @@ export const Register = () => {
         </div>
 
         {addressList &&
-          addressList.map((data, index) => (
-            <li key={index}>{data.formatted_address}</li>
-          ))}
+          addressList.map((data, index) =>
+            data.types[0] == "administrative_area_level_4" ? (
+              <li key={index} className="flex flex-col gap-2">
+                <div>{data.formatted_address}</div>
+                <div>
+                  <li>
+                    NorthEast - {data.geometry.bounds.northeast.lat},{" "}
+                    {data.geometry.bounds.northeast.lng}
+                  </li>
+                  <li>
+                    Southwest - {data.geometry.bounds.southwest.lat},{" "}
+                    {data.geometry.bounds.southwest.lng}
+                  </li>
+                </div>
+              </li>
+            ) : (
+              <></>
+            )
+          )}
 
         <p>{latitude}</p>
         <p>{longitude}</p>
