@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useGeolocated } from "react-geolocated";
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
+=======
+import { GMAPS_API } from "../../api_key/constants";
+>>>>>>> 3002d445cd9dc7e3bf886402250e90f7ef7ff950
 
 export const Register = () => {
   const [name, setName] = useState("");
@@ -26,24 +30,26 @@ export const Register = () => {
         if (isGeolocationEnabled) {
           setLatitude(coords.latitude);
           setLongitude(coords.longitude);
-          // var res1 = await axios.get(
-          //   `https://geokeo.com/geocode/v1/reverse.php?lat=${coords.latitude}&lng=${coords.longitude}&api=ce3d5ebc5bde05ab840e4189d41ea6ea`
-          // );
-          // console.log("first");
-          // console.log(res1);
 
-          // var res2 = await axios.get(
-          //   `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${coords.latitude}&lon=${coords.longitude}&zoom=18&addressdetails=1`
-          // );
-          // setDisplayAddress(res2.data.display_name);
           var res2 = await axios.get(
+<<<<<<< HEAD
             `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=${import.meta.env.VITE_GMAPS_API}`
+=======
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=${GMAPS_API}`
+>>>>>>> 3002d445cd9dc7e3bf886402250e90f7ef7ff950
           );
-          // setDisplayAddress(res2.data.display_name);
+
           res2.data.results.map((_, index) => {
-            // console.log(res2.data.results[index].formatted_address);
             setAddressList(res2.data.results);
           });
+
+          // ------------ For checking if I am inside a bound or not
+
+          //   if (your_latitude > SW_latitude and your_latitude < NE_latitude and
+          //     your_longitude > SW_longitude and your_longitude < NE_longitude):
+          //   print("Your point is inside the bounds!")
+          // else:
+          //   print("Your point is outside the bounds.")
 
           console.log(res2);
         } else {
@@ -55,9 +61,9 @@ export const Register = () => {
     }
   };
 
-  useEffect(() => {
-    handleGetLocation();
-  }, [coords]);
+  // useEffect(() => {
+  //   handleGetLocation();
+  // }, [coords]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -139,14 +145,14 @@ export const Register = () => {
               <li key={index} className="flex flex-col gap-2">
                 <div>{data.formatted_address}</div>
                 <div>
-                  <li>
+                  <p>
                     NorthEast - {data.geometry.bounds.northeast.lat},{" "}
                     {data.geometry.bounds.northeast.lng}
-                  </li>
-                  <li>
+                  </p>
+                  <p>
                     Southwest - {data.geometry.bounds.southwest.lat},{" "}
                     {data.geometry.bounds.southwest.lng}
-                  </li>
+                  </p>
                 </div>
               </li>
             ) : (
@@ -156,6 +162,10 @@ export const Register = () => {
 
         <p>{latitude}</p>
         <p>{longitude}</p>
+
+        <button onClick={handleGetLocation} className="kTextButton">
+          Get My Location
+        </button>
         <button type="submit" className="kButton w-full">
           Create Account
         </button>

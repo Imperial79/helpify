@@ -2,7 +2,7 @@ import welcomeImg from "../assets/welcome.svg";
 
 function HomePage() {
   return (
-    <>
+    <div className="py-5">
       <section
         id="hero"
         className="grid md:grid-cols-2 grid-cols-1 gap-5 items-center "
@@ -32,7 +32,7 @@ function HomePage() {
         Voluptatem accusamus nesciunt voluptate, provident sunt, ullam vero
         fugit aspernatur, iste ipsam error?
       </div>
-    </>
+    </div>
   );
 }
 

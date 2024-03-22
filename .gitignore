@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+frontend/src/api_key/constants.jsx
 
 # Editor directories and files
 .vscode/*
