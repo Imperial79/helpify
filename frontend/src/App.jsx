@@ -7,9 +7,7 @@ import Navbar from "./components/Navbar";
 import { Routes, Route } from "react-router-dom";
 import { Register } from "./Screens/Authentication/Register";
 import { Login } from "./Screens/Authentication/Login";
-
 import Geolocation from "./Screens/GeoLocation";
-
 
 function App() {
   return (
