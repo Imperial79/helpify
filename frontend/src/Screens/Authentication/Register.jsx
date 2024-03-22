@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useGeolocated } from "react-geolocated";
-<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
-=======
-import { GMAPS_API } from "../../api_key/constants";
->>>>>>> 3002d445cd9dc7e3bf886402250e90f7ef7ff950
 
 export const Register = () => {
   const [name, setName] = useState("");
@@ -32,11 +28,7 @@ export const Register = () => {
           setLongitude(coords.longitude);
 
           var res2 = await axios.get(
-<<<<<<< HEAD
             `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=${import.meta.env.VITE_GMAPS_API}`
-=======
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=${GMAPS_API}`
->>>>>>> 3002d445cd9dc7e3bf886402250e90f7ef7ff950
           );
 
           res2.data.results.map((_, index) => {
