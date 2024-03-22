@@ -3,6 +3,11 @@ import { Link, NavLink } from "react-router-dom";
 
 export default function Navbar() {
   const [showMenu, setshowMenu] = useState(false);
+
+  const handleMenuBtnClick = () => {
+    setshowMenu(false);
+  };
+
   return (
     <div className="bg-white w-full h-[80px] flex items-center px-5 justify-between fixed border border-b-2">
       <Link to="/" className="text-lg font-medium">
@@ -23,6 +28,9 @@ export default function Navbar() {
         </NavLink>
         <NavLink to="/about" className="navLink">
           About Us
+        </NavLink>
+        <NavLink to="/profile" className="navLink">
+          Username
         </NavLink>
       </div>
 
@@ -50,30 +58,65 @@ export default function Navbar() {
 
       {showMenu ? (
         <div className="menu">
-          <Link to="/" className="menuBtn">
-            <img src="/home.svg" alt="home" className="h-6 w-6" />
-            <p>Home</p>
+          <Link
+            onClick={handleMenuBtnClick}
+            to={"/profile"}
+            className="menuBtn"
+          >
+            <div className="h-[20px] w-[20px] overflow-hidden rounded-full">
+              <img
+                src={
+                  "https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj"
+                }
+                alt={"User"}
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <p>{"Username"}</p>
           </Link>
-          <Link to="/register" className="menuBtn">
-            <img src="/register.svg" alt="register" className="h-6 w-6" />
-            <p>Register</p>
-          </Link>
-          <Link to="/login" className="menuBtn">
-            <img src="/user.svg" alt="login" className="h-6 w-6" />
-            <p>Login</p>
-          </Link>
-          <Link to="/contact" className="menuBtn">
-            <img src="/contact.svg" alt="contact" className="h-6 w-6" />
-            <p>Contact Us</p>
-          </Link>
-          <Link to="/about" className="menuBtn">
-            <img src="/about.svg" alt="about" className="h-6 w-6" />
-            <p>About Us</p>
-          </Link>
+          <HomeMenuLink
+            onClick={handleMenuBtnClick}
+            to="/"
+            label="Home"
+            imgSrc="/home.svg"
+          />
+          <HomeMenuLink
+            onClick={handleMenuBtnClick}
+            to="/register"
+            label="Register"
+            imgSrc="/register.svg"
+          />
+          <HomeMenuLink
+            onClick={handleMenuBtnClick}
+            to="/login"
+            label="Login"
+            imgSrc="/user.svg"
+          />
+          <HomeMenuLink
+            onClick={handleMenuBtnClick}
+            to="/contact"
+            label="Contact Us"
+            imgSrc="/contact.svg"
+          />
+          <HomeMenuLink
+            onClick={handleMenuBtnClick}
+            to="/about"
+            label="About Us"
+            imgSrc="/about.svg"
+          />
         </div>
       ) : (
         <></>
       )}
     </div>
+  );
+}
+
+function HomeMenuLink({ onClick, to, imgSrc, label }) {
+  return (
+    <Link onClick={onClick} to={to} className="menuBtn">
+      <img src={imgSrc} alt={label} className="h-[20px] w-[20px]" />
+      <p className="text-[15px] tracking-wide">{label}</p>
+    </Link>
   );
 }

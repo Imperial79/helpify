@@ -52,9 +52,9 @@ export const Register = () => {
     }
   };
 
-  useEffect(() => {
-    handleGetLocation();
-  }, [coords]);
+  // useEffect(() => {
+  //   handleGetLocation();
+  // }, [coords]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -152,6 +152,10 @@ export const Register = () => {
 
         <p>{latitude}</p>
         <p>{longitude}</p>
+
+        <button onClick={handleGetLocation} className="kTextButton">
+          Get My Location
+        </button>
         <button type="submit" className="kButton w-full">
           Create Account
         </button>
