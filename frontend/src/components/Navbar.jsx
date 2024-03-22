@@ -1,29 +1,53 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 export default function Navbar() {
   const [showMenu, setshowMenu] = useState(false);
+  const [cookies, setCookies] = useCookies(["token"]);
+  const navigate = useNavigate();
+  const Logout = () => {
+    setCookies("token", "");
+    window.localStorage.removeItem("userID");
+    navigate("/login");
+  };
   return (
     <div className="bg-white w-full h-[80px] flex items-center px-5 justify-between fixed border border-b-2">
       <Link to="/" className="text-lg font-medium">
         Logo
       </Link>
       <div className="md:flex items-center gap-3 bg-gray-100 rounded-full p-2 hidden">
-        <NavLink to="/" className="navLink">
-          Home
-        </NavLink>
-        <NavLink to="/register" className="navLink">
-          Register
-        </NavLink>
-        <NavLink to="/login" className="navLink">
-          Login
-        </NavLink>
-        <NavLink to="/contact" className="navLink">
-          Contact Us
-        </NavLink>
-        <NavLink to="/about" className="navLink">
-          About Us
-        </NavLink>
+        {cookies.token ? (
+          <>
+            <NavLink to="/profile" className="navLink">
+              My Profile
+            </NavLink>
+            <button
+              onClick={Logout}
+              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <NavLink to="/" className="navLink">
+              Home
+            </NavLink>
+            <NavLink to="/register" className="navLink">
+              Register
+            </NavLink>
+            <NavLink to="/login" className="navLink">
+              Login
+            </NavLink>
+            <NavLink to="/contact" className="navLink">
+              Contact Us
+            </NavLink>
+            <NavLink to="/about" className="navLink">
+              About Us
+            </NavLink>
+          </>
+        )}
       </div>
 
       <button
@@ -50,26 +74,43 @@ export default function Navbar() {
 
       {showMenu ? (
         <div className="menu">
-          <Link to="/" className="menuBtn">
-            <img src="/home.svg" alt="home" className="h-6 w-6" />
-            <p>Home</p>
-          </Link>
-          <Link to="/register" className="menuBtn">
-            <img src="/register.svg" alt="register" className="h-6 w-6" />
-            <p>Register</p>
-          </Link>
-          <Link to="/login" className="menuBtn">
-            <img src="/user.svg" alt="login" className="h-6 w-6" />
-            <p>Login</p>
-          </Link>
-          <Link to="/contact" className="menuBtn">
-            <img src="/contact.svg" alt="contact" className="h-6 w-6" />
-            <p>Contact Us</p>
-          </Link>
-          <Link to="/about" className="menuBtn">
-            <img src="/about.svg" alt="about" className="h-6 w-6" />
-            <p>About Us</p>
-          </Link>
+          {cookies.token ? (
+            <>
+              <Link to="/profile" className="menuBtn">
+                <img src="/home.svg" alt="profile" className="h-6 w-6" />
+                <p>My Profile</p>
+              </Link>
+              <button
+                onClick={Logout}
+                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/" className="menuBtn">
+                <img src="/home.svg" alt="home" className="h-6 w-6" />
+                <p>Home</p>
+              </Link>
+              <Link to="/register" className="menuBtn">
+                <img src="/register.svg" alt="register" className="h-6 w-6" />
+                <p>Register</p>
+              </Link>
+              <Link to="/login" className="menuBtn">
+                <img src="/user.svg" alt="login" className="h-6 w-6" />
+                <p>Login</p>
+              </Link>
+              <Link to="/contact" className="menuBtn">
+                <img src="/contact.svg" alt="contact" className="h-6 w-6" />
+                <p>Contact Us</p>
+              </Link>
+              <Link to="/about" className="menuBtn">
+                <img src="/about.svg" alt="about" className="h-6 w-6" />
+                <p>About Us</p>
+              </Link>
+            </>
+          )}
         </div>
       ) : (
         <></>

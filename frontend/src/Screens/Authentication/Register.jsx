@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useGeolocated } from "react-geolocated";
+import { useNavigate } from "react-router-dom";
 
 export const Register = () => {
   const [name, setName] = useState("");
@@ -9,6 +10,7 @@ export const Register = () => {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [addressList, setAddressList] = useState([]);
+  const navigate = useNavigate();
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
@@ -35,7 +37,7 @@ export const Register = () => {
           // );
           // setDisplayAddress(res2.data.display_name);
           var res2 = await axios.get(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=AIzaSyCTmYUgaN2Y2Yhs9ALqa8nXjhTD93ibMyU`
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=${import.meta.env.VITE_GMAPS_API}`
           );
           // setDisplayAddress(res2.data.display_name);
           res2.data.results.map((_, index) => {
@@ -74,7 +76,8 @@ export const Register = () => {
         latitude,
         longitude,
       });
-      alert("registered");
+      // alert("registered");
+      navigate('/login');
     } catch (e) {
       console.log(e);
     }
