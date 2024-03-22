@@ -6,14 +6,19 @@ const Profile = () => {
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
 
+  const [editedUser, setEditedUser] = useState({ ...user });
+
   const navigate = useNavigate();
   const userID = window.localStorage.getItem("userID");
   if (!userID) {
     navigate("/login");
   }
   const [showPostModal, setShowPostModal] = useState(false);
+  const [showEditUserModal, setShowEditUserModal] = useState(false);
   const [postContent, setPostContent] = useState("");
   const [postTitle, setPostTitle] = useState("");
+
+  //Add Post function
   const handlePostSubmit = () => {
     setShowPostModal(false);
     
@@ -34,7 +39,26 @@ const Profile = () => {
     };
     createPosts();
   };
+  
+  //Edit User functions
+  const handleEditSubmit = async () => {
+    try {
+      // Make a PUT request to update the user's profile
+      await axios.put(`http://localhost:8080/users/edit-user/${userID}`, editedUser);
 
+      // Update the user state with the edited data
+      setUser(editedUser);
+      setShowEditUserModal(false);
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+    }
+  };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedUser((prevUser) => ({ ...prevUser, [name]: value }));
+  };
+
+  //fetching User Data and User's Posts
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -73,7 +97,7 @@ const Profile = () => {
           </div>
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold mb-2">{user.name}</h2>
-            {/* <p className="text-gray-600">@{user.name.replaceAll(" ","").toLowerCase()}</p> */}
+            <p className="text-gray-600">{user.email}</p>
           </div>
           <div className="mb-6">
             <p className="text-gray-700 mb-2">Bio:</p>
@@ -89,7 +113,7 @@ const Profile = () => {
           </div>
 
           <div className="flex justify-center">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onClick={() => setShowEditUserModal(true)}>
               Edit Profile
             </button>
           </div>
@@ -147,7 +171,7 @@ const Profile = () => {
                 <div className="flex justify-end mt-4">
                   <button
                     className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
-                    onClick={handlePostSubmit}
+                    onClick={handleEditUser}
                   >
                     Post
                   </button>
@@ -161,6 +185,92 @@ const Profile = () => {
               </div>
             </div>
           )}
+          {showEditUserModal && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-lg p-8 max-w-md">
+
+              <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
+              <div className="mb-4">
+                <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={editedUser.name}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={editedUser.email}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              {/* <div className="mb-4">
+                <label htmlFor="bio" className="block text-gray-700 font-bold mb-2">
+                  Bio
+                </label>
+                <textarea
+                  id="bio"
+                  name="bio"
+                  value={editedUser.bio}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                ></textarea>
+              </div>
+              <div className="mb-4">
+                <label htmlFor="location" className="block text-gray-700 font-bold mb-2">
+                  Location
+                </label>
+                <input
+                  type="text"
+                  id="location"
+                  name="location"
+                  value={editedUser.location}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="website" className="block text-gray-700 font-bold mb-2">
+                  Website
+                </label>
+                <input
+                  type="text"
+                  id="website"
+                  name="website"
+                  value={editedUser.website}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div> */}
+              <div className="flex justify-end mt-4">
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
+                  onClick={handleEditSubmit}
+                >
+                  Save
+                </button>
+                <button
+                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                  onClick={() => setShowEditUserModal(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         </div>
       </div>
     </div>
