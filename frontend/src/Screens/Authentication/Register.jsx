@@ -28,7 +28,9 @@ export const Register = () => {
           setLongitude(coords.longitude);
 
           var res2 = await axios.get(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=${import.meta.env.VITE_GMAPS_API}`
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${
+              coords.latitude
+            },${coords.longitude}&key=${import.meta.env.VITE_GMAPS_API}`
           );
 
           res2.data.results.map((_, index) => {
@@ -75,93 +77,98 @@ export const Register = () => {
         longitude,
       });
       // alert("registered");
-      navigate('/login');
+      navigate("/login");
     } catch (e) {
       console.log(e);
     }
   };
 
   return (
-    <div>
-      <div className="pageTitle">Create an account</div>
-      <p className="mt-2 text-gray-500 md:text-xl text-sm mb-5">
-        Enter your details below to create an account
-      </p>
-      <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-5">
-        <div>
-          <label htmlFor="name" className="block font-semibold mb-1">
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Eg. John Doe"
-            className="textfield"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="email" className="block font-semibold mb-1">
-            E-mail
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="textfield"
-            placeholder="Eg. johndoe@mail.com"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password" className="block font-semibold mb-1">
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="textfield"
-            placeholder="Your password here ..."
-            required
-          />
-        </div>
+    <div className="grid grid-cols-2 gap-10 items-center">
+      <div className="rounded-xl h-[300px] w-[300px]">
+        <img src="/register-hero.svg" alt="" />
+      </div>
+      <div className="p-10">
+        <div className="pageTitle">Create an account</div>
+        <p className="mt-2 text-gray-500 md:text-xl text-sm mb-5">
+          Enter your details below to create an account
+        </p>
+        <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-5">
+          <div>
+            <label htmlFor="name" className="block font-semibold mb-1">
+              Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Eg. John Doe"
+              className="textfield"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="email" className="block font-semibold mb-1">
+              E-mail
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="textfield"
+              placeholder="Eg. johndoe@mail.com"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="block font-semibold mb-1">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="textfield"
+              placeholder="Your password here ..."
+              required
+            />
+          </div>
 
-        {addressList &&
-          addressList.map((data, index) =>
-            data.types[0] == "administrative_area_level_4" ? (
-              <li key={index} className="flex flex-col gap-2">
-                <div>{data.formatted_address}</div>
-                <div>
-                  <p>
-                    NorthEast - {data.geometry.bounds.northeast.lat},{" "}
-                    {data.geometry.bounds.northeast.lng}
-                  </p>
-                  <p>
-                    Southwest - {data.geometry.bounds.southwest.lat},{" "}
-                    {data.geometry.bounds.southwest.lng}
-                  </p>
-                </div>
-              </li>
-            ) : (
-              <></>
-            )
-          )}
+          {addressList &&
+            addressList.map((data, index) =>
+              data.types[0] == "administrative_area_level_4" ? (
+                <li key={index} className="flex flex-col gap-2">
+                  <div>{data.formatted_address}</div>
+                  <div>
+                    <p>
+                      NorthEast - {data.geometry.bounds.northeast.lat},{" "}
+                      {data.geometry.bounds.northeast.lng}
+                    </p>
+                    <p>
+                      Southwest - {data.geometry.bounds.southwest.lat},{" "}
+                      {data.geometry.bounds.southwest.lng}
+                    </p>
+                  </div>
+                </li>
+              ) : (
+                <></>
+              )
+            )}
 
-        <p>{latitude}</p>
-        <p>{longitude}</p>
+          <p>{latitude}</p>
+          <p>{longitude}</p>
 
-        <button onClick={handleGetLocation} className="kTextButton">
-          Get My Location
-        </button>
-        <button type="submit" className="kButton w-full">
-          Create Account
-        </button>
-      </form>
+          <button onClick={handleGetLocation} className="kTextButton">
+            Get My Location
+          </button>
+          <button type="submit" className="kButton w-full">
+            Create Account
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
