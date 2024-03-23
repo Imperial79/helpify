@@ -8,25 +8,28 @@ import { Routes, Route } from "react-router-dom";
 import { Register } from "./Screens/Authentication/Register";
 import { Login } from "./Screens/Authentication/Login";
 import Geolocation from "./Screens/GeoLocation";
-import Profile from "./Screens/Profile/Profile";
+import Profile from "./Screens/Profile";
+import ContextProvider from "./context/ContextProvider";
 
 function App() {
   return (
-    <div className="flex flex-col justify-between min-h-screen">
-      <Navbar />
-      <ContentArea>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/contact" element={<ContactUs />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/geo" element={<Geolocation />} />
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
-      </ContentArea>
-      <Footer />
-    </div>
+    <ContextProvider>
+      <div className="flex flex-col justify-between min-h-screen">
+        <Navbar />
+        <ContentArea>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/contact" element={<ContactUs />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/geo" element={<Geolocation />} />
+            <Route path="/profile" element={<Profile />} />
+          </Routes>
+        </ContentArea>
+        <Footer />
+      </div>
+    </ContextProvider>
   );
 }
 

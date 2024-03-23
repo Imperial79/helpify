@@ -84,11 +84,11 @@ export const Register = () => {
   };
 
   return (
-    <div className="grid grid-cols-2 gap-10 items-center">
+    <div className="grid md:grid-cols-2 grid-cols-1 gap-10 items-center">
       <div className="rounded-xl h-[300px] w-[300px]">
         <img src="/register-hero.svg" alt="" />
       </div>
-      <div className="p-10">
+      <div className="p-2">
         <div className="pageTitle">Create an account</div>
         <p className="mt-2 text-gray-500 md:text-xl text-sm mb-5">
           Enter your details below to create an account
