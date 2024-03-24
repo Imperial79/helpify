@@ -4,37 +4,96 @@ import Scaffold from "../components/Scaffold";
 function HomePage() {
   return (
     <Scaffold isLoading={false}>
-      <div className="py-5">
-        <section
-          id="hero"
-          className="grid md:grid-cols-2 grid-cols-1 gap-5 items-center "
-        >
-          <p className="p-5 bg-gray-50 rounded-xl md:order-first order-last">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Deleniti
-            praesentium facilis a quidem pariatur esse. Dolor, sint nostrum ipsa
-            earum doloremque nulla, sit, doloribus a iste corrupti eius deserunt
-            placeat. Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-            Maiores nemo omnis iure consequuntur velit, autem fugiat a corrupti
-            nihil aperiam dicta architecto similique quam. Vitae consequatur
-            explicabo saepe veniam eum!
-          </p>
-
-          <div>
-            <img
-              src={welcomeImg}
-              alt="welcome"
-              className="h-full w-full object-contain"
-            />
+      {/* POST FORM */}
+      <div className="px-4 mt-4 shadow rounded-lg bg-white dark:bg-dark-second">
+        <div className="p-2 border-b border-gray-300 dark:border-dark-third flex space-x-4">
+          <img src="./images/tuat.jpg" alt="Profile picture" className="w-10 h-10 rounded-full" />
+          <div className="flex-1 bg-gray-100 rounded-full flex items-center justify-start pl-4 cursor-pointer dark:bg-dark-third text-gray-500 text-lg dark:text-dark-txt">
+            <span>
+              What's on your mind, Tuat?
+            </span>
           </div>
-        </section>
-        <h1 className="text-4xl mt-5">Lorem Ipsum</h1>
-        <div className="bg-gray-50 p-5 mt-5">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Blanditiis
-          aperiam quae temporibus vitae nostrum sequi provident dolores!
-          Voluptatem accusamus nesciunt voluptate, provident sunt, ullam vero
-          fugit aspernatur, iste ipsam error?
         </div>
+
       </div>
+
+      {/* END POST FORM */}
+
+      {/* LIST POST */}
+      <div>
+        {/* POST */}
+        <div className="shadow bg-white dark:bg-dark-second dark:text-dark-txt mt-4 rounded-lg">
+          {/* POST AUTHOR */}
+          <div className="flex items-center justify-between px-4 py-2">
+            <div className="flex space-x-2 items-center">
+              <div className="relative">
+                <img src="./images/avt-2.jpg" alt="Profile picture" className="w-10 h-10 rounded-full" />
+
+              </div>
+
+              <div className="font-semibold">
+                John Doe
+              </div>
+
+
+            </div>
+            <div className="w-8 h-8 grid place-items-center text-xl text-gray-500 hover:bg-gray-200 dark:text-dark-txt dark:hover:bg-dark-third rounded-full cursor-pointer">
+              <i className="bx bx-dots-horizontal-rounded" />
+            </div>
+          </div>
+          {/* END POST AUTHOR */}
+          {/* POST CONTENT */}
+          <div className="text-justify px-4 py-2">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates, autem earum cum ullam odio, molestias maxime aperiam in id aspernatur vel ratione odit molestiae minus ipsa obcaecati quia! Doloribus, illum.
+          </div>
+          {/* END POST CONTENT */}
+          {/* POST IMAGE */}
+          <div className="py-2">
+            <img src="./images/post.png" alt="Post image" />
+          </div>
+          {/* END POST IMAGE */}
+          {/* POST REACT */}
+          <div className="px-4 py-2">
+            <div className="flex items-center justify-between">
+              <div className="flex flex-row-reverse items-center">
+                <span className="ml-2 text-gray-500 dark:text-dark-txt">999</span>
+                <span className="rounded-full grid place-items-center text-2xl -ml-1 text-red-800">
+                  <i className="bx bxs-angry" />
+                </span>
+                <span className="rounded-full grid place-items-center text-2xl -ml-1 text-red-500">
+                  <i className="bx bxs-heart-circle" />
+                </span>
+                <span className="rounded-full grid place-items-center text-2xl -ml-1 text-yellow-500">
+                  <i className="bx bx-happy-alt" />
+                </span>
+              </div>
+              
+            </div>
+          </div>
+          {/* END POST REACT */}
+          {/* POST ACTION */}
+          <div className="py-2 px-4">
+            <div className="border border-gray-200 dark:border-dark-third border-l-0 border-r-0 py-1">
+              <div className="flex space-x-2">
+                <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
+                  <i className="bx bx-like" />
+                  <span className="text-sm font-semibold">Like</span>
+                </div>
+                <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
+                  <i className="bx bx-comment" />
+                  <span className="text-sm font-semibold">Comment</span>
+                </div>
+                <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
+                  <i className="bx bx-share bx-flip-horizontal" />
+                  <span className="text-sm font-semibold">Share</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* END POST ACTION */}
+        </div>
+        {/* END POST */}</div>
+
     </Scaffold>
   );
 }
