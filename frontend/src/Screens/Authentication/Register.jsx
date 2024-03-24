@@ -161,7 +161,7 @@ export const Register = () => {
           <p>{latitude}</p>
           <p>{longitude}</p>
 
-          <button onClick={handleGetLocation} className="kTextButton">
+          <button type="button" onClick={handleGetLocation} className="kTextButton">
             Get My Location
           </button>
           <button type="submit" className="kButton w-full">
