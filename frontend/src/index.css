@@ -8,14 +8,14 @@
 }
 
 .kButton{
-  @apply bg-blue-700 text-white py-2 px-4 rounded-full hover:bg-blue-900;
+  @apply bg-blue-700 text-white py-2 px-4 rounded-full hover:bg-blue-900 select-none;
 }
 .kTextButton{
-  @apply text-blue-700 font-medium underline-offset-4 hover:underline;
+  @apply text-blue-700 font-medium underline-offset-4 hover:underline select-none;
 }
 
 .pageTitle {
-  @apply text-black md:text-5xl text-4xl;
+  @apply text-black md:text-2xl text-xl font-bold;
 }
 
 .navLink {
@@ -25,7 +25,6 @@
 .active {
   @apply bg-blue-700 text-white font-medium hover:bg-blue-700;
 }
-
 
 .menu{
   @apply bg-gray-50 shadow-xl fixed top-20 p-2 right-5 rounded-lg flex flex-col gap-2 w-[150px] md:hidden;

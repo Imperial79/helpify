@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useGeolocated } from "react-geolocated";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Register = () => {
   const [name, setName] = useState("");
@@ -84,13 +84,13 @@ export const Register = () => {
   };
 
   return (
-    <div className="grid md:grid-cols-2 grid-cols-1 gap-10 items-center">
-      <div className="rounded-xl h-[300px] w-[300px]">
+    <div className="grid md:grid-cols-2 grid-cols-1 md:gap-10 gap-5 items-center">
+      <div className="rounded-xl h-[200px] md:h-[300px] md:w-[300px] w-[200px] mx-auto">
         <img src="/register-hero.svg" alt="" />
       </div>
       <div className="p-2">
         <div className="pageTitle">Create an account</div>
-        <p className="mt-2 text-gray-500 md:text-xl text-sm mb-5">
+        <p className="mt-1 text-gray-500 md:text-xl text-sm mb-5">
           Enter your details below to create an account
         </p>
         <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-5">
@@ -167,6 +167,13 @@ export const Register = () => {
           <button type="submit" className="kButton w-full">
             Create Account
           </button>
+
+          <div className="flex gap-2">
+            Already have an account?
+            <Link to="/login" replace type="button" className="kTextButton">
+              Login
+            </Link>
+          </div>
         </form>
       </div>
     </div>

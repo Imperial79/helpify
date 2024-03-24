@@ -14,7 +14,7 @@ import ContextProvider from "./context/ContextProvider";
 function App() {
   return (
     <ContextProvider>
-      <div className="flex flex-col justify-between min-h-screen">
+      <div className="flex flex-col justify-between min-h-screen bg-gray-50">
         <Navbar />
         <ContentArea>
           <Routes>
