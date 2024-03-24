@@ -1,8 +1,9 @@
 import express from 'express';
-import { Login, Profile, Register, editUser } from '../controllers/Users.js';
+import { Login, Profile, Register, editUser,userData } from '../controllers/Users.js';
 
 const router = express.Router();
 
+router.get("/", userData);
 router.get("/profile/:userID", Profile);
 
 router.post('/register',Register);

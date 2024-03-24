@@ -1,6 +1,6 @@
 import AboutUs from "./Screens/AboutUs";
 import ContactUs from "./Screens/ContactUs";
-import HomePage from "./Screens/Home";
+import Home from "./Screens/Home";
 import ContentArea from "./components/ContentArea";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
@@ -20,7 +20,7 @@ function App() {
         <Navbar />
         <ContentArea>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/contact" element={<ContactUs />} />

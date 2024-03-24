@@ -24,6 +24,9 @@ export default function Navbar() {
         <div className="md:flex items-center gap-3 bg-gray-100 rounded-full p-2 hidden">
           {cookies.token ? (
             <>
+              <NavLink to="/" className="navLink">
+                Home
+              </NavLink>
               <NavLink to="/profile" className="navLink">
                 My Profile
               </NavLink>

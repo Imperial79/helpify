@@ -1,7 +1,41 @@
 import welcomeImg from "../assets/welcome.svg";
+import { useState,useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Scaffold from "../components/Scaffold";
 
-function HomePage() {
+function Home() {
+  const [users, setUsers] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const navigate = useNavigate();
+  const userID = window.localStorage.getItem("userID");
+  if (!userID) {
+    navigate("/login");
+  }
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/users/`
+        );
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+    fetchUsers();
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/posts/`
+        );
+        setPosts(response.data);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+    fetchPosts();
+  }, []);
   return (
     <Scaffold isLoading={false}>
       {/* POST FORM */}
@@ -23,7 +57,10 @@ function HomePage() {
       {/* LIST POST */}
       <div>
         {/* POST */}
-        <div className="shadow bg-white dark:bg-dark-second dark:text-dark-txt mt-4 rounded-lg">
+        {posts.map((post)=>{
+            const currentUser = users.find(user => user._id === post.user_id);
+          return (
+          <div key={post._id} className="shadow bg-white dark:bg-dark-second dark:text-dark-txt mt-4 rounded-lg">
           {/* POST AUTHOR */}
           <div className="flex items-center justify-between px-4 py-2">
             <div className="flex space-x-2 items-center">
@@ -35,7 +72,7 @@ function HomePage() {
                 />
               </div>
 
-              <div className="font-semibold">John Doe</div>
+              <div className="font-semibold">{currentUser.name}</div>
             </div>
             <div className="w-8 h-8 grid place-items-center text-xl text-gray-500 hover:bg-gray-200 dark:text-dark-txt dark:hover:bg-dark-third rounded-full cursor-pointer">
               <i className="bx bx-dots-horizontal-rounded" />
@@ -44,16 +81,13 @@ function HomePage() {
           {/* END POST AUTHOR */}
           {/* POST CONTENT */}
           <div className="text-justify px-4 py-2">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates,
-            autem earum cum ullam odio, molestias maxime aperiam in id
-            aspernatur vel ratione odit molestiae minus ipsa obcaecati quia!
-            Doloribus, illum.
+            {post.content}
           </div>
           {/* END POST CONTENT */}
           {/* POST IMAGE */}
-          <div className="py-2">
+          {/* <div className="py-2">
             <img src="./images/post.png" alt="Post image" />
-          </div>
+          </div> */}
           {/* END POST IMAGE */}
           {/* POST REACT */}
           <div className="px-4 py-2">
@@ -95,11 +129,13 @@ function HomePage() {
             </div>
           </div>
           {/* END POST ACTION */}
-        </div>
+        </div>)
+        })}
+
         {/* END POST */}
       </div>
     </Scaffold>
   );
 }
 
-export default HomePage;
+export default Home;

@@ -4,6 +4,11 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 dotenv.config();
 
+export const userData = async (req, res) => {
+  const users = await UserModel.find({});
+  res.status(200).json(users);
+};
+
 export const Profile = async (req, res) => {
   const userID = req.params.userID;
   const user = await UserModel.findById(userID);

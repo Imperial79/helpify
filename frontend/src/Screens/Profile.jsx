@@ -1,6 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 import Modal from "../components/Modal";
 import {
   like,
@@ -12,8 +14,11 @@ import {
 function Profile() {
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
+  const navigate = useNavigate();
   const userID = window.localStorage.getItem("userID");
-
+  if (!userID) {
+    navigate("/login");
+  }
   const [showPostModal, setShowPostModal] = useState(false);
   const [postContent, setPostContent] = useState("");
   const [postTitle, setPostTitle] = useState("");
