@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useGeolocated } from "react-geolocated";
 import { Link, useNavigate } from "react-router-dom";
 import Scaffold from "../../components/Scaffold";
+import { Context } from "../../context/ContextProvider";
 
 export const Register = () => {
+  const { showAlert } = useContext(Context);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -69,15 +72,24 @@ export const Register = () => {
       longitude,
     });
     try {
-      setLoading(true);
-      await axios.post("http://localhost:8080/users/register", {
-        name,
-        email,
-        password,
-        latitude,
-        longitude,
-      });
-      navigate("/login");
+      if (latitude && longitude) {
+        setLoading(true);
+        const res = await axios.post("http://localhost:8080/users/register", {
+          name,
+          email,
+          password,
+          latitude,
+          longitude,
+        });
+
+        if (!res.data.error) {
+          navigate("/login", { replace: true });
+        }
+
+        showAlert(res.data.message, res.data.error);
+      } else {
+        showAlert("Please allow location / Get location to continue", true);
+      }
     } catch (e) {
       console.log(e);
     } finally {

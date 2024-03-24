@@ -10,11 +10,13 @@ import { Login } from "./Screens/Authentication/Login";
 import Geolocation from "./Screens/GeoLocation";
 import Profile from "./Screens/Profile";
 import ContextProvider from "./context/ContextProvider";
+import Alert from "./components/Alert";
 
 function App() {
   return (
     <ContextProvider>
       <div className="flex flex-col justify-between min-h-screen bg-gray-50">
+        <Alert />
         <Navbar />
         <ContentArea>
           <Routes>

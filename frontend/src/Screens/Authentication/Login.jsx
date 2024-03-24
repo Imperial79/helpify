@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Scaffold from "../../components/Scaffold";
+import { Context } from "../../context/ContextProvider";
 export const Login = () => {
+  const { showAlert } = useContext(Context);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setshowPassword] = useState(false);
@@ -13,7 +16,7 @@ export const Login = () => {
   const [_, setCookies] = useCookies(["token"]);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login data:", { email, password });
+
     try {
       setLoading(true);
       const res = await axios.post("http://localhost:8080/users/login", {
@@ -21,9 +24,13 @@ export const Login = () => {
         password,
       });
 
-      setCookies("token", res.data.token);
-      window.localStorage.setItem("userID", res.data.userID);
-      navigate("/profile");
+      if (!res.data.error) {
+        setCookies("token", res.data.response.token);
+        window.localStorage.setItem("userID", res.data.response.user._id);
+        navigate("/profile", { replace: true });
+      } else {
+        showAlert(res.data.message, true);
+      }
     } catch (e) {
       console.log(e);
     } finally {
