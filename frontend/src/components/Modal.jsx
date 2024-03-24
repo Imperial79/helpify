@@ -1,21 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 
-const Modal = ({ isOpen, toggleModal, children }) => {
+const Modal = ({ isOpen, children }) => {
   const modalClass = `text-black fixed top-0 left-0 w-full h-full flex items-center justify-center transition-opacity duration-300 ${
     isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
   }`;
-
-  const handleEscPress = () => {
-    toggleModal();
-  };
-
-  useEffect(() => {
-    if (isOpen) {
-      document.addEventListener("keydown", handleEscPress);
-
-      return () => document.removeEventListener("keydown", handleEscPress);
-    }
-  }, [isOpen]);
 
   return (
     <>

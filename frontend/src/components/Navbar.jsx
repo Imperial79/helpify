@@ -85,6 +85,27 @@ export default function Navbar() {
                   <img src="/home.svg" alt="profile" className="h-6 w-6" />
                   <p>My Profile</p>
                 </Link>
+                <HomeMenuLink
+                  onClick={() => {
+                    setshowMenu(false);
+                  }}
+                  imgSrc="/home.svg"
+                  label="Home"
+                />
+                <HomeMenuLink
+                  onClick={() => {
+                    setshowMenu(false);
+                  }}
+                  imgSrc="/contact.svg"
+                  label="Contact Us"
+                />
+                <HomeMenuLink
+                  onClick={() => {
+                    setshowMenu(false);
+                  }}
+                  imgSrc="/about.svg"
+                  label="About Us"
+                />
                 <button
                   onClick={Logout}
                   className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline"
@@ -101,10 +122,6 @@ export default function Navbar() {
                   imgSrc="/home.svg"
                   label="Home"
                 />
-                <Link to="/" className="menuBtn">
-                  <img src="/home.svg" alt="home" className="h-6 w-6" />
-                  <p>Home</p>
-                </Link>
                 <Link to="/register" className="menuBtn">
                   <img src="/register.svg" alt="register" className="h-6 w-6" />
                   <p>Register</p>

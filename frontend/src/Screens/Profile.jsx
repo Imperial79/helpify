@@ -127,15 +127,19 @@ function Profile() {
         <br />
         <p className="text-gray-600 font-medium mb-5">Your Posts</p>
 
-        <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
-          {posts.map((post) => {
-            return (
-              <div key={post._id}>
-                <PostCard title={post.title} content={post.content} />
-              </div>
-            );
-          })}
-        </div>
+        {posts.length > 0 ? (
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
+            {posts.map((post) => {
+              return (
+                <div key={post._id}>
+                  <PostCard title={post.title} content={post.content} />
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <img src="/no_data.svg" alt="no-data" className="h-64 md:h-72" />
+        )}
       </div>
       <Modal
         isOpen={showPostModal}
