@@ -7,14 +7,15 @@ function HomePage() {
       {/* POST FORM */}
       <div className="px-4 mt-4 shadow rounded-lg bg-white dark:bg-dark-second">
         <div className="p-2 border-b border-gray-300 dark:border-dark-third flex space-x-4">
-          <img src="./images/tuat.jpg" alt="Profile picture" className="w-10 h-10 rounded-full" />
+        <img
+              src="https://via.placeholder.com/150"
+              alt="Profile Picture"
+              className="rounded-full w-10 h-10"
+            />
           <div className="flex-1 bg-gray-100 rounded-full flex items-center justify-start pl-4 cursor-pointer dark:bg-dark-third text-gray-500 text-lg dark:text-dark-txt">
-            <span>
-              What's on your mind, Tuat?
-            </span>
+            <span>What's on your mind, Tuat?</span>
           </div>
         </div>
-
       </div>
 
       {/* END POST FORM */}
@@ -27,15 +28,14 @@ function HomePage() {
           <div className="flex items-center justify-between px-4 py-2">
             <div className="flex space-x-2 items-center">
               <div className="relative">
-                <img src="./images/avt-2.jpg" alt="Profile picture" className="w-10 h-10 rounded-full" />
-
+                <img
+                  src="https://via.placeholder.com/150"
+                  alt="Profile Picture"
+                  className="rounded-full w-20 h-20"
+                />
               </div>
 
-              <div className="font-semibold">
-                John Doe
-              </div>
-
-
+              <div className="font-semibold">John Doe</div>
             </div>
             <div className="w-8 h-8 grid place-items-center text-xl text-gray-500 hover:bg-gray-200 dark:text-dark-txt dark:hover:bg-dark-third rounded-full cursor-pointer">
               <i className="bx bx-dots-horizontal-rounded" />
@@ -44,7 +44,10 @@ function HomePage() {
           {/* END POST AUTHOR */}
           {/* POST CONTENT */}
           <div className="text-justify px-4 py-2">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates, autem earum cum ullam odio, molestias maxime aperiam in id aspernatur vel ratione odit molestiae minus ipsa obcaecati quia! Doloribus, illum.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates,
+            autem earum cum ullam odio, molestias maxime aperiam in id
+            aspernatur vel ratione odit molestiae minus ipsa obcaecati quia!
+            Doloribus, illum.
           </div>
           {/* END POST CONTENT */}
           {/* POST IMAGE */}
@@ -56,7 +59,9 @@ function HomePage() {
           <div className="px-4 py-2">
             <div className="flex items-center justify-between">
               <div className="flex flex-row-reverse items-center">
-                <span className="ml-2 text-gray-500 dark:text-dark-txt">999</span>
+                <span className="ml-2 text-gray-500 dark:text-dark-txt">
+                  Likes: 999
+                </span>
                 <span className="rounded-full grid place-items-center text-2xl -ml-1 text-red-800">
                   <i className="bx bxs-angry" />
                 </span>
@@ -67,7 +72,6 @@ function HomePage() {
                   <i className="bx bx-happy-alt" />
                 </span>
               </div>
-              
             </div>
           </div>
           {/* END POST REACT */}
@@ -92,8 +96,8 @@ function HomePage() {
           </div>
           {/* END POST ACTION */}
         </div>
-        {/* END POST */}</div>
-
+        {/* END POST */}
+      </div>
     </Scaffold>
   );
 }
