@@ -9,6 +9,9 @@ import {
   like_filled,
   comment,
   comment_filled,
+  LocationIcon,
+  ImageIcon,
+  CloseIcon,
 } from "../components/Icons";
 
 function Profile() {
@@ -152,7 +155,7 @@ function Profile() {
           setShowPostModal(!showPostModal);
         }}
       >
-        <div>
+        {/* <div>
           <h2 className="text-xl font-bold mb-4">Create Post</h2>
           <input
             type="text"
@@ -181,6 +184,51 @@ function Profile() {
               Cancel
             </button>
           </div>
+        </div> */}
+
+        <div>
+          <div className="flex items-center justify-between mb-5">
+            <h1 className="font-medium text-xl">Create Post</h1>
+            <button
+              onClick={() => {
+                setShowPostModal(false);
+              }}
+              className="h-10 w-10 bg-gray-100 rounded-full p-2 content-center hover:bg-gray-200"
+            >
+              <CloseIcon color={"text-black mx-auto"} />
+            </button>
+          </div>
+
+          <div className="flex gap-2 items-center mb-5">
+            <div className="circleAvatar bg-gray-100">
+              <img src="https://source.unsplash.com/random" alt="" />
+            </div>
+            <div>
+              <h1 className="font-medium">Avishek Verma</h1>
+              <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
+                <LocationIcon size={"h-5 w-5"} color={"text-blue-700"} />
+                Durgapur, West Bengal
+              </div>
+            </div>
+          </div>
+          <button className="w-full rounded-xl mb-5 flex items-center gap-2 bg-gray-100 p-2 justify-center hover:bg-gray-200">
+            <ImageIcon size={"h-5 w-5"} color={"text-gray-500"} />
+            <h1 className="font-medium text-gray-500">Add Image</h1>
+          </button>
+          <textarea
+            name="postContent"
+            id="postContent"
+            rows={10}
+            className="w-full p-2 bg-gray-100 rounded-xl"
+            placeholder="What's on your mind?"
+            onChange={(e) => {
+              setPostContent(e.target.value);
+            }}
+          ></textarea>
+
+          <button type="button" className="kButton w-full mt-5">
+            Create Post
+          </button>
         </div>
       </Modal>
       <Modal
@@ -223,44 +271,7 @@ function Profile() {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          {/* <div className="mb-4">
-        <label htmlFor="bio" className="block text-gray-700 font-bold mb-2">
-          Bio
-        </label>
-        <textarea
-          id="bio"
-          name="bio"
-          value={editedUser.bio}
-          onChange={handleInputChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        ></textarea>
-      </div>
-      <div className="mb-4">
-        <label htmlFor="location" className="block text-gray-700 font-bold mb-2">
-          Location
-        </label>
-        <input
-          type="text"
-          id="location"
-          name="location"
-          value={editedUser.location}
-          onChange={handleInputChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="website" className="block text-gray-700 font-bold mb-2">
-          Website
-        </label>
-        <input
-          type="text"
-          id="website"
-          name="website"
-          value={editedUser.website}
-          onChange={handleInputChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div> */}
+
           <div className="flex justify-end mt-4">
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
