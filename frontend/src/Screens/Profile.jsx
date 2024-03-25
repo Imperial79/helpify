@@ -179,7 +179,7 @@ function Profile() {
                 <img src="https://source.unsplash.com/random" alt="" />
               </div>
               <div>
-                <h1 className="font-medium">Avishek Verma</h1>
+                <h1 className="font-medium">{user.name}</h1>
                 <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
                   <LocationIcon size={"h-5 w-5"} color={"text-blue-700"} />
                   Durgapur, West Bengal

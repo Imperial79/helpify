@@ -16,7 +16,9 @@ export const Register = () => {
   const [addressList, setAddressList] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  if(window.localStorage.getItem("userID")){
+    navigate('/');
+  }
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
       positionOptions: {

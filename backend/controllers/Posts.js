@@ -36,3 +36,28 @@ export const createPost = async (req, res) => {
     res.sendStatus(400).send(e);
   }
 };
+
+export const likePost = async (req, res) => {
+  const { postID } = req.params;
+  const { userID } = req.body;
+
+  try {
+    const post = await PostModel.findById(postID);
+
+    if (!post) {
+      return res.status(404).json({ error: true,message:'Post not found' });
+    }
+    const isLiked = post.likes.includes(userID);
+
+    if (isLiked) {
+      post.likes = post.likes.filter((id) => id.toString() !== userID);
+    } else {
+      post.likes.push(userID);
+    }
+    await post.save();
+    res.json({ success: true, likes: post.likes });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: true,message: 'Something went wrong' });
+  }
+}

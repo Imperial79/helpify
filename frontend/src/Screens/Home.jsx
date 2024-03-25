@@ -56,8 +56,37 @@ function Home() {
         {posts.map((post) => {
           const currentUser = users.find((user) => user._id === post.user_id);
           return (
-            <div
-              key={post._id}
+            <div key={post._id}>
+                <PostComponent postID={post._id} currentUser={currentUser} title={post.title} content={post.content} likes={post.likes}/>
+            </div>
+          );
+        })}
+
+        {/* END POST */}
+      </div>
+    </Scaffold>
+  );
+}
+
+export default Home;
+
+const PostComponent = ({postID,title,content,likes,currentUser})=>{
+
+  const [likeCount, setLikeCount] = useState(likes.length);
+  const [isLiked, setIsLiked] = useState(likes.includes(window.localStorage.getItem("userID")));
+  const userID = window.localStorage.getItem('userID');
+
+  const handleLike = async () => {
+    try {
+      const response = await axios.put(`http://localhost:8080/posts/${postID}/like`, { userID: userID });
+      setLikeCount(response.data.likes.length);
+      setIsLiked(!isLiked);
+    } catch (error) {
+      console.error('Error liking/unliking post:', error);
+    }
+  };
+  return (
+    <div
               className="shadow bg-white dark:bg-dark-second dark:text-dark-txt mt-4 rounded-lg"
             >
               {/* POST AUTHOR */}
@@ -81,7 +110,7 @@ function Home() {
               </div>
               {/* END POST AUTHOR */}
               {/* POST CONTENT */}
-              <div className="text-justify px-4 py-2">{post.content}</div>
+              <div className="text-justify px-4 py-2">{content}</div>
               {/* END POST CONTENT */}
               {/* POST IMAGE */}
               {/* <div className="py-2">
@@ -93,7 +122,7 @@ function Home() {
                 <div className="flex items-center justify-between">
                   <div className="flex flex-row-reverse items-center">
                     <span className="ml-2 text-gray-500 dark:text-dark-txt">
-                      Likes: 999
+                      Likes: {likeCount}
                     </span>
                     <span className="rounded-full grid place-items-center text-2xl -ml-1 text-red-800">
                       <i className="bx bxs-angry" />
@@ -114,7 +143,7 @@ function Home() {
                   <div className="flex space-x-2">
                     <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
                       <i className="bx bx-like" />
-                      <span className="text-sm font-semibold">Like</span>
+                      <span className="text-sm font-semibold" onClick={handleLike}>{isLiked?"Unlike":"Like"}</span>
                     </div>
                     <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
                       <i className="bx bx-comment" />
@@ -129,13 +158,5 @@ function Home() {
               </div>
               {/* END POST ACTION */}
             </div>
-          );
-        })}
-
-        {/* END POST */}
-      </div>
-    </Scaffold>
-  );
+  )
 }
-
-export default Home;
