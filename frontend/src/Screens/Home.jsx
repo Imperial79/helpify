@@ -119,39 +119,36 @@ const PostComponent = ({
   const postTime = formatDateTime(createdAt);
 
   return (
-    <div
-              className="shadow bg-white dark:bg-dark-second dark:text-dark-txt mt-4 rounded-lg"
-            >
-              {/* POST AUTHOR */}
-              <div className="flex items-center justify-between px-4 py-2">
-                <div className="flex space-x-2 items-center">
-                  <div className="relative">
-                    <img
-                      src="https://via.placeholder.com/150"
-                      alt="Profile Picture"
-                      className="rounded-full w-20 h-20"
-                    />
-                  </div>
-                  <div>
-                  <div className="font-semibold">
-                    {currentUser && currentUser.name}
-                  </div>
-                    <small>{postTime}</small>
-                  </div>
-                  
-                </div>
-                <div className="w-8 h-8 grid place-items-center text-xl text-gray-500 hover:bg-gray-200 dark:text-dark-txt dark:hover:bg-dark-third rounded-full cursor-pointer">
-                  <i className="bx bx-dots-horizontal-rounded" />
-                </div>
-              </div>
-              {/* END POST AUTHOR */}
-              {/* POST CONTENT */}
-              <div className="text-justify px-4 py-2">{content}</div>
-              {/* END POST CONTENT */}
-              {/* POST IMAGE */}
-              {/* <div className="py-2">
-            <img src="./images/post.png" alt="Post image" />
-          </div> */}
+    <div className="shadow bg-white dark:bg-dark-second dark:text-dark-txt mt-4 rounded-lg">
+      {/* POST AUTHOR */}
+      <div className="flex items-center justify-between px-4 py-2">
+        <div className="flex space-x-2 items-center">
+          <div className="relative">
+            <img
+              src="https://source.unsplash.com/random"
+              alt="Profile Picture"
+              className="rounded-full w-20 h-20"
+            />
+          </div>
+          <div>
+            <div className="font-semibold">
+              {currentUser && currentUser.name}
+            </div>
+            <small>{postTime}</small>
+          </div>
+        </div>
+        <div className="w-8 h-8 grid place-items-center text-xl text-gray-500 hover:bg-gray-200 dark:text-dark-txt dark:hover:bg-dark-third rounded-full cursor-pointer">
+          <i className="bx bx-dots-horizontal-rounded" />
+        </div>
+      </div>
+      {/* END POST AUTHOR */}
+      {/* POST CONTENT */}
+      <div className="text-justify px-4 py-2">{content}</div>
+      {/* END POST CONTENT */}
+      {/* POST IMAGE */}
+      <div className="py-2">
+        <img className="h-64 w-64 mx-auto" src="https://source.unsplash.com/random" alt="Post image" />
+      </div>
       {/* END POST IMAGE */}
       {/* POST REACT */}
       <div className="px-4 py-2">
