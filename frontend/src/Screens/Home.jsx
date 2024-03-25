@@ -38,7 +38,7 @@ function Home() {
       <div className="px-4 mt-4 shadow rounded-lg bg-white dark:bg-dark-second">
         <div className="p-2 border-b border-gray-300 dark:border-dark-third flex space-x-4">
           <img
-            src="https://via.placeholder.com/150"
+            src="https://source.unsplash.com/random"
             alt="Profile Picture"
             className="rounded-full w-10 h-10"
           />
@@ -94,7 +94,7 @@ const PostComponent = ({postID,title,content,likes,currentUser})=>{
                 <div className="flex space-x-2 items-center">
                   <div className="relative">
                     <img
-                      src="https://via.placeholder.com/150"
+                      src="https://source.unsplash.com/random"
                       alt="Profile Picture"
                       className="rounded-full w-20 h-20"
                     />

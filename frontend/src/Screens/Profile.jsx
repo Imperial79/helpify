@@ -155,6 +155,7 @@ function Profile() {
             <img src="/no_data.svg" alt="no-data" className="h-64 md:h-72" />
           )}
         </div>
+
         <Modal
           isOpen={showPostModal}
           toggleModal={() => {
@@ -164,14 +165,6 @@ function Profile() {
           <div>
             <div className="flex items-center justify-between mb-5">
               <h1 className="font-medium text-xl">Create Post</h1>
-              <button
-                onClick={() => {
-                  setShowPostModal(false);
-                }}
-                className="h-10 w-10 bg-gray-100 rounded-full p-2 content-center hover:bg-gray-200"
-              >
-                <CloseIcon color={"text-black mx-auto"} />
-              </button>
             </div>
 
             <div className="flex gap-2 items-center mb-5">
@@ -204,9 +197,15 @@ function Profile() {
             <button
               type="button"
               onClick={handlePostSubmit}
-              className="kButton w-full mt-5"
+              className="kButton w-1/2 mt-5"
             >
               Create Post
+            </button>
+            <button
+              className=" py-2 px-4 rounded-full select-none bg-gray-300 text-gray-700 w-1/2 hover:bg-gray-400"
+              onClick={() => {setShowPostModal(false);}}
+            >
+              Cancel
             </button>
           </div>
         </Modal>
