@@ -14,7 +14,6 @@ export const profilePost = async (req, res) => {
   try {
     const user_id = req.params.userID;
     const Posts = await PostModel.find({ user_id });
-    console.log(Posts);
     res.status(200).json(Posts);
   } catch (e) {
     res.sendStatus(400).send(e);
