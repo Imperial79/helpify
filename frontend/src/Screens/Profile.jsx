@@ -146,7 +146,7 @@ function Profile() {
               {posts.map((post) => {
                 return (
                   <div key={post._id}>
-                    <PostCard title={post.title} content={post.content} />
+                    <PostCard title={post.title} content={post.content} likes={post.likes}/>
                   </div>
                 );
               })}
@@ -274,7 +274,7 @@ function Profile() {
 
 export default Profile;
 
-function PostCard({ title, content }) {
+function PostCard({ title, content,likes }) {
   return (
     <div className="bg-gray-100 rounded-xl p-5">
       <div className="w-full h-[200px] rounded-xl bg-white mb-2">
@@ -292,7 +292,7 @@ function PostCard({ title, content }) {
       <div className="flex items-center gap-5 mt-5">
         <button className="flex items-center mt-2 gap-2 hover:bg-gray-200 rounded-full px-2">
           {!true ? like : like_filled}
-          <p className="font-medium text-gray-500">12</p>
+          <p className="font-medium text-gray-500">{likes.length}</p>
         </button>
         <button className="flex items-center mt-2 gap-2 hover:bg-gray-200 rounded-full px-2">
           {!true ? comment : comment_filled}
