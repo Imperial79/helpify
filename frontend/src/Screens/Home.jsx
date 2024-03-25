@@ -55,7 +55,24 @@ function Home() {
       {/* LIST POST */}
       <div>
         {/* POST */}
-        {posts.map((post) => {
+        {posts
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .map((post) => {
+            const currentUser = users.find((user) => user._id === post.user_id);
+            return (
+              <div key={post._id}>
+                <PostComponent
+                  postID={post._id}
+                  currentUser={currentUser}
+                  title={post.title}
+                  content={post.content}
+                  likes={post.likes}
+                  createdAt={post.createdAt}
+                />
+              </div>
+            );
+          })}
+        {/* {posts.map((post) => {
           const currentUser = users.find((user) => user._id === post.user_id);
           return (
             <div key={post._id}>
@@ -69,7 +86,7 @@ function Home() {
               />
             </div>
           );
-        })}
+        })} */}
 
         {/* END POST */}
       </div>
@@ -147,7 +164,11 @@ const PostComponent = ({
       {/* END POST CONTENT */}
       {/* POST IMAGE */}
       <div className="py-2">
-        <img className="h-64 w-64 mx-auto" src="https://source.unsplash.com/random" alt="Post image" />
+        <img
+          className="h-64 w-64 mx-auto"
+          src="https://source.unsplash.com/random"
+          alt="Post image"
+        />
       </div>
       {/* END POST IMAGE */}
       {/* POST REACT */}
