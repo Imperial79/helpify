@@ -40,7 +40,7 @@ function Home() {
       <div className="px-4 mt-4 shadow rounded-lg bg-white dark:bg-dark-second">
         <div className="p-2 border-b border-gray-300 dark:border-dark-third flex space-x-4">
           <img
-            src="https://via.placeholder.com/150"
+            src="https://source.unsplash.com/random"
             alt="Profile Picture"
             className="rounded-full w-10 h-10"
           />
@@ -119,34 +119,34 @@ const PostComponent = ({
   const postTime = formatDateTime(createdAt);
 
   return (
-    <div className="shadow bg-white dark:bg-dark-second dark:text-dark-txt mt-4 rounded-lg">
-      {/* POST AUTHOR */}
-      <div className="flex items-center justify-between px-4 py-2">
-        <div className="flex space-x-2 items-center">
-          <div className="relative">
-            <img
-              src="https://via.placeholder.com/150"
-              alt="Profile Picture"
-              className="rounded-full w-20 h-20"
-            />
-          </div>
-          <div className="flex flex-col">
-            <div className="font-semibold">
-              {currentUser && currentUser.name}
-            </div>
-            <small>{postTime}</small>
-          </div>
-        </div>
-        <div className="w-8 h-8 grid place-items-center text-xl text-gray-500 hover:bg-gray-200 dark:text-dark-txt dark:hover:bg-dark-third rounded-full cursor-pointer">
-          <i className="bx bx-dots-horizontal-rounded" />
-        </div>
-      </div>
-      {/* END POST AUTHOR */}
-      {/* POST CONTENT */}
-      <div className="text-justify px-4 py-2">{content}</div>
-      {/* END POST CONTENT */}
-      {/* POST IMAGE */}
-      {/* <div className="py-2">
+    <div
+              className="shadow bg-white dark:bg-dark-second dark:text-dark-txt mt-4 rounded-lg"
+            >
+              {/* POST AUTHOR */}
+              <div className="flex items-center justify-between px-4 py-2">
+                <div className="flex space-x-2 items-center">
+                  <div className="relative">
+                    <img
+                      src="https://via.placeholder.com/150"
+                      alt="Profile Picture"
+                      className="rounded-full w-20 h-20"
+                    />
+                  </div>
+
+                  <div className="font-semibold">
+                    {currentUser && currentUser.name}
+                  </div>
+                </div>
+                <div className="w-8 h-8 grid place-items-center text-xl text-gray-500 hover:bg-gray-200 dark:text-dark-txt dark:hover:bg-dark-third rounded-full cursor-pointer">
+                  <i className="bx bx-dots-horizontal-rounded" />
+                </div>
+              </div>
+              {/* END POST AUTHOR */}
+              {/* POST CONTENT */}
+              <div className="text-justify px-4 py-2">{content}</div>
+              {/* END POST CONTENT */}
+              {/* POST IMAGE */}
+              {/* <div className="py-2">
             <img src="./images/post.png" alt="Post image" />
           </div> */}
       {/* END POST IMAGE */}
