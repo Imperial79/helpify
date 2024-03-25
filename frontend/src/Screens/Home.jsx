@@ -132,10 +132,13 @@ const PostComponent = ({
                       className="rounded-full w-20 h-20"
                     />
                   </div>
-
+                  <div>
                   <div className="font-semibold">
                     {currentUser && currentUser.name}
                   </div>
+                    <small>{postTime}</small>
+                  </div>
+                  
                 </div>
                 <div className="w-8 h-8 grid place-items-center text-xl text-gray-500 hover:bg-gray-200 dark:text-dark-txt dark:hover:bg-dark-third rounded-full cursor-pointer">
                   <i className="bx bx-dots-horizontal-rounded" />
