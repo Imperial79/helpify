@@ -103,10 +103,12 @@ function Profile() {
   return (
     <Scaffold isLoading={isLoading}>
       <div>
+        {/* Profile */}
         <div className="flex flex-col">
           <div className="flex items-center gap-5 bg-gray-50 p-5 justify-between">
             <div className="flex items-center gap-5">
               <div className="rounded-full h-20 w-20 bg-gray-200 overflow-hidden">
+                {/* Profile Details */}
                 <img
                   src="https://source.unsplash.com/random"
                   alt="profile-img"
@@ -121,7 +123,7 @@ function Profile() {
                 </h1>
               </div>
             </div>
-
+            {/* Edit Profile Button */}
             <button
               type="button"
               className="border-2 rounded-lg px-5 text-sm font-medium text-blue-700"
@@ -133,6 +135,7 @@ function Profile() {
             </button>
           </div>
 
+          {/* Create Post Button */}
           <button className="kButton" onClick={() => setShowPostModal(true)}>
             Create Post
           </button>
@@ -161,6 +164,7 @@ function Profile() {
           )}
         </div>
 
+        {/* Create POST Modal */}
         <Modal
           isOpen={showPostModal}
           toggleModal={() => {
@@ -171,7 +175,6 @@ function Profile() {
             <div className="flex items-center justify-between mb-5">
               <h1 className="font-medium text-xl">Create Post</h1>
             </div>
-
             <div className="flex gap-2 items-center mb-5">
               <div className="circleAvatar bg-gray-100">
                 <img src="https://source.unsplash.com/random" alt="" />
@@ -184,6 +187,7 @@ function Profile() {
                 </div>
               </div>
             </div>
+            {/* Add Image */}
             {imagePreview == null ? (
               <button
                 onClick={() => {
@@ -221,6 +225,8 @@ function Profile() {
                 setImagePreview(URL.createObjectURL(e.target.files[0]));
               }}
             />
+
+            {/* Post Body */}
             <textarea
               name="postContent"
               id="postContent"
@@ -231,7 +237,7 @@ function Profile() {
                 setPostContent(e.target.value);
               }}
             ></textarea>
-
+            {/* Create Post Button and Cancel Button */}
             <div className="flex gap-2">
               <button
                 type="button"
@@ -251,6 +257,8 @@ function Profile() {
             </div>
           </div>
         </Modal>
+
+        {/* Edit User Modal */}
         <Modal
           isOpen={showEditUserModal}
           toggleModal={() => {
@@ -291,7 +299,7 @@ function Profile() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-
+            {/* Save and Cancel Button */}
             <div className="flex justify-end mt-4">
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
