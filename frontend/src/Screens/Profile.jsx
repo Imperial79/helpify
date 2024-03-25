@@ -18,6 +18,7 @@ import Scaffold from "../components/Scaffold";
 function Profile() {
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
+  const [imagePreview, setImagePreview] = useState(null);
   const navigate = useNavigate();
   const userID = window.localStorage.getItem("userID");
   if (!userID) {
@@ -146,7 +147,11 @@ function Profile() {
               {posts.map((post) => {
                 return (
                   <div key={post._id}>
-                    <PostCard title={post.title} content={post.content} likes={post.likes}/>
+                    <PostCard
+                      title={post.title}
+                      content={post.content}
+                      likes={post.likes}
+                    />
                   </div>
                 );
               })}
@@ -179,14 +184,47 @@ function Profile() {
                 </div>
               </div>
             </div>
-            <button className="w-full rounded-xl mb-5 flex items-center gap-2 bg-gray-100 p-2 justify-center hover:bg-gray-200">
-              <ImageIcon size={"h-5 w-5"} color={"text-gray-500"} />
-              <h1 className="font-medium text-gray-500">Add Image</h1>
-            </button>
+            {imagePreview == null ? (
+              <button
+                onClick={() => {
+                  document.getElementById("postImagePicker").click();
+                }}
+                className="w-full rounded-xl mb-5 flex items-center gap-2 bg-gray-100 p-2 justify-center hover:bg-gray-200"
+              >
+                <ImageIcon size={"h-5 w-5"} color={"text-gray-500"} />
+                <h1 className="font-medium text-gray-500">Add Image</h1>
+              </button>
+            ) : (
+              <div className="w-full rounded-xl h-[200px] overflow-hidden relative mb-5">
+                <img
+                  src={imagePreview}
+                  alt="picked-image"
+                  className="h-full w-full object-contain"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setImagePreview(null);
+                  }}
+                  className="absolute rounded-full h-7 w-7 bg-black right-[10px] top-[10px] flex justify-center items-center"
+                >
+                  <CloseIcon color={"text-white object-contain mx-auto"} />
+                </button>
+              </div>
+            )}
+            <input
+              type="file"
+              id="postImagePicker"
+              className="hidden"
+              accept=".jpeg, .jpg, .png, .webp"
+              onChange={(e) => {
+                setImagePreview(URL.createObjectURL(e.target.files[0]));
+              }}
+            />
             <textarea
               name="postContent"
               id="postContent"
-              rows={10}
+              rows={6}
               className="w-full p-2 bg-gray-100 rounded-xl"
               placeholder="What's on your mind?"
               onChange={(e) => {
@@ -194,19 +232,23 @@ function Profile() {
               }}
             ></textarea>
 
-            <button
-              type="button"
-              onClick={handlePostSubmit}
-              className="kButton w-1/2 mt-5"
-            >
-              Create Post
-            </button>
-            <button
-              className=" py-2 px-4 rounded-full select-none bg-gray-300 text-gray-700 w-1/2 hover:bg-gray-400"
-              onClick={() => {setShowPostModal(false);}}
-            >
-              Cancel
-            </button>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={handlePostSubmit}
+                className="kButton w-full"
+              >
+                Create Post
+              </button>
+              <button
+                className="min-w-[200px] bg-black rounded-full text-white hover:bg-gray-700"
+                onClick={() => {
+                  setShowPostModal(false);
+                }}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </Modal>
         <Modal
@@ -273,7 +315,7 @@ function Profile() {
 
 export default Profile;
 
-function PostCard({ title, content,likes }) {
+function PostCard({ title, content, likes }) {
   return (
     <div className="bg-gray-100 rounded-xl p-5">
       <div className="w-full h-[200px] rounded-xl bg-white mb-2">
