@@ -225,7 +225,7 @@ function Profile() {
               name="postContent"
               id="postContent"
               rows={6}
-              className="w-full p-2 bg-gray-100 rounded-xl"
+              className="w-full p-2 bg-gray-100 rounded-xl mb-5"
               placeholder="What's on your mind?"
               onChange={(e) => {
                 setPostContent(e.target.value);
