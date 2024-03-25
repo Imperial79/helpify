@@ -32,7 +32,7 @@ function Home() {
     };
     fetchPosts();
   }, []);
-  const userName = (users.find((user) => user._id === userID)).name.split(" ")[0]
+  // const userName = (users.find((user) => user._id === userID)).name.split(" ")[0];
 
   return (
     <Scaffold isLoading={false}>
@@ -45,7 +45,7 @@ function Home() {
             className="rounded-full w-10 h-10"
           />
           <div className="flex-1 bg-gray-100 rounded-full flex items-center justify-start pl-4 cursor-pointer dark:bg-dark-third text-gray-500 text-lg dark:text-dark-txt">
-            <span>What's on your mind, {userName}?</span>
+            <span>What's on your mind, {"userName"}?</span>
           </div>
         </div>
       </div>
