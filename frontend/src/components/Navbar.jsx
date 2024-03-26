@@ -122,13 +122,24 @@ export default function Navbar() {
                   onClick={() => {
                     setshowMenu(false);
                   }}
+                  to="/"
                   imgSrc="/home.svg"
                   label="Home"
                 />
-                <Link to="/register" className="menuBtn">
-                  <img src="/register.svg" alt="register" className="h-6 w-6" />
-                  <p>Register</p>
-                </Link>
+                <HomeMenuLink
+                  onClick={() => {
+                    setshowMenu(false);
+                  }}
+                  imgSrc="/register.svg"
+                  label="Register"
+                />
+                <HomeMenuLink
+                  onClick={() => {
+                    setshowMenu(false);
+                  }}
+                  imgSrc="/home.svg"
+                  label="Home"
+                />
                 <Link to="/login" className="menuBtn">
                   <img src="/user.svg" alt="login" className="h-6 w-6" />
                   <p>Login</p>

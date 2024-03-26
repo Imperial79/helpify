@@ -42,7 +42,7 @@ function Home() {
       // Remove the deleted post from the posts state
       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postID));
     } catch (error) {
-      console.error('Error deleting post:', error);
+      console.error("Error deleting post:", error);
     }
   };
 
@@ -75,7 +75,7 @@ function Home() {
             const currentUser = usersList.find(
               (user) => user._id === post.user_id
             );
-            return (
+            return currentUser ? (
               <div key={post._id}>
                 <PostComponent
                   postID={post._id}
@@ -85,8 +85,10 @@ function Home() {
                   likes={post.likes}
                   createdAt={post.createdAt}
                   onDelete={deletePost}
-                  />
+                />
               </div>
+            ) : (
+              <></>
             );
           })}
       </div>
@@ -103,7 +105,7 @@ const PostComponent = ({
   likes,
   currentUser,
   createdAt,
-  onDelete
+  onDelete,
 }) => {
   const [showPostMenu, setShowPostMenu] = useState(false);
   const [likeCount, setLikeCount] = useState(likes.length);
@@ -138,9 +140,9 @@ const PostComponent = ({
   const handleDelete = async () => {
     try {
       await onDelete(postID);
-      console.log('Post deleted successfully');
+      console.log("Post deleted successfully");
     } catch (error) {
-      console.error('Error deleting post:', error);
+      console.error("Error deleting post:", error);
     }
   };
   return (
@@ -173,8 +175,7 @@ const PostComponent = ({
             >
               <MenuIcon size={"h-6 w-6"} />
             </button>
-          )
-          }
+          )}
 
           <div
             className={`${
