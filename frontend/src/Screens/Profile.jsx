@@ -127,7 +127,7 @@ function Profile() {
             {/* Edit Profile Button */}
             <button
               type="button"
-              className="border-2 rounded-lg px-5 text-sm font-medium text-blue-700"
+              className="border-2 rounded-lg px-5 text-sm font-medium text-blue-700 hover:border-gray-300"
               onClick={() => {
                 setShowEditUserModal(true);
               }}
@@ -349,14 +349,14 @@ function PostCard({ title, content, likes }) {
 
           <p className="font-medium text-gray-500">{likes.length}</p>
         </button>
-        <button className="flex items-center mt-2 gap-2 hover:bg-gray-200 rounded-full px-2">
+        {/* <button className="flex items-center mt-2 gap-2 hover:bg-gray-200 rounded-full px-2">
           {!true ? (
             <CommentIcon color="text-gray-500" />
           ) : (
             <CommentFilledIcon color="text-gray-500" />
           )}
           <p className="font-medium text-gray-500">12</p>
-        </button>
+        </button> */}
       </div>
     </div>
   );
