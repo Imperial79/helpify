@@ -30,6 +30,9 @@ export default function Navbar() {
               <NavLink to="/profile" className="navLink">
                 My Profile
               </NavLink>
+              <NavLink to="/about" className="navLink">
+                About Us
+              </NavLink>
               <button
                 onClick={Logout}
                 className="bg-red-500 hover:bg-red-600 text-white font-medium text-sm py-1.5 px-5 rounded-full"
