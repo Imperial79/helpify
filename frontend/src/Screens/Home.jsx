@@ -6,7 +6,7 @@ import { Context } from "../context/ContextProvider";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const { userId } = useContext(Context);
+  const { userID } = useContext(Context);
   const [usersList, setUsers] = useState([]);
   const [posts, setPosts] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -36,7 +36,6 @@ function Home() {
     fetchUsers();
     fetchPosts();
   }, []);
-<<<<<<< HEAD
   const deletePost = async (postID) => {
     try {
       await axios.delete(`http://localhost:8080/posts/${postID}`);
@@ -46,8 +45,6 @@ function Home() {
       console.error('Error deleting post:', error);
     }
   };
-=======
->>>>>>> eafd92c0de32690efa4357306b592a44d99b257f
 
   // const userName = users?(users.find((user) => user._id === userID)).name.split(" ")[0]:"";
   return (
@@ -61,13 +58,8 @@ function Home() {
             alt="Profile Picture"
             className="rounded-full w-10 h-10"
           />
-<<<<<<< HEAD
           <div className="flex-1 bg-gray-100 rounded-full flex items-center justify-start pl-4 cursor-pointer dark:bg-dark-third text-gray-500 text-lg dark:text-dark-txt">
             <span>What's on your mind, {"SomeUserName"}?</span>
-=======
-          <div className="bg-gray-100 p-4 rounded-lg text-gray-400 font-medium text-sm truncate w-full">
-            <span>🤔💭 What's on your mind, {userId}?</span>
->>>>>>> eafd92c0de32690efa4357306b592a44d99b257f
           </div>
         </div>
       </div>
@@ -115,14 +107,14 @@ const PostComponent = ({
 }) => {
   const [showPostMenu, setShowPostMenu] = useState(false);
   const [likeCount, setLikeCount] = useState(likes.length);
-  const { userId } = useContext(Context);
-  const [isLiked, setIsLiked] = useState(likes.includes(userId));
+  const { userID } = useContext(Context);
+  const [isLiked, setIsLiked] = useState(likes.includes(userID));
 
   const handleLike = async () => {
     try {
       const response = await axios.put(
         `http://localhost:8080/posts/${postID}/like`,
-        { userID: userId }
+        { userID: userID }
       );
 
       setLikeCount(response.data.likes.length);
@@ -172,11 +164,7 @@ const PostComponent = ({
         </div>
 
         <div className="relative">
-<<<<<<< HEAD
           {currentUser._id === userID && (
-=======
-          {
->>>>>>> eafd92c0de32690efa4357306b592a44d99b257f
             <button
               onClick={() => {
                 setShowPostMenu(!showPostMenu);
@@ -185,6 +173,7 @@ const PostComponent = ({
             >
               <MenuIcon size={"h-6 w-6"} />
             </button>
+          )
           }
 
           <div

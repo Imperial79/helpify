@@ -28,7 +28,7 @@ function ContextProvider({ children }) {
     }
   }, [location]);
 
-  const [userId, setUserId] = useState(null);
+  const [userID, setuserID] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,11 +36,11 @@ function ContextProvider({ children }) {
 
     if (uid) {
       console.log("My UID -> " + uid);
-      setUserId(uid);
+      setuserID(uid);
     } else {
       navigate("/login", { replace: true });
     }
-  }, [userId]);
+  }, [userID]);
 
   return (
     <Context.Provider
@@ -50,8 +50,8 @@ function ContextProvider({ children }) {
         setisAlertShow,
         showAlert,
         showNavBar,
-        userId,
-        setUserId,
+        userID,
+        setuserID,
       }}
     >
       {children}
