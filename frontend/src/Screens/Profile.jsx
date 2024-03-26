@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -14,8 +14,10 @@ import {
   CommentFilledIcon,
 } from "../components/Icons";
 import Scaffold from "../components/Scaffold";
+import { Context } from "../context/ContextProvider";
 
 function Profile() {
+  const { showAlert } = useContext(Context);
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
   const [imagePreview, setImagePreview] = useState(null);
@@ -26,7 +28,6 @@ function Profile() {
   }
   const [showPostModal, setShowPostModal] = useState(false);
   const [postContent, setPostContent] = useState("");
-  const [postTitle, setPostTitle] = useState("");
   const [showEditUserModal, setShowEditUserModal] = useState(false);
   const [editedUser, setEditedUser] = useState({ ...user });
   const [isLoading, setLoading] = useState(false);
@@ -37,12 +38,14 @@ function Profile() {
     const createPosts = async () => {
       try {
         setLoading(true);
-        const response = await axios.post(
+        const res = await axios.post(
           "http://localhost:8080/posts/create-post",
-          { user_id: userID, title: postTitle, content: postContent }
+          { user_id: userID, title: "", content: postContent }
         );
-        const newPost = response.data;
-        setPosts((prevPosts) => [...prevPosts, newPost]);
+        if (!res.data.error) {
+          setPosts((prevPosts) => [...prevPosts, res.data.response]);
+        }
+        showAlert(res.data.message, res.data.error);
       } catch (error) {
         console.error("Error creating post:", error);
       } finally {
@@ -50,7 +53,7 @@ function Profile() {
       }
 
       setPostContent("");
-      setPostTitle("");
+      document.getElementById("postContent").value = "";
       setImagePreview(null);
     };
     createPosts();
@@ -106,9 +109,9 @@ function Profile() {
       <div>
         {/* Profile */}
         <div className="flex flex-col">
-          <div className="flex items-center gap-5 bg-gray-50 p-5 justify-between">
+          <div className="md:flex items-center md:gap-5 gap-5 bg-gray-50 p-5 justify-between">
             <div className="flex items-center gap-5">
-              <div className="rounded-full h-20 w-20 bg-gray-200 overflow-hidden">
+              <div className="rounded-full md:h-20 md:w-20 h-10 w-10 bg-gray-200 overflow-hidden flex-shrink-0">
                 {/* Profile Details */}
                 <img
                   src="https://source.unsplash.com/random"
@@ -116,9 +119,11 @@ function Profile() {
                   className="h-full w-full object-cover"
                 />
               </div>
-              <div className="flex flex-col">
-                <h1 className="text-xl font-medium">{user.name}</h1>
-                <h1 className="text-sm text-gray-500">{user.email}</h1>
+              <div className="flex flex-col truncate">
+                <h1 className="md:text-xl text-sm font-medium">{user.name}</h1>
+                <h1 className="text-[15px] sm:text-lg md:text-lg text-gray-500">
+                  {user.email}
+                </h1>
                 <h1 className="text-sm text-gray-500 font-medium mt-2">
                   Posts {posts.length}
                 </h1>
@@ -127,7 +132,7 @@ function Profile() {
             {/* Edit Profile Button */}
             <button
               type="button"
-              className="border-2 rounded-lg px-5 text-sm font-medium text-blue-700 hover:border-gray-300"
+              className="border-2 rounded-lg px-5 py-1 text-sm font-medium text-blue-700 md:w-auto w-full md:mt-0 mt-5"
               onClick={() => {
                 setShowEditUserModal(true);
               }}
@@ -147,18 +152,20 @@ function Profile() {
           <p className="text-gray-600 font-medium mb-5">Your Posts</p>
 
           {posts.length > 0 ? (
-            <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
-              {posts.map((post) => {
-                return (
-                  <div key={post._id}>
-                    <PostCard
-                      title={post.title}
-                      content={post.content}
-                      likes={post.likes}
-                    />
-                  </div>
-                );
-              })}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-5">
+              {posts
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .map((post) => {
+                  return (
+                    <div key={post._id}>
+                      <PostCard
+                        title={post.title}
+                        content={post.content}
+                        likes={post.likes}
+                      />
+                    </div>
+                  );
+                })}
             </div>
           ) : (
             <img src="/no_data.svg" alt="no-data" className="h-64 md:h-72" />
@@ -250,6 +257,8 @@ function Profile() {
               <button
                 className="min-w-[200px] bg-black rounded-full text-white hover:bg-gray-700"
                 onClick={() => {
+                  document.getElementById("postContent").value = "";
+                  setImagePreview(null);
                   setShowPostModal(false);
                 }}
               >
@@ -326,8 +335,8 @@ export default Profile;
 
 function PostCard({ title, content, likes }) {
   return (
-    <div className="bg-gray-100 rounded-xl p-5">
-      <div className="w-full h-[200px] rounded-xl bg-white mb-2">
+    <div className="bg-white border rounded-xl">
+      <div className="w-full h-[200px] bg-gray-100 mb-2">
         <img
           src="https://source.unsplash.com/random"
           alt="post-index"
@@ -335,28 +344,32 @@ function PostCard({ title, content, likes }) {
         />
       </div>
 
-      <h2 className="font-bold text-gray-700 mb-2">{title}</h2>
+      <div className="p-2">
+        <h2 className="font-bold text-gray-700 mb-2">{title}</h2>
 
-      <p className="line-clamp-3">{content}</p>
+        <p className="line-clamp-3">{content}</p>
 
-      <div className="flex items-center gap-5 mt-2">
-        <button className="flex items-center mt-2 gap-2 hover:bg-gray-200 rounded-full px-2">
-          {!true ? (
-            <LikeIcon color="text-gray-500" />
-          ) : (
-            <LikeFilledIcon color="text-gray-500" />
-          )}
+        <div className="flex items-center gap-5 mt-2">
+          <button className="flex items-center mt-2 gap-2 hover:bg-gray-200 rounded-full px-2">
+            {!true ? (
+              <LikeIcon color="text-gray-500" />
+            ) : (
+              <LikeFilledIcon color="text-gray-500" />
+            )}
 
-          <p className="font-medium text-gray-500">{likes.length}</p>
-        </button>
-        {/* <button className="flex items-center mt-2 gap-2 hover:bg-gray-200 rounded-full px-2">
-          {!true ? (
-            <CommentIcon color="text-gray-500" />
-          ) : (
-            <CommentFilledIcon color="text-gray-500" />
-          )}
-          <p className="font-medium text-gray-500">12</p>
-        </button> */}
+            <p className="font-medium text-gray-500">
+              {(likes && likes.length) || "0"}
+            </p>
+          </button>
+          {/* <button className="flex items-center mt-2 gap-2 hover:bg-gray-200 rounded-full px-2">
+            {!true ? (
+              <CommentIcon color="text-gray-500" />
+            ) : (
+              <CommentFilledIcon color="text-gray-500" />
+            )}
+            <p className="font-medium text-gray-500">12</p>
+          </button> */}
+        </div>
       </div>
     </div>
   );
