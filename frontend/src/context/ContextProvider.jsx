@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+
 export const Context = React.createContext();
 function ContextProvider({ children }) {
   const [alert, setAlert] = useState({

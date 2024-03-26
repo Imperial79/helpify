@@ -1,22 +1,19 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Scaffold from "../../components/Scaffold";
-import { Context } from "../../context/ContextProvider";
 export const Login = () => {
-  const { showAlert } = useContext(Context);
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setshowPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [_, setCookies] = useCookies(["token"]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       setLoading(true);
       const res = await axios.post("http://localhost:8080/users/login", {
