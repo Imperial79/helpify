@@ -3,7 +3,7 @@ import { PostModel } from "../models/Post_model.js";
 export const allPosts = async (req, res) => {
   try {
     const Posts = await PostModel.find({});
-    console.log(Posts);
+    // console.log(Posts);
     res.status(200).json(Posts);
   } catch (e) {
     res.sendStatus(400).send(e);
@@ -35,6 +35,21 @@ export const createPost = async (req, res) => {
     res.sendStatus(400).send(e);
   }
 };
+
+export const deletePost = async (req,res)=>{
+  const { postID } = req.params;
+  try {
+    const deletedPost = await PostModel.findByIdAndDelete(postID);
+    if (!deletedPost) {
+      return res.status(404).json({ error: true, message:'Post not found' });
+    }
+    
+    res.json({ error: false, message: 'Post deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+}
 
 export const likePost = async (req, res) => {
   const { postID } = req.params;

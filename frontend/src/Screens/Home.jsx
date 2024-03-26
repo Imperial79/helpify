@@ -26,7 +26,6 @@ function Home() {
         setLoading(false);
       }
     };
-    fetchUsers();
     const fetchPosts = async () => {
       try {
         setLoading(true);
@@ -38,10 +37,20 @@ function Home() {
         setLoading(false);
       }
     };
+    fetchUsers();
     fetchPosts();
   }, []);
-  // const userName = (users.find((user) => user._id === userID)).name.split(" ")[0];
+  const deletePost = async (postID) => {
+    try {
+      await axios.delete(`http://localhost:8080/posts/${postID}`);
+      // Remove the deleted post from the posts state
+      setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postID));
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
 
+  // const userName = users?(users.find((user) => user._id === userID)).name.split(" ")[0]:"";
   return (
     <Scaffold isLoading={isLoading}>
       {/* POST FORM */}
@@ -53,7 +62,7 @@ function Home() {
             className="rounded-full w-10 h-10"
           />
           <div className="flex-1 bg-gray-100 rounded-full flex items-center justify-start pl-4 cursor-pointer dark:bg-dark-third text-gray-500 text-lg dark:text-dark-txt">
-            <span>What's on your mind, {"userName"}?</span>
+            <span>What's on your mind, {"SomeUserName"}?</span>
           </div>
         </div>
       </div>
@@ -76,7 +85,8 @@ function Home() {
                   content={post.content}
                   likes={post.likes}
                   createdAt={post.createdAt}
-                />
+                  onDelete={deletePost}
+                  />
               </div>
             );
           })}
@@ -94,6 +104,7 @@ const PostComponent = ({
   likes,
   currentUser,
   createdAt,
+  onDelete
 }) => {
   const [showPostMenu, setShowPostMenu] = useState(false);
   const [likeCount, setLikeCount] = useState(likes.length);
@@ -127,7 +138,14 @@ const PostComponent = ({
     return `${day}-${month}-${year} ${hours}:${minutes}`;
   }
   const postTime = formatDateTime(createdAt);
-
+  const handleDelete = async () => {
+    try {
+      await onDelete(postID);
+      console.log('Post deleted successfully');
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
   return (
     <div className="shadow bg-white dark:bg-dark-second dark:text-dark-txt mt-4 rounded-lg">
       {/* POST AUTHOR */}
@@ -149,7 +167,7 @@ const PostComponent = ({
         </div>
 
         <div className="relative">
-          {currentUser._id && (
+          {currentUser._id === userID && (
             <button
               onClick={() => {
                 setShowPostMenu(!showPostMenu);
@@ -188,6 +206,7 @@ const PostComponent = ({
             <button
               type="button"
               className="w-full hover:bg-gray-100 p-2 flex items-center gap-2"
+              onClick={handleDelete}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -214,11 +233,11 @@ const PostComponent = ({
       {/* END POST CONTENT */}
       {/* POST IMAGE */}
       <div className="py-2">
-        <img
+        {/* <img
           className="h-64 w-64 mx-auto"
           src="https://source.unsplash.com/random"
           alt="Post image"
-        />
+        /> */}
       </div>
       {/* END POST IMAGE */}
       {/* POST REACT */}
