@@ -6,7 +6,7 @@ import { useCookies } from "react-cookie";
 import Scaffold from "../../components/Scaffold";
 import { Context } from "../../context/ContextProvider";
 export const Login = () => {
-  const { showAlert, userID } = useContext(Context);
+  const { showAlert, userID, setuserID } = useContext(Context);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,6 +29,7 @@ export const Login = () => {
       if (!res.data.error) {
         setCookies("token", res.data.response.token);
         window.localStorage.setItem("userID", res.data.response.user._id);
+        setuserID(res.data.response.user._id);
         navigate("/", { replace: true });
       } else {
         showAlert(res.data.message, true);

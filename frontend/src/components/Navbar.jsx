@@ -4,13 +4,14 @@ import { useCookies } from "react-cookie";
 import { Context } from "../context/ContextProvider";
 
 export default function Navbar() {
-  const { showNavBar, userID } = useContext(Context);
+  const { showNavBar, userID, setuserID } = useContext(Context);
   const [showMenu, setshowMenu] = useState(false);
   const [cookies, setCookies] = useCookies(["token"]);
 
   const navigate = useNavigate();
   const Logout = () => {
     setCookies("token", "");
+    setuserID(null);
     window.localStorage.removeItem("userID");
     navigate("/login");
   };
