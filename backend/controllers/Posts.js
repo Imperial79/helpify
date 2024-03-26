@@ -23,33 +23,41 @@ export const profilePost = async (req, res) => {
 export const createPost = async (req, res) => {
   try {
     const { user_id, title, content } = req.body;
-    // console.log(req.body);
+
     const newPost = new PostModel({
       user_id,
       title,
       content,
     });
-    await newPost.save();
-    res.status(200).json(newPost);
+    const post = await newPost.save();
+
+    res.json({
+      error: false,
+      message: "Post created successfully!",
+      response: post,
+    });
   } catch (e) {
-    res.sendStatus(400).send(e);
+    res.json({
+      error: true,
+      message: e,
+    });
   }
 };
 
-export const deletePost = async (req,res)=>{
+export const deletePost = async (req, res) => {
   const { postID } = req.params;
   try {
     const deletedPost = await PostModel.findByIdAndDelete(postID);
     if (!deletedPost) {
-      return res.status(404).json({ error: true, message:'Post not found' });
+      return res.status(404).json({ error: true, message: "Post not found" });
     }
-    
-    res.json({ error: false, message: 'Post deleted successfully' });
+
+    res.json({ error: false, message: "Post deleted successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: "Something went wrong" });
   }
-}
+};
 
 export const likePost = async (req, res) => {
   const { postID } = req.params;
@@ -59,7 +67,7 @@ export const likePost = async (req, res) => {
     const post = await PostModel.findById(postID);
 
     if (!post) {
-      return res.status(404).json({ error: true,message:'Post not found' });
+      return res.status(404).json({ error: true, message: "Post not found" });
     }
     const isLiked = post.likes.includes(userID);
 
@@ -72,6 +80,6 @@ export const likePost = async (req, res) => {
     res.json({ success: true, likes: post.likes });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: true,message: 'Something went wrong' });
+    res.status(500).json({ error: true, message: "Something went wrong" });
   }
-}
+};

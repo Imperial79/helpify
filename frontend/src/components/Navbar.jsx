@@ -4,7 +4,7 @@ import { useCookies } from "react-cookie";
 import { Context } from "../context/ContextProvider";
 
 export default function Navbar() {
-  const { showNavBar } = useContext(Context);
+  const { showNavBar, userID } = useContext(Context);
   const [showMenu, setshowMenu] = useState(false);
   const [cookies, setCookies] = useCookies(["token"]);
 
@@ -18,11 +18,11 @@ export default function Navbar() {
   return (
     <div className={`${showNavBar ? "" : "hidden"}`}>
       <div className="bg-white w-full h-[80px] flex items-center px-5 justify-between fixed border border-b-2 z-10">
-        <Link to="/" className="text-lg font-medium">
-          Logo
+        <Link to="/" className="text-lg font-extrabold">
+          Helpify
         </Link>
         <div className="md:flex items-center gap-3 bg-gray-100 rounded-full p-2 hidden">
-          {cookies.token ? (
+          {userID ? (
             <>
               <NavLink to="/" className="navLink">
                 Home
@@ -32,7 +32,7 @@ export default function Navbar() {
               </NavLink>
               <button
                 onClick={Logout}
-                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+                className="bg-red-500 hover:bg-red-600 text-white font-medium text-sm py-1.5 px-5 rounded-full"
               >
                 Logout
               </button>
@@ -82,12 +82,15 @@ export default function Navbar() {
 
         {showMenu ? (
           <div className="menu">
-            {cookies.token ? (
+            {userID ? (
               <>
-                <Link to="/profile" className="menuBtn">
-                  <img src="/home.svg" alt="profile" className="h-6 w-6" />
-                  <p>My Profile</p>
-                </Link>
+                <HomeMenuLink
+                  onClick={() => {
+                    setshowMenu(false);
+                  }}
+                  imgSrc="/user.svg"
+                  label="My Profile"
+                />
                 <HomeMenuLink
                   onClick={() => {
                     setshowMenu(false);
@@ -111,7 +114,7 @@ export default function Navbar() {
                 />
                 <button
                   onClick={Logout}
-                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline"
+                  className="bg-red-500 hover:bg-red-600 text-white font-medium px-5 py-1.5 rounded-full text-sm truncate"
                 >
                   Logout
                 </button>
@@ -130,6 +133,7 @@ export default function Navbar() {
                   onClick={() => {
                     setshowMenu(false);
                   }}
+                  to="/register"
                   imgSrc="/register.svg"
                   label="Register"
                 />
@@ -137,21 +141,26 @@ export default function Navbar() {
                   onClick={() => {
                     setshowMenu(false);
                   }}
-                  imgSrc="/home.svg"
-                  label="Home"
+                  to="/login"
+                  imgSrc="/login.svg"
+                  label="Login"
                 />
-                <Link to="/login" className="menuBtn">
-                  <img src="/user.svg" alt="login" className="h-6 w-6" />
-                  <p>Login</p>
-                </Link>
-                <Link to="/contact" className="menuBtn">
-                  <img src="/contact.svg" alt="contact" className="h-6 w-6" />
-                  <p>Contact Us</p>
-                </Link>
-                <Link to="/about" className="menuBtn">
-                  <img src="/about.svg" alt="about" className="h-6 w-6" />
-                  <p>About Us</p>
-                </Link>
+                <HomeMenuLink
+                  onClick={() => {
+                    setshowMenu(false);
+                  }}
+                  to="/contact"
+                  imgSrc="/contact.svg"
+                  label="Contact Us"
+                />
+                <HomeMenuLink
+                  onClick={() => {
+                    setshowMenu(false);
+                  }}
+                  to="/about"
+                  imgSrc="/about.svg"
+                  label="About Us"
+                />
               </>
             )}
           </div>

@@ -6,7 +6,7 @@ import Scaffold from "../../components/Scaffold";
 import { Context } from "../../context/ContextProvider";
 
 export const Register = () => {
-  const { showAlert } = useContext(Context);
+  const { showAlert, userID } = useContext(Context);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -16,8 +16,8 @@ export const Register = () => {
   const [addressList, setAddressList] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
-  if(window.localStorage.getItem("userID")){
-    navigate('/');
+  if (userID) {
+    navigate("/");
   }
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({

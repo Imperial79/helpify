@@ -3,9 +3,15 @@ import axios from "axios";
 import Scaffold from "../components/Scaffold";
 import {
   CloseIcon,
+  CommentIcon,
+  DeleteIcon,
+  EditIcon,
   ImageIcon,
+  LikeFilledIcon,
+  LikeIcon,
   LocationIcon,
   MenuIcon,
+  ShareIcon,
 } from "../components/Icons";
 import { Context } from "../context/ContextProvider";
 import Modal from "../components/Modal";
@@ -55,12 +61,10 @@ function Home() {
   // const userName = users?(users.find((user) => user._id === userID)).name.split(" ")[0]:"";
   return (
     <Scaffold isLoading={isLoading}>
-      {/* POST FORM */}
-
       <div className="max-w-2xl mx-auto">
         <div>
-          <div className="p-4 rounded-lg bg-white">
-            <div className="p-2 flex items-center gap-2">
+          <div className="p-4 rounded-lg bg-white border-2">
+            <div className="p-2 flex items-center gap-5">
               <div className="h-10 w-10 overflow-hidden rounded-full flex-shrink-0">
                 <img
                   src="https://source.unsplash.com/random"
@@ -73,14 +77,13 @@ function Home() {
                 onClick={() => {
                   setShowCreatePostModal(true);
                 }}
-                className="text-start text-sm font-medium text-gray-400 rounded-xl bg-gray-100 p-3 w-full"
+                className="text-start text-sm font-medium text-gray-600 rounded-xl bg-gray-100 p-3 w-full"
               >
                 <span>🤔 What's on your mind, {"SomeUserName"}?</span>
               </button>
             </div>
           </div>
           <div>
-            {/* POST */}
             {posts
               .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
               .map((post) => {
@@ -111,6 +114,8 @@ function Home() {
       <CreatePostModal
         showPostModal={showCreatePostModal}
         setShowPostModal={setShowCreatePostModal}
+        setLoading={setLoading}
+        setPosts={setPosts}
       />
     </Scaffold>
   );
@@ -118,11 +123,43 @@ function Home() {
 
 export default Home;
 
-function CreatePostModal({ showPostModal, setShowPostModal }) {
+function CreatePostModal({
+  showPostModal,
+  setShowPostModal,
+  setLoading,
+  setPosts,
+}) {
   const [imagePreview, setImagePreview] = useState(null);
   const [postContent, setPostContent] = useState("");
+  const { userID, showAlert } = useContext(Context);
 
-  function handlePostSubmit() {}
+  function handlePostSubmit() {
+    setShowPostModal(false);
+
+    const createPosts = async () => {
+      try {
+        setLoading(true);
+
+        const res = await axios.post(
+          "http://localhost:8080/posts/create-post",
+          { user_id: userID, title: "", content: postContent }
+        );
+
+        if (!res.data.error) {
+          setPosts((prevPosts) => [...prevPosts, res.data.response]);
+        }
+        showAlert(res.data.message, res.data.error);
+      } catch (error) {
+        console.error("Error creating post:", error);
+      } finally {
+        setLoading(false);
+      }
+
+      setPostContent("");
+      setImagePreview(null);
+    };
+    createPosts();
+  }
   return (
     <Modal
       isOpen={showPostModal}
@@ -267,7 +304,7 @@ const PostComponent = ({
     }
   };
   return (
-    <div className="shadow bg-white dark:bg-dark-second dark:text-dark-txt mt-4 rounded-lg">
+    <div className="border-2 bg-white mt-4 rounded-lg">
       {/* POST AUTHOR */}
       <div className="flex items-center justify-between px-4 py-2">
         <div className="flex space-x-2 items-center gap-2">
@@ -292,7 +329,7 @@ const PostComponent = ({
               onClick={() => {
                 setShowPostMenu(!showPostMenu);
               }}
-              className="hover:bg-gray-200 bg-gray-100 rounded-full p-2"
+              className="hover:bg-gray-200 rounded-full p-2"
             >
               <MenuIcon size={"h-6 w-6"} />
             </button>
@@ -305,53 +342,25 @@ const PostComponent = ({
           >
             <button
               type="button"
-              className="w-full hover:bg-gray-100 p-2 flex items-center gap-2"
+              className="w-full hover:bg-gray-100 p-2 text-sm font-medium flex items-center gap-2"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-5 h-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                />
-              </svg>
+              <EditIcon size="h-4 w-4" />
               Edit
             </button>
             <button
               type="button"
-              className="w-full hover:bg-gray-100 p-2 flex items-center gap-2"
+              className="w-full hover:bg-gray-100 p-2 flex items-center gap-2 text-sm font-medium"
               onClick={handleDelete}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-5 h-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                />
-              </svg>
+              <DeleteIcon size="h-4 w-4" />
               Delete
             </button>
           </div>
         </div>
       </div>
-      {/* END POST AUTHOR */}
-      {/* POST CONTENT */}
+
       <div className="text-justify px-4 py-2">{content}</div>
-      {/* END POST CONTENT */}
-      {/* POST IMAGE */}
+
       <div className="bg-gray-100">
         <img
           className="max-h-[300px] mx-auto"
@@ -359,13 +368,12 @@ const PostComponent = ({
           alt="post-image"
         />
       </div>
-      {/* END POST IMAGE */}
-      {/* POST REACT */}
+
       <div className="px-4 py-2">
         <div className="flex items-center justify-between">
           <div className="flex flex-row-reverse items-center">
             <span className="ml-2 text-gray-500 dark:text-dark-txt">
-              Likes: {likeCount}
+              {likeCount || "0"} Likes
             </span>
             <span className="rounded-full grid place-items-center text-2xl -ml-1 text-red-800">
               <i className="bx bxs-angry" />
@@ -379,23 +387,26 @@ const PostComponent = ({
           </div>
         </div>
       </div>
-      {/* END POST REACT */}
-      {/* POST ACTION */}
+
       <div className="py-2 px-4">
-        <div className="border border-gray-200 dark:border-dark-third border-l-0 border-r-0 py-1">
+        <div>
           <div className="flex space-x-2">
             <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
               <i className="bx bx-like" />
-              <span className="text-sm font-semibold" onClick={handleLike}>
-                {isLiked ? "Unlike" : "Like"}
+              <span
+                className="text-sm font-semibold flex gap-2"
+                onClick={handleLike}
+              >
+                {!isLiked ? <LikeIcon /> : <LikeFilledIcon />}
+                {!isLiked ? "Like" : "Unlike"}
               </span>
             </div>
             <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
-              <i className="bx bx-comment" />
+              <CommentIcon />
               <span className="text-sm font-semibold">Comment</span>
             </div>
             <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
-              <i className="bx bx-share bx-flip-horizontal" />
+              <ShareIcon />
               <span className="text-sm font-semibold">Share</span>
             </div>
           </div>

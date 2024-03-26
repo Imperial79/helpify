@@ -5,13 +5,13 @@ import { useNavigate } from "react-router-dom";
 
 import Modal from "../components/Modal";
 import {
-  like,
-  like_filled,
-  comment,
-  comment_filled,
   LocationIcon,
   ImageIcon,
   CloseIcon,
+  LikeIcon,
+  LikeFilledIcon,
+  CommentIcon,
+  CommentFilledIcon,
 } from "../components/Icons";
 import Scaffold from "../components/Scaffold";
 
@@ -51,6 +51,7 @@ function Profile() {
 
       setPostContent("");
       setPostTitle("");
+      setImagePreview(null);
     };
     createPosts();
   };
@@ -338,13 +339,22 @@ function PostCard({ title, content, likes }) {
 
       <p className="line-clamp-3">{content}</p>
 
-      <div className="flex items-center gap-5 mt-5">
+      <div className="flex items-center gap-5 mt-2">
         <button className="flex items-center mt-2 gap-2 hover:bg-gray-200 rounded-full px-2">
-          {!true ? like : like_filled}
+          {!true ? (
+            <LikeIcon color="text-gray-500" />
+          ) : (
+            <LikeFilledIcon color="text-gray-500" />
+          )}
+
           <p className="font-medium text-gray-500">{likes.length}</p>
         </button>
         <button className="flex items-center mt-2 gap-2 hover:bg-gray-200 rounded-full px-2">
-          {!true ? comment : comment_filled}
+          {!true ? (
+            <CommentIcon color="text-gray-500" />
+          ) : (
+            <CommentFilledIcon color="text-gray-500" />
+          )}
           <p className="font-medium text-gray-500">12</p>
         </button>
       </div>
