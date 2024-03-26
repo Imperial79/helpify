@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const Context = React.createContext();
 function ContextProvider({ children }) {
@@ -8,9 +8,6 @@ function ContextProvider({ children }) {
     isDanger: false,
   });
   const [isAlertShow, setisAlertShow] = useState(false);
-
-  // This will store user data for local session which can be accessed anywhere in the website using context api
-  const [user, setUser] = useState(null);
 
   const showAlert = (message, isDanger) => {
     setisAlertShow(true);
@@ -24,13 +21,26 @@ function ContextProvider({ children }) {
   const location = useLocation();
 
   useEffect(() => {
-    console.log(location.pathname);
     if (location.pathname == "/login" || location.pathname == "/register") {
       setShowNavBar(false);
     } else {
       setShowNavBar(true);
     }
   }, [location]);
+
+  const [userId, setUserId] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const uid = window.localStorage.getItem("userID");
+
+    if (uid) {
+      console.log("My UID -> " + uid);
+      setUserId(uid);
+    } else {
+      navigate("/login", { replace: true });
+    }
+  }, [userId]);
 
   return (
     <Context.Provider
@@ -39,9 +49,9 @@ function ContextProvider({ children }) {
         isAlertShow,
         setisAlertShow,
         showAlert,
-        user,
-        setUser,
         showNavBar,
+        userId,
+        setUserId,
       }}
     >
       {children}

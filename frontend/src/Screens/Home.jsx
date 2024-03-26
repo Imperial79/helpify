@@ -1,19 +1,15 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Scaffold from "../components/Scaffold";
 import { MenuIcon } from "../components/Icons";
+import { Context } from "../context/ContextProvider";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const [users, setUsers] = useState([]);
+  const { userId } = useContext(Context);
+  const [usersList, setUsers] = useState([]);
   const [posts, setPosts] = useState([]);
   const [isLoading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const userID = window.localStorage.getItem("userID");
-  if (!userID) {
-    navigate("/login");
-  }
-
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -40,20 +36,20 @@ function Home() {
     };
     fetchPosts();
   }, []);
-  // const userName = (users.find((user) => user._id === userID)).name.split(" ")[0];
 
   return (
     <Scaffold isLoading={isLoading}>
       {/* POST FORM */}
-      <div className="px-4 mt-4 shadow rounded-lg bg-white dark:bg-dark-second">
-        <div className="p-2 border-b border-gray-300 dark:border-dark-third flex space-x-4">
+
+      <div className="p-4 mt-4 rounded-lg bg-white dark:bg-dark-second">
+        <div className="p-2 flex items-center gap-2">
           <img
             src="https://source.unsplash.com/random"
             alt="Profile Picture"
             className="rounded-full w-10 h-10"
           />
-          <div className="flex-1 bg-gray-100 rounded-full flex items-center justify-start pl-4 cursor-pointer dark:bg-dark-third text-gray-500 text-lg dark:text-dark-txt">
-            <span>What's on your mind, {"userName"}?</span>
+          <div className="bg-gray-100 p-4 rounded-lg text-gray-400 font-medium text-sm truncate w-full">
+            <span>🤔💭 What's on your mind, {userId}?</span>
           </div>
         </div>
       </div>
@@ -66,7 +62,9 @@ function Home() {
         {posts
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
           .map((post) => {
-            const currentUser = users.find((user) => user._id === post.user_id);
+            const currentUser = usersList.find(
+              (user) => user._id === post.user_id
+            );
             return (
               <div key={post._id}>
                 <PostComponent
@@ -97,16 +95,14 @@ const PostComponent = ({
 }) => {
   const [showPostMenu, setShowPostMenu] = useState(false);
   const [likeCount, setLikeCount] = useState(likes.length);
-  const [isLiked, setIsLiked] = useState(
-    likes.includes(window.localStorage.getItem("userID"))
-  );
-  const userID = window.localStorage.getItem("userID");
+  const { userId } = useContext(Context);
+  const [isLiked, setIsLiked] = useState(likes.includes(userId));
 
   const handleLike = async () => {
     try {
       const response = await axios.put(
         `http://localhost:8080/posts/${postID}/like`,
-        { userID: userID }
+        { userID: userId }
       );
 
       setLikeCount(response.data.likes.length);
@@ -149,7 +145,7 @@ const PostComponent = ({
         </div>
 
         <div className="relative">
-          {currentUser._id && (
+          {
             <button
               onClick={() => {
                 setShowPostMenu(!showPostMenu);
@@ -158,12 +154,12 @@ const PostComponent = ({
             >
               <MenuIcon size={"h-6 w-6"} />
             </button>
-          )}
+          }
 
           <div
             className={`${
               showPostMenu ? "opacity-100" : "opacity-0 pointer-events-none"
-            } absolute shadow-lg py-2 bg-white rounded-lg w-[100px] transition-opacity duration-300`}
+            } absolute shadow-lg py-2 bg-white rounded-lg w-[100px] transition-opacity duration-300 right-1`}
           >
             <button
               type="button"
