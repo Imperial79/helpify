@@ -36,41 +36,42 @@ function ContextProvider({ children }) {
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`http://localhost:8080/users/`);
-        setUsers(response.data);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    const fetchPosts = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`http://localhost:8080/posts/`);
-        setPosts(response.data);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUsers();
-    fetchPosts();
-  }, []);
+    if (location.pathname == "/" || location.pathname == "/profile") {
+      const fetchUsers = async () => {
+        try {
+          setLoading(true);
+          const response = await axios.get(`http://localhost:8080/users/`);
+          setUsers(response.data);
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      const fetchPosts = async () => {
+        try {
+          setLoading(true);
+          const response = await axios.get(`http://localhost:8080/posts/`);
+          setPosts(response.data);
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchUsers();
+      fetchPosts();
+    }
+  }, [location]);
+  const uid = window.localStorage.getItem("userID");
   useEffect(() => {
-    const uid = window.localStorage.getItem("userID");
-
     if (uid) {
       console.log("My UID -> " + uid);
       setuserID(uid);
     } else {
       navigate("/login", { replace: true });
     }
-  }, [userID]);
+  }, [uid]);
 
   return (
     <Context.Provider
@@ -87,7 +88,7 @@ function ContextProvider({ children }) {
         posts,
         setPosts,
         isLoading,
-        setLoading
+        setLoading,
       }}
     >
       {children}

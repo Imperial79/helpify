@@ -92,6 +92,7 @@ export default function Navbar() {
                   onClick={() => {
                     setshowMenu(false);
                   }}
+                  to="/profile"
                   imgSrc="/user.svg"
                   label="My Profile"
                 />
@@ -99,6 +100,7 @@ export default function Navbar() {
                   onClick={() => {
                     setshowMenu(false);
                   }}
+                  to="/"
                   imgSrc="/home.svg"
                   label="Home"
                 />
@@ -106,6 +108,7 @@ export default function Navbar() {
                   onClick={() => {
                     setshowMenu(false);
                   }}
+                  to="/contact"
                   imgSrc="/contact.svg"
                   label="Contact Us"
                 />
@@ -113,6 +116,7 @@ export default function Navbar() {
                   onClick={() => {
                     setshowMenu(false);
                   }}
+                  to="/about"
                   imgSrc="/about.svg"
                   label="About Us"
                 />

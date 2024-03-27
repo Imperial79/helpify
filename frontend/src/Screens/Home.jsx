@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import Scaffold from "../components/Scaffold";
 import {
@@ -101,7 +101,7 @@ function Home() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 h-[500px] col-span-1 mt-10 sm:mt-10 lg:mt-0">
+        <div className="flex flex-col gap-2 h-[500px] col-span-1 mt-10 sm:mt-10 lg:mt-0 md:sticky md:top-[85px]">
           <h1>People in my area</h1>
           <div className="h-full w-full rounded-xl bg-white border p-5 overflow-auto">
             <div className="w-full flex items-center gap-3">
