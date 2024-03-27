@@ -348,6 +348,9 @@ const PostComponent = ({
             } absolute shadow-lg py-2 bg-white rounded-lg w-[100px] transition-opacity duration-300 right-1`}
           >
             <button
+              onClick={() => {
+                setShowPostMenu(false);
+              }}
               type="button"
               className="w-full hover:bg-gray-100 p-2 text-sm font-medium flex items-center gap-2"
             >
@@ -357,7 +360,10 @@ const PostComponent = ({
             <button
               type="button"
               className="w-full hover:bg-gray-100 p-2 flex items-center gap-2 text-sm font-medium"
-              onClick={handleDelete}
+              onClick={() => {
+                handleDelete();
+                setShowPostMenu(false);
+              }}
             >
               <DeleteIcon size="h-4 w-4" />
               Delete
