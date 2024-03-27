@@ -18,23 +18,21 @@ import { Context } from "../context/ContextProvider";
 import FullScreenLoading from "../components/FullScrenLoading";
 
 function Profile() {
-  const { showAlert, usersList, setUsers, posts, setPosts, userID } =
-    useContext(Context);
+  const {
+    showAlert,
+    profileUser,
+    setProfileUser,
+    profilePosts,
+    setProfilePosts,
+    userID,
+  } = useContext(Context);
   const [imagePreview, setImagePreview] = useState(null);
 
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    if (usersList) {
-      var user = usersList.find((user) => user._id == userID);
-      setUser(user);
-    }
-  }, [usersList]);
 
   const [showPostModal, setShowPostModal] = useState(false);
   const [postContent, setPostContent] = useState("");
   const [showEditUserModal, setShowEditUserModal] = useState(false);
-  const [editedUser, setEditedUser] = useState({ ...user });
+  const [editedUser, setEditedUser] = useState({ ...profileUser });
   const [isLoading, setLoading] = useState(false);
 
   const handlePostSubmit = () => {
@@ -48,7 +46,7 @@ function Profile() {
           { user_id: userID, title: "", content: postContent }
         );
         if (!res.data.error) {
-          setPosts((prevPosts) => [...prevPosts, res.data.response]);
+          setProfilePosts((prevPosts) => [...prevPosts, res.data.response]);
         }
         showAlert(res.data.message, res.data.error);
       } catch (error) {
@@ -73,7 +71,7 @@ function Profile() {
       );
 
       // Update the user state with the edited data
-      setUser(editedUser);
+      setProfileUser(editedUser);
       setShowEditUserModal(false);
     } catch (error) {
       console.error("Error updating user profile:", error);
@@ -83,7 +81,7 @@ function Profile() {
     const { name, value } = e.target;
     setEditedUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
-  return user != null ? (
+  return profileUser != null ? (
     <Scaffold isLoading={isLoading}>
       <div>
         {/* Profile */}
@@ -99,12 +97,12 @@ function Profile() {
                 />
               </div>
               <div className="flex flex-col truncate">
-                <h1 className="md:text-xl text-sm font-medium">{user.name}</h1>
+                <h1 className="md:text-xl text-sm font-medium">{profileUser.name}</h1>
                 <h1 className="text-[15px] sm:text-lg md:text-lg text-gray-500">
-                  {user.email}
+                  {profileUser.email}
                 </h1>
                 <h1 className="text-sm text-gray-500 font-medium mt-2">
-                  Posts {posts.length}
+                  Posts {profilePosts.length}
                 </h1>
               </div>
             </div>
@@ -130,9 +128,9 @@ function Profile() {
           <br />
           <p className="text-gray-600 font-medium mb-5">Your Posts</p>
 
-          {posts.length > 0 ? (
+          {profilePosts.length > 0 ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-5">
-              {posts
+              {profilePosts
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                 .map((post) => {
                   return (
@@ -167,7 +165,7 @@ function Profile() {
                 <img src="https://source.unsplash.com/random" alt="" />
               </div>
               <div>
-                <h1 className="font-medium">{user.name}</h1>
+                <h1 className="font-medium">{profileUser.name}</h1>
                 <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
                   <LocationIcon size={"h-5 w-5"} color={"text-blue-700"} />
                   Durgapur, West Bengal
