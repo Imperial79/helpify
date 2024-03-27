@@ -61,8 +61,8 @@ function Home() {
   // const userName = users?(users.find((user) => user._id === userID)).name.split(" ")[0]:"";
   return (
     <Scaffold isLoading={isLoading}>
-      <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 sm:gap-0 lg:gap-10 gap-0 mx-auto">
-        <div className="col-span-3 max-w-4xl mx-auto w-full">
+      <div className="max-w-2xl mx-auto">
+        <div>
           <div className="p-4 rounded-lg bg-white border-2">
             <div className="p-2 flex items-center gap-5">
               <div className="h-10 w-10 overflow-hidden rounded-full flex-shrink-0">
@@ -84,55 +84,28 @@ function Home() {
             </div>
           </div>
           <div>
-            {posts && posts.length > 0 ? (
-              posts
-                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                .map((post) => {
-                  const currentUser = usersList.find(
-                    (user) => user._id === post.user_id
-                  );
-                  return currentUser ? (
-                    <div key={post._id}>
-                      <PostComponent
-                        postID={post._id}
-                        currentUser={currentUser}
-                        title={post.title}
-                        content={post.content}
-                        likes={post.likes}
-                        createdAt={post.createdAt}
-                        onDelete={deletePost}
-                      />
-                    </div>
-                  ) : (
-                    <></>
-                  );
-                })
-            ) : (
-              <div className="flex flex-col p-10">
-                <img
-                  src="/no-posts.svg"
-                  className="h-[200px] w-[200px] mx-auto"
-                />
-                <h1 className="mx-auto mt-5 font-medium text-gray-500">
-                  No Posts yet !
-                </h1>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-2 h-[500px] col-span-1 mt-10 sm:mt-10 lg:mt-0">
-          <h1>People in my area</h1>
-          <div className="h-full w-full rounded-xl bg-white border p-5 overflow-auto">
-            <div className="w-full flex items-center gap-3">
-              <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200"></div>
-              <div className="flex flex-col truncate">
-                <h3 className="font-medium text-gray-600">Avishek verma</h3>
-                <p className="font-normal text-gray-400 text-sm">
-                  avishekverma79@gmail.com
-                </p>
-              </div>
-            </div>
+            {posts
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+              .map((post) => {
+                const currentUser = usersList.find(
+                  (user) => user._id === post.user_id
+                );
+                return currentUser ? (
+                  <div key={post._id}>
+                    <PostComponent
+                      postID={post._id}
+                      currentUser={currentUser}
+                      title={post.title}
+                      content={post.content}
+                      likes={post.likes}
+                      createdAt={post.createdAt}
+                      onDelete={deletePost}
+                    />
+                  </div>
+                ) : (
+                  <></>
+                );
+              })}
           </div>
         </div>
       </div>
