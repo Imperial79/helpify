@@ -18,20 +18,21 @@ import { Context } from "../context/ContextProvider";
 
 function Profile() {
   const { showAlert } = useContext(Context);
-  const [user, setUser] = useState({});
-  const [posts, setPosts] = useState([]);
   const [imagePreview, setImagePreview] = useState(null);
   const navigate = useNavigate();
   const userID = window.localStorage.getItem("userID");
   if (!userID) {
     navigate("/login");
   }
+  const {usersList,setUsers,posts,setPosts} = useContext(Context);
+  console.log(usersList)
+  const [user, setUser] = useState(usersList?.find((user) => user._id === userID));
   const [showPostModal, setShowPostModal] = useState(false);
   const [postContent, setPostContent] = useState("");
   const [showEditUserModal, setShowEditUserModal] = useState(false);
   const [editedUser, setEditedUser] = useState({ ...user });
   const [isLoading, setLoading] = useState(false);
-
+  
   const handlePostSubmit = () => {
     setShowPostModal(false);
 
@@ -78,31 +79,31 @@ function Profile() {
     const { name, value } = e.target;
     setEditedUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
-
   //fetching User Data and User's Posts
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/users/profile/${userID}`
-        );
-        setUser(response.data);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      }
-    };
-    fetchUser();
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/posts/profile-post/${userID}`
-        );
-        setPosts(response.data);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      }
-    };
-    fetchPosts();
+  //   const fetchUser = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `http://localhost:8080/users/profile/${userID}`
+  //       );
+  //       setUser(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching user:", error);
+  //     }
+  //   };
+  //   fetchUser();
+  //   const fetchPosts = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `http://localhost:8080/posts/profile-post/${userID}`
+  //       );
+  //       setPosts(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching user:", error);
+  //     }
+  //   };
+  //   fetchPosts();
+
   }, []);
   return (
     <Scaffold isLoading={isLoading}>

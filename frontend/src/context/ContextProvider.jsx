@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import axios from "axios";
 export const Context = React.createContext();
 function ContextProvider({ children }) {
   const [alert, setAlert] = useState({
@@ -31,6 +31,36 @@ function ContextProvider({ children }) {
   const [userID, setuserID] = useState(null);
   const navigate = useNavigate();
 
+  const [usersList, setUsers] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`http://localhost:8080/users/`);
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    const fetchPosts = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`http://localhost:8080/posts/`);
+        setPosts(response.data);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUsers();
+    fetchPosts();
+  }, []);
   useEffect(() => {
     const uid = window.localStorage.getItem("userID");
 
@@ -52,6 +82,12 @@ function ContextProvider({ children }) {
         showNavBar,
         userID,
         setuserID,
+        usersList,
+        setUsers,
+        posts,
+        setPosts,
+        isLoading,
+        setLoading
       }}
     >
       {children}

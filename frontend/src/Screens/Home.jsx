@@ -15,39 +15,18 @@ import {
 } from "../components/Icons";
 import { Context } from "../context/ContextProvider";
 import Modal from "../components/Modal";
-
 function Home() {
-  const [usersList, setUsers] = useState([]);
-  const [posts, setPosts] = useState([]);
-  const [isLoading, setLoading] = useState(false);
+  const {
+    usersList,
+    setUsers,
+    posts,
+    setPosts,
+    isLoading,
+    setLoading,
+    userID,
+  } = useContext(Context);
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`http://localhost:8080/users/`);
-        setUsers(response.data);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    const fetchPosts = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`http://localhost:8080/posts/`);
-        setPosts(response.data);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUsers();
-    fetchPosts();
-  }, []);
   const deletePost = async (postID) => {
     try {
       await axios.delete(`http://localhost:8080/posts/${postID}`);
@@ -58,7 +37,8 @@ function Home() {
     }
   };
 
-  // const userName = users?(users.find((user) => user._id === userID)).name.split(" ")[0]:"";
+  // const userName = usersList? (usersList.find((user) => user._id === userID).name.split(" ")[0]) :'userName';
+  // console.log(userName);
   return (
     <Scaffold isLoading={isLoading}>
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 sm:gap-0 lg:gap-10 gap-0 mx-auto">
@@ -79,7 +59,7 @@ function Home() {
                 }}
                 className="text-start text-sm font-medium text-gray-600 rounded-xl bg-gray-100 p-3 w-full"
               >
-                <span>🤔 What's on your mind, {"SomeUserName"}?</span>
+                <span>🤔 What's on your mind, {"userName"}?</span>
               </button>
             </div>
           </div>
