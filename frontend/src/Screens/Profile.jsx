@@ -15,20 +15,22 @@ import {
 } from "../components/Icons";
 import Scaffold from "../components/Scaffold";
 import { Context } from "../context/ContextProvider";
+import FullScreenLoading from "../components/FullScrenLoading";
 
 function Profile() {
-  const { showAlert, usersList, setUsers, posts, setPosts } =
+  const { showAlert, usersList, setUsers, posts, setPosts, userID } =
     useContext(Context);
   const [imagePreview, setImagePreview] = useState(null);
-  const navigate = useNavigate();
-  const userID = window.localStorage.getItem("userID");
-  if (!userID) {
-    navigate("/login");
-  }
-  console.log(usersList);
-  const [user, setUser] = useState(
-    usersList?.find((user) => user._id === userID)
-  );
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    if (usersList) {
+      var user = usersList.find((user) => user._id == userID);
+      setUser(user);
+    }
+  }, [usersList]);
+
   const [showPostModal, setShowPostModal] = useState(false);
   const [postContent, setPostContent] = useState("");
   const [showEditUserModal, setShowEditUserModal] = useState(false);
@@ -81,7 +83,7 @@ function Profile() {
     const { name, value } = e.target;
     setEditedUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
-  return (
+  return user != null ? (
     <Scaffold isLoading={isLoading}>
       <div>
         {/* Profile */}
@@ -305,6 +307,8 @@ function Profile() {
         </Modal>
       </div>
     </Scaffold>
+  ) : (
+    <FullScreenLoading isLoading={!user} />
   );
 }
 

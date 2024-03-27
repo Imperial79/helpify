@@ -67,12 +67,12 @@ function Home() {
             {posts && posts.length > 0 ? (
               posts
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                .map((post) => {
+                .map((post, index) => {
                   const currentUser = usersList.find(
                     (user) => user._id === post.user_id
                   );
                   return currentUser ? (
-                    <div key={post._id}>
+                    <div key={index}>
                       <PostComponent
                         postID={post._id}
                         currentUser={currentUser}

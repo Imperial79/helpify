@@ -63,6 +63,7 @@ function ContextProvider({ children }) {
       fetchPosts();
     }
   }, [location]);
+
   const uid = window.localStorage.getItem("userID");
   useEffect(() => {
     if (uid) {
