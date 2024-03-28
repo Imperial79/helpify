@@ -34,7 +34,6 @@ export const Register = () => {
           setLoading(true);
           setLatitude(coords.latitude);
           setLongitude(coords.longitude);
-
           var res2 = await axios.get(
             `https://maps.googleapis.com/maps/api/geocode/json?latlng=${
               coords.latitude
