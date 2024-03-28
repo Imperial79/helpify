@@ -26,7 +26,7 @@ function Home() {
     posts,
     setPosts,
     city,
-    place_id
+    place_id,
   } = useContext(Context);
 
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
@@ -65,7 +65,7 @@ function Home() {
                 }}
                 className="text-start text-sm font-medium text-gray-600 rounded-xl bg-gray-100 p-3 w-full"
               >
-                <span>🤔 What's on your mind, {"userName"}?</span>
+                <span>🤔 What's on your mind, {profileUser.name}?</span>
               </button>
             </div>
           </div>
@@ -130,6 +130,8 @@ function Home() {
         setLoading={setLoading}
         setPosts={setPosts}
         place_id={place_id}
+        city={city}
+        profileUser={profileUser}
       />
     </Scaffold>
   );
@@ -142,7 +144,9 @@ function CreatePostModal({
   setShowPostModal,
   setLoading,
   setPosts,
-  place_id
+  place_id,
+  city,
+  profileUser
 }) {
   const [imagePreview, setImagePreview] = useState(null);
   const [postContent, setPostContent] = useState("");
@@ -191,10 +195,10 @@ function CreatePostModal({
             <img src="https://source.unsplash.com/random" alt="" />
           </div>
           <div>
-            <h1 className="font-medium">username</h1>
+            <h1 className="font-medium">{profileUser.name}</h1>
             <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
               <LocationIcon size={"h-5 w-5"} color={"text-blue-700"} />
-              Durgapur, West Bengal
+              {city}
             </div>
           </div>
         </div>
