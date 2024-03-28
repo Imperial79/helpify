@@ -13,6 +13,8 @@ export const Register = () => {
   const [password, setPassword] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
+  const [city,setCity] = useState("");
+  const [place_id, setPlaceID] = useState("");
   const [addressList, setAddressList] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -51,8 +53,15 @@ export const Register = () => {
           //   print("Your point is inside the bounds!")
           // else:
           //   print("Your point is outside the bounds.")
-
           console.log(res2);
+          console.log(res2.data.results.filter((result)=> result.types[0] === "administrative_area_level_4"));
+          const locationData = res2.data.results.filter((result)=> result.types[0] === "administrative_area_level_4")
+          if(locationData.length!=0){
+            console.log(locationData[0].place_id);
+            console.log((locationData[0].address_components.filter((result)=>result.types[0]==="administrative_area_level_4"))[0].long_name);
+            setPlaceID(locationData[0].place_id)
+            setCity((locationData[0].address_components.filter((result)=>result.types[0]==="administrative_area_level_4"))[0].long_name);
+          }
           setLoading(false);
         } else {
           console.error("Geolocation is not enabled.");
@@ -71,6 +80,8 @@ export const Register = () => {
       password,
       latitude,
       longitude,
+      city,
+      place_id
     });
     try {
       if (latitude && longitude) {
@@ -81,6 +92,8 @@ export const Register = () => {
           password,
           latitude,
           longitude,
+          city,
+          place_id
         });
 
         if (!res.data.error) {

@@ -2,7 +2,8 @@ import { PostModel } from "../models/Post_model.js";
 
 export const allPosts = async (req, res) => {
   try {
-    const Posts = await PostModel.find({});
+    const place_id = req.params.place_id;
+    const Posts = await PostModel.find({place_id});
     // console.log(Posts);
     res.status(200).json(Posts);
   } catch (e) {
@@ -22,12 +23,13 @@ export const profilePost = async (req, res) => {
 
 export const createPost = async (req, res) => {
   try {
-    const { user_id, title, content } = req.body;
+    const { user_id, title, content, place_id } = req.body;
 
     const newPost = new PostModel({
       user_id,
       title,
       content,
+      place_id
     });
     const post = await newPost.save();
 

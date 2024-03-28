@@ -25,6 +25,7 @@ function Profile() {
     profilePosts,
     setProfilePosts,
     userID,
+    place_id
   } = useContext(Context);
   const [imagePreview, setImagePreview] = useState(null);
 
@@ -39,11 +40,12 @@ function Profile() {
     setShowPostModal(false);
 
     const createPosts = async () => {
+      const p = place_id;
       try {
         setLoading(true);
         const res = await axios.post(
           "http://localhost:8080/posts/create-post",
-          { user_id: userID, title: "", content: postContent }
+          { user_id: userID, title: "", content: postContent,place_id:p }
         );
         if (!res.data.error) {
           setProfilePosts((prevPosts) => [...prevPosts, res.data.response]);

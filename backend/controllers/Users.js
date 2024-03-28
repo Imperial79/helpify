@@ -2,23 +2,34 @@ import { UserModel } from "../models/User_model.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import { LocationModel } from "../models/Location_model.js";
 dotenv.config();
 
 export const userData = async (req, res) => {
-  const users = await UserModel.find({});
+  const place_id = req.params.place_id;
+  const users = await UserModel.find({place_id});
+  console.log(users)
   res.status(200).json(users);
 };
 
 export const Profile = async (req, res) => {
   const userID = req.params.userID;
-  const user = await UserModel.findById(userID);
+  var user = await UserModel.findById(userID);
+  const location = await LocationModel.findById(user.place_id);
+  user = {
+    ...user._doc,
+    city: location.city
+  }
+  console.log(user)
   res.status(200).json(user);
 };
 
 export const Register = async (req, res) => {
   try {
-    const { name, email, password, latitude, longitude } = req.body;
+    const { name, email, password, latitude, longitude,city, place_id } = req.body;
+    console.log(req.body);
     const user = await UserModel.findOne({ email });
+    const location = await UserModel.findOne({ place_id });
 
     if (user) {
       return res.json({
@@ -33,15 +44,26 @@ export const Register = async (req, res) => {
       password: hashPWD,
       latitude,
       longitude,
+      place_id
     });
-    await newUser.save();
+
+    if(!location)
+    {
+      const newLocation = new LocationModel({
+      _id:place_id,
+      city
+    });
+    await newLocation.save();
+  }
+  await newUser.save();
     res.json({
       message: "User registered successfully! Please login to continue",
       error: false,
       response: newUser,
     });
   } catch (e) {
-    res.json({
+    console.log(e)
+    res.status(400).json({
       message: e,
       error: true,
     });

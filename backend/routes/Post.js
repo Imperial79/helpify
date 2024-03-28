@@ -3,7 +3,7 @@ import { createPost,profilePost,allPosts,likePost,deletePost } from "../controll
 
 const router = express.Router();
 
-router.get("/", allPosts);
+router.get("/:place_id", allPosts);
 router.delete("/:postID", deletePost);
 
 router.get("/profile-post/:userID", profilePost);

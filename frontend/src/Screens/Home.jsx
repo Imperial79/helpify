@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import Scaffold from "../components/Scaffold";
 import {
@@ -15,34 +15,41 @@ import {
 } from "../components/Icons";
 import { Context } from "../context/ContextProvider";
 import Modal from "../components/Modal";
-import { PostComponent } from "../components/PostComponent";
 function Home() {
   const {
+    isLoading,
+    setLoading,
+    userID,
+    profileUser,
     usersList,
     setUsers,
     posts,
     setPosts,
-    isLoading,
-    setLoading,
-    userID,
+    city,
+    place_id
   } = useContext(Context);
+
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
 
-  // const deletePost = async (postID) => {
-  //   try {
-  //     await axios.delete(`http://localhost:8080/posts/${postID}`);
-  //     // Remove the deleted post from the posts state
-  //     setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postID));
-  //   } catch (error) {
-  //     console.error("Error deleting post:", error);
-  //   }
-  // };
+  const deletePost = async (postID) => {
+    try {
+      await axios.delete(`http://localhost:8080/posts/${postID}`);
+      // Remove the deleted post from the posts state
+      setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postID));
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
 
+
+  // const userName = usersList? (usersList.find((user) => user._id === userID).name.split(" ")[0]) :'userName';
+  // console.log(userName);
   return (
     <Scaffold isLoading={isLoading}>
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 sm:gap-0 lg:gap-10 gap-0 mx-auto">
         <div className="col-span-3 max-w-4xl mx-auto w-full">
           <div className="p-4 rounded-lg bg-white border-2">
+            <div>City: {city} - {place_id}</div>
             <div className="p-2 flex items-center gap-5">
               <div className="h-10 w-10 overflow-hidden rounded-full flex-shrink-0">
                 <img
@@ -63,13 +70,6 @@ function Home() {
             </div>
           </div>
           <div>
-            {/* <PostComponent
-              postID={0}
-              currentUser={currentUser}
-              content={post.content}
-              likes={post.likes}
-              createdAt={post.createdAt}
-            /> */}
             {posts && posts.length > 0 ? (
               posts
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -82,9 +82,11 @@ function Home() {
                       <PostComponent
                         postID={post._id}
                         currentUser={currentUser}
+                        title={post.title}
                         content={post.content}
                         likes={post.likes}
                         createdAt={post.createdAt}
+                        onDelete={deletePost}
                       />
                     </div>
                   ) : (
@@ -127,6 +129,7 @@ function Home() {
         setShowPostModal={setShowCreatePostModal}
         setLoading={setLoading}
         setPosts={setPosts}
+        place_id={place_id}
       />
     </Scaffold>
   );
@@ -139,11 +142,12 @@ function CreatePostModal({
   setShowPostModal,
   setLoading,
   setPosts,
+  place_id
 }) {
   const [imagePreview, setImagePreview] = useState(null);
   const [postContent, setPostContent] = useState("");
   const { userID, showAlert } = useContext(Context);
-
+  const p = place_id;
   function handlePostSubmit() {
     setShowPostModal(false);
 
@@ -153,7 +157,7 @@ function CreatePostModal({
 
         const res = await axios.post(
           "http://localhost:8080/posts/create-post",
-          { user_id: userID, title: "", content: postContent }
+          { user_id: userID, title: "", content: postContent, place_id:p}
         );
 
         if (!res.data.error) {
@@ -266,3 +270,170 @@ function CreatePostModal({
     </Modal>
   );
 }
+
+const PostComponent = ({
+  postID,
+  title,
+  content,
+  likes,
+  currentUser,
+  createdAt,
+  onDelete,
+}) => {
+  const [showPostMenu, setShowPostMenu] = useState(false);
+  const [likeCount, setLikeCount] = useState(likes.length);
+  const { userID } = useContext(Context);
+  const [isLiked, setIsLiked] = useState(likes.includes(userID));
+
+  const handleLike = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/posts/${postID}/like`,
+        { userID: userID }
+      );
+
+      setLikeCount(response.data.likes.length);
+      setIsLiked(!isLiked);
+    } catch (error) {
+      console.error("Error liking/unliking post:", error);
+    }
+  };
+
+  function formatDateTime(timeString) {
+    const date = new Date(timeString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Add leading zero for single-digit months
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    return `${day}-${month}-${year} ${hours}:${minutes}`;
+  }
+  const postTime = formatDateTime(createdAt);
+  const handleDelete = async () => {
+    try {
+      await onDelete(postID);
+      console.log("Post deleted successfully");
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
+  return (
+    <div className="border-2 bg-white mt-4 rounded-lg">
+      {/* POST AUTHOR */}
+      <div className="flex items-center justify-between px-4 py-2">
+        <div className="flex space-x-2 items-center gap-2">
+          <div className="h-10 w-10 rounded-full overflow-hidden">
+            <img
+              src="https://source.unsplash.com/random"
+              alt="Profile Picture"
+              className="rounded-full w-full h-full object-cover"
+            />
+          </div>
+          <div>
+            <div className="font-semibold">
+              {currentUser && currentUser.name}
+            </div>
+            <small>{postTime}</small>
+          </div>
+        </div>
+
+        <div className="relative">
+          {currentUser._id === userID && (
+            <button
+              onClick={() => {
+                setShowPostMenu(!showPostMenu);
+              }}
+              className="hover:bg-gray-200 rounded-full p-2"
+            >
+              <MenuIcon size={"h-6 w-6"} />
+            </button>
+          )}
+
+          <div
+            className={`${
+              showPostMenu ? "opacity-100" : "opacity-0 pointer-events-none"
+            } absolute shadow-lg py-2 bg-white rounded-lg w-[100px] transition-opacity duration-300 right-1`}
+          >
+            <button
+              onClick={() => {
+                setShowPostMenu(false);
+              }}
+              type="button"
+              className="w-full hover:bg-gray-100 p-2 text-sm font-medium flex items-center gap-2"
+            >
+              <EditIcon size="h-4 w-4" />
+              Edit
+            </button>
+            <button
+              type="button"
+              className="w-full hover:bg-gray-100 p-2 flex items-center gap-2 text-sm font-medium"
+              onClick={() => {
+                handleDelete();
+                setShowPostMenu(false);
+              }}
+            >
+              <DeleteIcon size="h-4 w-4" />
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="text-justify px-4 py-2">{content}</div>
+
+      <div className="bg-gray-100">
+        <img
+          className="max-h-[300px] mx-auto"
+          src="https://source.unsplash.com/random"
+          alt="post-image"
+        />
+      </div>
+
+      <div className="px-4 py-2">
+        <div className="flex items-center justify-between">
+          <div className="flex flex-row-reverse items-center">
+            <span className="ml-2 text-gray-500 dark:text-dark-txt">
+              {likeCount || "0"} Likes
+            </span>
+            <span className="rounded-full grid place-items-center text-2xl -ml-1 text-red-800">
+              <i className="bx bxs-angry" />
+            </span>
+            <span className="rounded-full grid place-items-center text-2xl -ml-1 text-red-500">
+              <i className="bx bxs-heart-circle" />
+            </span>
+            <span className="rounded-full grid place-items-center text-2xl -ml-1 text-yellow-500">
+              <i className="bx bx-happy-alt" />
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="py-2 px-4">
+        <div>
+          <div className="flex space-x-2">
+            <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
+              <i className="bx bx-like" />
+              <span
+                className="text-sm font-semibold flex gap-2"
+                onClick={handleLike}
+              >
+                {!isLiked ? <LikeIcon /> : <LikeFilledIcon />}
+                {!isLiked ? "Like" : "Unlike"}
+              </span>
+            </div>
+            <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
+              <CommentIcon />
+              <span className="text-sm font-semibold">Comment</span>
+            </div>
+            <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
+              <ShareIcon />
+              <span className="text-sm font-semibold">Share</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* END POST ACTION */}
+    </div>
+  );
+};

@@ -3,7 +3,7 @@ import { Login, Profile, Register, editUser,userData } from '../controllers/User
 
 const router = express.Router();
 
-router.get("/", userData);
+router.get("/:place_id", userData);
 router.get("/profile/:userID", Profile);
 
 router.post('/register',Register);

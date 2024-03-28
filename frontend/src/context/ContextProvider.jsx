@@ -16,7 +16,6 @@ function ContextProvider({ children }) {
       isDanger: isDanger,
     });
   };
-
   const [showNavBar, setShowNavBar] = useState(true);
   const location = useLocation();
 
@@ -30,12 +29,12 @@ function ContextProvider({ children }) {
 
   const [userID, setuserID] = useState(null);
   const navigate = useNavigate();
-
   const [usersList, setUsers] = useState([]);
   const [posts, setPosts] = useState([]);
   const [profileUser, setProfileUser] = useState({});
   const [profilePosts, setProfilePosts] = useState([]);
-
+  const [place_id, setPlaceID] = useState("");
+  const [city, setCity] = useState("");
   const [isLoading, setLoading] = useState(false);
 
   // useEffect(() => {
@@ -103,47 +102,41 @@ function ContextProvider({ children }) {
   //     navigate("/login", { replace: true });
   //   }
   // }, [uid]);
+  const uid = window.localStorage.getItem("userID");
   useEffect(() => {
-    const uid = window.localStorage.getItem("userID");
     if (uid) {
       console.log("My UID -> " + uid);
       setuserID(uid);
-      fetchData(uid); // Call the fetchData function with the userID
+      fetchData(uid);
     } else {
       if (location.pathname != "/register")
         navigate("/login", { replace: true });
     }
   }, [navigate]);
-
   const fetchData = async (uid) => {
-    if (location.pathname === "/") {
-      try {
-        setLoading(true);
+    try {
+      setLoading(true);
+      const profileUserResponse = await axios.get(`http://localhost:8080/users/profile/${uid}`);
+      console.log(profileUserResponse)
+      setProfileUser(profileUserResponse.data);
+      setCity(profileUserResponse.data.city);
+      const place_id = profileUserResponse.data.place_id;
+      setPlaceID(profileUserResponse.data.place_id);
+
         const [usersResponse, postsResponse] = await Promise.all([
-          axios.get("http://localhost:8080/users/"),
-          axios.get("http://localhost:8080/posts/"),
+          axios.get(`http://localhost:8080/users/${place_id}`),
+          axios.get(`http://localhost:8080/posts/${place_id}`),
         ]);
         setUsers(usersResponse.data);
         setPosts(postsResponse.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
+        if (location.pathname === "/profile") {
+      const profilePostsResponse = await axios.get(`http://localhost:8080/posts/profile-post/${uid}`);
+      setProfilePosts(profilePostsResponse.data);
       }
-    } else if (location.pathname === "/profile") {
-      try {
-        setLoading(true);
-        const [profileUserResponse, profilePostsResponse] = await Promise.all([
-          axios.get(`http://localhost:8080/users/profile/${uid}`),
-          axios.get(`http://localhost:8080/posts/profile-post/${uid}`),
-        ]);
-        setProfileUser(profileUserResponse.data);
-        setProfilePosts(profilePostsResponse.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -156,16 +149,18 @@ function ContextProvider({ children }) {
         showNavBar,
         userID,
         setuserID,
-        usersList,
-        setUsers,
-        posts,
-        setPosts,
         isLoading,
         setLoading,
         profileUser,
         setProfileUser,
         profilePosts,
         setProfilePosts,
+        usersList,
+        setUsers,
+        posts,
+        setPosts,
+        city,
+        place_id
       }}
     >
       {children}
