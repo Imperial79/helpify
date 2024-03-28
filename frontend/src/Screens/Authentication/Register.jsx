@@ -13,7 +13,7 @@ export const Register = () => {
   const [password, setPassword] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
-  const [city,setCity] = useState("");
+  const [city, setCity] = useState("");
   const [place_id, setPlaceID] = useState("");
   const [addressList, setAddressList] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -54,13 +54,27 @@ export const Register = () => {
           // else:
           //   print("Your point is outside the bounds.")
           console.log(res2);
-          console.log(res2.data.results.filter((result)=> result.types[0] === "administrative_area_level_4"));
-          const locationData = res2.data.results.filter((result)=> result.types[0] === "administrative_area_level_4")
-          if(locationData.length!=0){
+          console.log(
+            res2.data.results.filter(
+              (result) => result.types[0] === "administrative_area_level_4"
+            )
+          );
+          const locationData = res2.data.results.filter(
+            (result) => result.types[0] === "administrative_area_level_4"
+          );
+          if (locationData.length != 0) {
             console.log(locationData[0].place_id);
-            console.log((locationData[0].address_components.filter((result)=>result.types[0]==="administrative_area_level_4"))[0].long_name);
-            setPlaceID(locationData[0].place_id)
-            setCity((locationData[0].address_components.filter((result)=>result.types[0]==="administrative_area_level_4"))[0].long_name);
+            console.log(
+              locationData[0].address_components.filter(
+                (result) => result.types[0] === "administrative_area_level_4"
+              )[0].long_name
+            );
+            setPlaceID(locationData[0].place_id);
+            setCity(
+              locationData[0].address_components.filter(
+                (result) => result.types[0] === "administrative_area_level_4"
+              )[0].long_name
+            );
           }
           setLoading(false);
         } else {
@@ -81,7 +95,7 @@ export const Register = () => {
       latitude,
       longitude,
       city,
-      place_id
+      place_id,
     });
     try {
       if (latitude && longitude) {
@@ -93,7 +107,7 @@ export const Register = () => {
           latitude,
           longitude,
           city,
-          place_id
+          place_id,
         });
 
         if (!res.data.error) {
@@ -165,6 +179,18 @@ export const Register = () => {
                 required
               />
             </div>
+            {/* list of locality */}
+            {addressList &&
+              addressList.map((data, index) =>
+                data.types.includes("sublocality") ? (
+                  <li key={index} className="flex flex-col gap-2">
+                    <div>{data.formatted_address}</div>
+                  </li>
+                ) : (
+                  <></>
+                )
+              )}
+            {/* list of locality ends */}
 
             {addressList &&
               addressList.map((data, index) =>
