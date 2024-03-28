@@ -91,10 +91,10 @@ function ContextProvider({ children }) {
   //       profilePostData();
   //     }
   //   }
-    
+
   // }, [location]);
 
-  const uid = window.localStorage.getItem("userID");
+  // const uid = window.localStorage.getItem("userID");
   // useEffect(() => {
   //   if (uid) {
   //     console.log("My UID -> " + uid);
@@ -110,7 +110,8 @@ function ContextProvider({ children }) {
       setuserID(uid);
       fetchData(uid); // Call the fetchData function with the userID
     } else {
-      navigate("/login", { replace: true });
+      if (location.pathname != "/register")
+        navigate("/login", { replace: true });
     }
   }, [navigate]);
 
@@ -164,7 +165,7 @@ function ContextProvider({ children }) {
         profileUser,
         setProfileUser,
         profilePosts,
-        setProfilePosts
+        setProfilePosts,
       }}
     >
       {children}
