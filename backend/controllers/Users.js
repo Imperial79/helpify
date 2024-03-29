@@ -7,8 +7,8 @@ dotenv.config();
 
 export const userData = async (req, res) => {
   const place_id = req.params.place_id;
-  const users = await UserModel.find({place_id});
-  console.log(users)
+  const users = await UserModel.find({ place_id });
+  console.log(users);
   res.status(200).json(users);
 };
 
@@ -18,18 +18,26 @@ export const Profile = async (req, res) => {
   const location = await LocationModel.findById(user.place_id);
   user = {
     ...user._doc,
-    city: location.city
-  }
-  console.log(user)
+    city: location.city,
+  };
+  console.log(user);
   res.status(200).json(user);
 };
 
 export const Register = async (req, res) => {
   try {
-    const { name, email, password, latitude, longitude,city, place_id } = req.body;
-    console.log(req.body);
+    const { name, email, password, latitude, longitude, city, place_id } =
+      req.body;
+
     const user = await UserModel.findOne({ email });
     const location = await UserModel.findOne({ place_id });
+
+    if (!city || !place_id) {
+      return res.json({
+        error: true,
+        message: "Please enable your location services to continue !",
+      });
+    }
 
     if (user) {
       return res.json({
@@ -44,25 +52,24 @@ export const Register = async (req, res) => {
       password: hashPWD,
       latitude,
       longitude,
-      place_id
+      place_id,
     });
 
-    if(!location)
-    {
+    if (!location) {
       const newLocation = new LocationModel({
-      _id:place_id,
-      city
-    });
-    await newLocation.save();
-  }
-  await newUser.save();
+        _id: place_id,
+        city,
+      });
+      await newLocation.save();
+    }
+    await newUser.save();
     res.json({
       message: "User registered successfully! Please login to continue",
       error: false,
       response: newUser,
     });
   } catch (e) {
-    console.log(e)
+    console.log(e);
     res.status(400).json({
       message: e,
       error: true,
