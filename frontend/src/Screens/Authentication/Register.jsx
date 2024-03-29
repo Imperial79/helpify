@@ -213,8 +213,8 @@ export const Register = () => {
                 )
               )}
 
-            <p>{latitude}</p>
-            <p>{longitude}</p>
+            <p>Lat: {latitude}</p>
+            <p>Long: {longitude}</p>
 
             <button
               type="button"
