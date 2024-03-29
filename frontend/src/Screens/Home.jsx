@@ -32,15 +32,16 @@ function Home() {
 
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
 
-  const deletePost = async (postID) => {
-    try {
-      await axios.delete(`http://localhost:8080/posts/${postID}`);
-      // Remove the deleted post from the posts state
-      setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postID));
-    } catch (error) {
-      console.error("Error deleting post:", error);
-    }
-  };
+  // const deletePost = async (postID) => {
+  //   try {
+  //     console.log(postID)
+  //     await axios.delete(`http://localhost:8080/posts/${postID}`);
+  //     // Remove the deleted post from the posts state
+  //     setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postID));
+  //   } catch (error) {
+  //     console.error("Error deleting post:", error);
+  //   }
+  // };
 
   // const userName = usersList? (usersList.find((user) => user._id === userID).name.split(" ")[0]) :'userName';
   // console.log(userName);
@@ -86,7 +87,7 @@ function Home() {
                         content={post.content}
                         likes={post.likes}
                         createdAt={post.createdAt}
-                        onDelete={deletePost}
+                        setPosts={setPosts}
                       />
                     </div>
                   ) : (
@@ -110,15 +111,21 @@ function Home() {
         <div className="flex flex-col gap-2 h-[500px] col-span-1 mt-10 sm:mt-10 lg:mt-0 md:sticky md:top-[85px]">
           <h1>People in my area</h1>
           <div className="h-full w-full rounded-xl bg-white border p-5 overflow-auto">
-            <div className="w-full flex items-center gap-3">
-              <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200"></div>
-              <div className="flex flex-col truncate">
-                <h3 className="font-medium text-gray-600">Avishek verma</h3>
-                <p className="font-normal text-gray-400 text-sm">
-                  avishekverma79@gmail.com
-                </p>
-              </div>
-            </div>
+            {usersList.map((user, index) => {
+              return (
+                <div key={index}>
+                  <div className="w-full flex items-center gap-3">
+                    <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200"></div>
+                    <div className="flex flex-col truncate">
+                      <h3 className="font-medium text-gray-600">{user.name}</h3>
+                      <p className="font-normal text-gray-400 text-sm">
+                        {user.email}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

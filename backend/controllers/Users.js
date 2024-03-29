@@ -8,7 +8,7 @@ dotenv.config();
 export const userData = async (req, res) => {
   const place_id = req.params.place_id;
   const users = await UserModel.find({ place_id });
-  console.log(users);
+  // console.log(users)f;
   res.status(200).json(users);
 };
 
@@ -20,7 +20,7 @@ export const Profile = async (req, res) => {
     ...user._doc,
     city: location.city,
   };
-  console.log(user);
+  // console.log(user);
   res.status(200).json(user);
 };
 

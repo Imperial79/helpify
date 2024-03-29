@@ -12,6 +12,7 @@ import {
   ShareIcon,
 } from "./Icons";
 import axios from "axios";
+import { CommentComponent } from "./CommentComponent";
 
 export const PostComponent = ({
   postType = "Announcement",
@@ -20,6 +21,7 @@ export const PostComponent = ({
   likes,
   currentUser,
   createdAt,
+  setPosts
 }) => {
   const { userID } = useContext(Context);
   const [showPostMenu, setShowPostMenu] = useState(false);
@@ -31,7 +33,6 @@ export const PostComponent = ({
   async function deletePost(postID) {
     try {
       const res = await axios.delete(`http://localhost:8080/posts/${postID}`);
-      console.log(res);
       // Remove the deleted post from the posts state
       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postID));
     } catch (error) {
@@ -116,7 +117,7 @@ export const PostComponent = ({
               type="button"
               className="w-full hover:bg-gray-100 p-2 flex items-center gap-2 text-sm font-medium"
               onClick={() => {
-                deletePost();
+                deletePost(postID);
                 setShowPostMenu(false);
               }}
             >
@@ -168,7 +169,7 @@ export const PostComponent = ({
               </span>
             </div>
             <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
-              <CommentIcon />
+              <CommentIcon postID={postID}/>
               <span className="text-sm font-semibold">Comment</span>
             </div>
             <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
@@ -180,102 +181,7 @@ export const PostComponent = ({
       </div>
 
       {/* Comment Section */}
-      <div>
-        {/* LIST COMMENT */}
-        <div className="py-2 px-4">
-          {/* COMMENT */}
-          <div className="flex space-x-2">
-            <div className="h-10 w-10 rounded-full overflow-hidden flex-shrink-0">
-              <img
-                src="https://source.unsplash.com/random"
-                alt="Profile Picture"
-                className="rounded-full w-full h-full object-cover"
-              />
-            </div>
-            <div>
-              <div className="bg-gray-100 dark:bg-dark-third p-2 rounded-2xl text-sm">
-                <span className="font-semibold block">John Doe</span>
-                <span>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. In
-                  voluptate ipsa animi corrupti unde, voluptatibus expedita
-                  suscipit, itaque, laudantium accusantium aspernatur officia
-                  repellendus nihil mollitia soluta distinctio praesentium nulla
-                  eos?
-                </span>
-              </div>
-              <div className="p-2 text-xs text-gray-500 dark:text-dark-txt">
-                <span className="font-semibold cursor-pointer">Like</span>
-                <span>.</span>
-                <span className="font-semibold cursor-pointer">Reply</span>
-                <span>.</span>
-                10m
-              </div>
-              {/* COMMENT */}
-              <div className="flex space-x-2">
-                <div className="h-10 w-10 rounded-full overflow-hidden flex-shrink-0">
-                  <img
-                    src="https://source.unsplash.com/random"
-                    alt="Profile Picture"
-                    className="rounded-full w-full h-full object-cover"
-                  />
-                </div>
-                <div>
-                  <div className="bg-gray-100 dark:bg-dark-third p-2 rounded-2xl text-sm">
-                    <span className="font-semibold block">John Doe</span>
-                    <span>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </span>
-                  </div>
-                  <div className="p-2 text-xs text-gray-500 dark:text-dark-txt">
-                    <span className="font-semibold cursor-pointer">Like</span>
-                    <span>.</span>
-                    <span className="font-semibold cursor-pointer">Reply</span>
-                    <span>.</span>
-                    10m
-                  </div>
-                </div>
-              </div>
-              {/* END COMMENT */}
-            </div>
-          </div>
-          {/* END COMMENT */}
-        </div>
-        {/* END LIST COMMENT */}
-        {/* COMMENT FORM */}
-        <div className="py-2 px-4">
-          <div className="flex space-x-2">
-            <div className="h-10 w-10 rounded-full overflow-hidden flex-shrink-0">
-              <img
-                src="https://source.unsplash.com/random"
-                alt="Profile Picture"
-                className="rounded-full w-full h-full object-cover"
-              />
-            </div>
-            <div className="flex-1 flex bg-gray-100 dark:bg-dark-third rounded-full items-center justify-between px-3">
-              <input
-                type="text"
-                placeholder="Write a comment..."
-                className="outline-none bg-transparent flex-1"
-              />
-              <div className="flex space-x-0 items-center justify-center">
-                <span className="w-7 h-7 grid place-items-center rounded-full hover:bg-gray-200 cursor-pointer text-gray-500 dark:text-dark-txt dark:hover:bg-dark-second text-xl">
-                  <i className="bx bx-smile" />
-                </span>
-                <span className="w-7 h-7 grid place-items-center rounded-full hover:bg-gray-200 cursor-pointer text-gray-500 dark:text-dark-txt dark:hover:bg-dark-second text-xl">
-                  <i className="bx bx-camera" />
-                </span>
-                <span className="w-7 h-7 grid place-items-center rounded-full hover:bg-gray-200 cursor-pointer text-gray-500 dark:text-dark-txt dark:hover:bg-dark-second text-xl">
-                  <i className="bx bxs-file-gif" />
-                </span>
-                <span className="w-7 h-7 grid place-items-center rounded-full hover:bg-gray-200 cursor-pointer text-gray-500 dark:text-dark-txt dark:hover:bg-dark-second text-xl">
-                  <i className="bx bx-happy-heart-eyes" />
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* END COMMENT FORM */}
-      </div>
+      <CommentComponent postID={postID} userID={userID}/>
 
       {/* END POST ACTION */}
     </div>
