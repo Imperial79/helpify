@@ -2,9 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { Context } from "../context/ContextProvider";
+import { LocationIcon } from "./Icons";
 
 export default function Navbar() {
-  const { showNavBar, userID, setuserID } = useContext(Context);
+  const { showNavBar, userID, setuserID, city } = useContext(Context);
   const [showMenu, setshowMenu] = useState(false);
   const [cookies, setCookies] = useCookies(["token"]);
 
@@ -19,9 +20,21 @@ export default function Navbar() {
   return (
     <div className={`${showNavBar ? "" : "hidden"}`}>
       <div className="bg-white w-full h-[80px] flex items-center px-5 justify-between fixed border border-b-2 z-10">
-        <Link to="/" className="text-lg font-extrabold">
-          Helpify
-        </Link>
+        <div className="flex gap-5">
+          <Link to="/" className="text-lg font-bold">
+            Helpify
+          </Link>
+
+          {city && (
+            <div className="bg-gray-100 rounded-full pl-2 py-1 flex items-center">
+              <div className="bg-blue-700 rounded-full p-1">
+                <LocationIcon size="h-4 w-4" color="text-white" />
+              </div>
+              <p className="font-medium text-sm mx-3">{city}</p>
+            </div>
+          )}
+        </div>
+
         <div className="md:flex items-center gap-3 bg-gray-100 rounded-full p-2 hidden">
           {userID ? (
             <>

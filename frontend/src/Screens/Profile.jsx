@@ -25,10 +25,10 @@ function Profile() {
     profilePosts,
     setProfilePosts,
     userID,
-    place_id
+    place_id,
+    city,
   } = useContext(Context);
   const [imagePreview, setImagePreview] = useState(null);
-
 
   const [showPostModal, setShowPostModal] = useState(false);
   const [postContent, setPostContent] = useState("");
@@ -45,7 +45,7 @@ function Profile() {
         setLoading(true);
         const res = await axios.post(
           "http://localhost:8080/posts/create-post",
-          { user_id: userID, title: "", content: postContent,place_id:p }
+          { user_id: userID, title: "", content: postContent, place_id: p }
         );
         if (!res.data.error) {
           setProfilePosts((prevPosts) => [...prevPosts, res.data.response]);
@@ -99,7 +99,9 @@ function Profile() {
                 />
               </div>
               <div className="flex flex-col truncate">
-                <h1 className="md:text-xl text-sm font-medium">{profileUser.name}</h1>
+                <h1 className="md:text-xl text-sm font-medium">
+                  {profileUser.name}
+                </h1>
                 <h1 className="text-[15px] sm:text-lg md:text-lg text-gray-500">
                   {profileUser.email}
                 </h1>
@@ -170,7 +172,7 @@ function Profile() {
                 <h1 className="font-medium">{profileUser.name}</h1>
                 <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
                   <LocationIcon size={"h-5 w-5"} color={"text-blue-700"} />
-                  Durgapur, West Bengal
+                  {city}
                 </div>
               </div>
             </div>

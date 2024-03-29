@@ -11,6 +11,7 @@ import {
   MenuIcon,
   ShareIcon,
 } from "./Icons";
+import axios from "axios";
 
 export const PostComponent = ({
   postType = "Announcement",
@@ -69,7 +70,7 @@ export const PostComponent = ({
       {/* POST AUTHOR */}
       <div className="flex items-center justify-between px-4 py-2">
         <div className="flex space-x-2 items-center gap-2">
-          <div className="h-10 w-10 rounded-full overflow-hidden">
+          <div className="h-10 w-10 rounded-full overflow-hidden flex-shrink-0">
             <img
               src="https://source.unsplash.com/random"
               alt="Profile Picture"
@@ -143,7 +144,7 @@ export const PostComponent = ({
               {likeCount || "0"} Likes
             </span>
           </div>
-          <p className="text-xs uppercase tracking-widest font-medium text-gray-400 flex gap-2 items-center">
+          <p className="text-xs uppercase tracking-widest font-medium text-gray-400 flex gap-2 items-center truncate">
             {postType == "Announcement" ? (
               <AnncounceIcon />
             ) : (
