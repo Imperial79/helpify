@@ -36,6 +36,11 @@ export const Register = () => {
           setLoading(true);
           setLatitude(coords.latitude);
           setLongitude(coords.longitude);
+
+          var res = await axios.get(
+            `https://api.maptiler.com/geocoding/${coords.longitude},${coords.latitude}.json?key=9l5J09oGfOiDCvKo5U14`
+          );
+          console.log(res);
           var res2 = await axios.get(
             `https://maps.googleapis.com/maps/api/geocode/json?latlng=${
               coords.latitude
@@ -53,7 +58,9 @@ export const Register = () => {
           //   print("Your point is inside the bounds!")
           // else:
           //   print("Your point is outside the bounds.")
-          console.log(res2);
+          // console.log(res2);
+
+          // -----------------------------
           console.log(
             res2.data.results.filter(
               (result) => result.types[0] === "administrative_area_level_4"
