@@ -1,5 +1,9 @@
 import { React, useState, useEffect } from "react";
 import axios from "axios";
+import {
+  SendIcon
+} from "./Icons";
+
 export const CommentComponent = ({ postID, userID }) => {
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState([]);
@@ -110,11 +114,11 @@ export const CommentComponent = ({ postID, userID }) => {
               className="rounded-full w-full h-full object-cover"
             />
           </div>
-          <div className="flex-1 flex bg-gray-100 dark:bg-dark-third rounded-full items-center px-3">
+          <div className="flex-1 flex bg-gray-100 dark:bg-dark-third rounded-full items-center">
             <form onSubmit={handlePostComment} className="flex w-full">
               <input
                 type="text"
-                placeholder="Write a comment..."
+                placeholder="   Write a comment..."
                 className="outline-none bg-transparent flex-1 rounded-l-full"
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
@@ -122,9 +126,9 @@ export const CommentComponent = ({ postID, userID }) => {
               />
               <button
                 type="submit"
-                className="flex-shrink-0 w-20 h-10 rounded-r-full bg-[#1d4ed8] text-white hover:bg-blue-600 transition-colors duration-300"
+                className="flex-shrink-0 w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-white hover:bg-gray-300 transition-colors duration-300"
               >
-                Send
+                <SendIcon />
               </button>
             </form>
           </div>
