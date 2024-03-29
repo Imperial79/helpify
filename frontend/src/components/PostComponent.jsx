@@ -21,12 +21,13 @@ export const PostComponent = ({
   likes,
   currentUser,
   createdAt,
-  setPosts
+  setPosts,
 }) => {
   const { userID } = useContext(Context);
   const [showPostMenu, setShowPostMenu] = useState(false);
   const [likeCount, setLikeCount] = useState(likes.length);
   const [isLiked, setIsLiked] = useState(likes.includes(userID));
+  const [showCommentComponent, setShowCommentComponent] = useState(false);
 
   //   ----------------------------------------------------
 
@@ -52,6 +53,10 @@ export const PostComponent = ({
     } catch (error) {
       console.error("Error liking/unliking post:", error);
     }
+  };
+
+  const handleShowCommentComponent = () => {
+    setShowCommentComponent(!showCommentComponent);
   };
 
   function formatDateTime(timeString) {
@@ -168,8 +173,11 @@ export const PostComponent = ({
                 {!isLiked ? "Like" : "Unlike"}
               </span>
             </div>
-            <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
-              <CommentIcon postID={postID}/>
+            <div
+              className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt"
+              onClick={handleShowCommentComponent}
+            >
+              <CommentIcon postID={postID} />
               <span className="text-sm font-semibold">Comment</span>
             </div>
             <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
@@ -181,7 +189,9 @@ export const PostComponent = ({
       </div>
 
       {/* Comment Section */}
-      <CommentComponent postID={postID} userID={userID}/>
+      {showCommentComponent && (
+        <CommentComponent postID={postID} userID={userID} />
+      )}
 
       {/* END POST ACTION */}
     </div>
