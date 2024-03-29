@@ -113,7 +113,7 @@ function Profile() {
             {/* Edit Profile Button */}
             <button
               type="button"
-              className="border-2 rounded-lg px-5 py-1 text-sm font-medium text-blue-700 md:w-auto w-full md:mt-0 mt-5"
+              className="border-2 rounded-lg px-5 py-1 text-sm font-medium text-blue-700 hover:border-gray-400 md:w-auto w-full md:mt-0 mt-5"
               onClick={() => {
                 setShowEditUserModal(true);
               }}

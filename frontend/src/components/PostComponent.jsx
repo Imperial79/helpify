@@ -178,66 +178,20 @@ export const PostComponent = ({
           </div>
         </div>
       </div>
-      
+
       {/* Comment Section */}
       <div>
         {/* LIST COMMENT */}
         <div className="py-2 px-4">
           {/* COMMENT */}
           <div className="flex space-x-2">
-            <img
-              src="./images/avt-5.jpg"
-              alt="Profile picture"
-              className="w-9 h-9 rounded-full"
-            />
-            <div>
-              <div className="bg-gray-100 dark:bg-dark-third p-2 rounded-2xl text-sm">
-                <span className="font-semibold block">John Doe</span>
-                <span>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                </span>
-              </div>
-              <div className="p-2 text-xs text-gray-500 dark:text-dark-txt">
-                <span className="font-semibold cursor-pointer">Like</span>
-                <span>.</span>
-                <span className="font-semibold cursor-pointer">Reply</span>
-                <span>.</span>
-                10m
-              </div>
-              {/* COMMENT */}
-              <div className="flex space-x-2">
-                <img
-                  src="./images/avt-7.jpg"
-                  alt="Profile picture"
-                  className="w-9 h-9 rounded-full"
-                />
-                <div>
-                  <div className="bg-gray-100 dark:bg-dark-third p-2 rounded-2xl text-sm">
-                    <span className="font-semibold block">John Doe</span>
-                    <span>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </span>
-                  </div>
-                  <div className="p-2 text-xs text-gray-500 dark:text-dark-txt">
-                    <span className="font-semibold cursor-pointer">Like</span>
-                    <span>.</span>
-                    <span className="font-semibold cursor-pointer">Reply</span>
-                    <span>.</span>
-                    10m
-                  </div>
-                </div>
-              </div>
-              {/* END COMMENT */}
+            <div className="h-10 w-10 rounded-full overflow-hidden flex-shrink-0">
+              <img
+                src="https://source.unsplash.com/random"
+                alt="Profile Picture"
+                className="rounded-full w-full h-full object-cover"
+              />
             </div>
-          </div>
-          {/* END COMMENT */}
-          {/* COMMENT */}
-          <div className="flex space-x-2">
-            <img
-              src="./images/avt-5.jpg"
-              alt="Profile picture"
-              className="w-9 h-9 rounded-full"
-            />
             <div>
               <div className="bg-gray-100 dark:bg-dark-third p-2 rounded-2xl text-sm">
                 <span className="font-semibold block">John Doe</span>
@@ -258,11 +212,13 @@ export const PostComponent = ({
               </div>
               {/* COMMENT */}
               <div className="flex space-x-2">
-                <img
-                  src="./images/avt-7.jpg"
-                  alt="Profile picture"
-                  className="w-9 h-9 rounded-full"
-                />
+                <div className="h-10 w-10 rounded-full overflow-hidden flex-shrink-0">
+                  <img
+                    src="https://source.unsplash.com/random"
+                    alt="Profile Picture"
+                    className="rounded-full w-full h-full object-cover"
+                  />
+                </div>
                 <div>
                   <div className="bg-gray-100 dark:bg-dark-third p-2 rounded-2xl text-sm">
                     <span className="font-semibold block">John Doe</span>
@@ -288,11 +244,13 @@ export const PostComponent = ({
         {/* COMMENT FORM */}
         <div className="py-2 px-4">
           <div className="flex space-x-2">
-            <img
-              src="./images/tuat.jpg"
-              alt="Profile picture"
-              className="w-9 h-9 rounded-full"
-            />
+            <div className="h-10 w-10 rounded-full overflow-hidden flex-shrink-0">
+              <img
+                src="https://source.unsplash.com/random"
+                alt="Profile Picture"
+                className="rounded-full w-full h-full object-cover"
+              />
+            </div>
             <div className="flex-1 flex bg-gray-100 dark:bg-dark-third rounded-full items-center justify-between px-3">
               <input
                 type="text"
