@@ -38,7 +38,7 @@ export const Register = () => {
           setLongitude(coords.longitude);
 
           var res = await axios.get(
-            `https://api.maptiler.com/geocoding/${coords.longitude},${coords.latitude}.json?key=9l5J09oGfOiDCvKo5U14`
+            `https://api.maptiler.com/geocoding/${coords.longitude},${coords.latitude}.json?key=${import.meta.env.VITE_MAPTILER_API}`
           );
           console.log(res);
           var res2 = await axios.get(
