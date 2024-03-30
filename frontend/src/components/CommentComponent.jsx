@@ -1,8 +1,6 @@
 import { React, useState, useEffect } from "react";
 import axios from "axios";
-import {
-  SendIcon
-} from "./Icons";
+import { SendIcon } from "./Icons";
 
 export const CommentComponent = ({ postID, userID }) => {
   const [newComment, setNewComment] = useState("");
@@ -59,7 +57,9 @@ export const CommentComponent = ({ postID, userID }) => {
                   </div>
                   <div>
                     <div className="bg-gray-100 dark:bg-dark-third p-2 rounded-2xl text-sm">
-                      <span className="font-semibold block">{comment.name}</span>
+                      <span className="font-semibold block">
+                        {comment.name}
+                      </span>
                       <span>{comment.content}</span>
                     </div>
                     <div className="p-2 text-xs text-gray-500 dark:text-dark-txt">
@@ -118,17 +118,21 @@ export const CommentComponent = ({ postID, userID }) => {
             <form onSubmit={handlePostComment} className="flex w-full">
               <input
                 type="text"
-                placeholder="   Write a comment..."
-                className="outline-none bg-transparent flex-1 rounded-l-full"
+                placeholder="Write a comment..."
+                className="outline-none bg-transparent flex-1 rounded-l-full px-3"
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 required
               />
               <button
                 type="submit"
-                className="flex-shrink-0 w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-white hover:bg-gray-300 transition-colors duration-300"
+                className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-white hover:bg-gray-300 transition-colors duration-300 ${
+                  newComment == "" ? "bg-gray-200" : "bg-blue-700"
+                }`}
               >
-                <SendIcon />
+                <SendIcon
+                  color={`${newComment == "" ? "text-gray-600" : "text-white"}`}
+                />
               </button>
             </form>
           </div>

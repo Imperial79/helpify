@@ -1,34 +1,14 @@
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import Scaffold from "../components/Scaffold";
-import {
-  CloseIcon,
-  CommentIcon,
-  DeleteIcon,
-  EditIcon,
-  ImageIcon,
-  LikeFilledIcon,
-  LikeIcon,
-  LocationIcon,
-  MenuIcon,
-  ShareIcon,
-} from "../components/Icons";
+import { CloseIcon, ImageIcon, LocationIcon } from "../components/Icons";
 import { Context } from "../context/ContextProvider";
 import Modal from "../components/Modal";
 import { PostComponent } from "../components/PostComponent";
+import { Link } from "react-router-dom";
 function Home() {
-  const {
-    isLoading,
-    setLoading,
-    userID,
-    profileUser,
-    usersList,
-    setUsers,
-    posts,
-    setPosts,
-    city,
-    place_id,
-  } = useContext(Context);
+  const { isLoading, setLoading, profileUser, usersList, posts, setPosts } =
+    useContext(Context);
 
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
 
@@ -109,20 +89,20 @@ function Home() {
         </div>
 
         <div className="flex flex-col gap-2 h-[500px] col-span-1 mt-10 sm:mt-10 lg:mt-0 md:sticky md:top-[85px]">
-          <h1>People in my area</h1>
-          <div className="h-full w-full rounded-xl bg-white border p-5 overflow-auto">
+          <div className="flex gap-2">
+            <div className="bg-blue-700 rounded-full p-1 w-min">
+              <LocationIcon size="h-4 w-4" color="text-white" />
+            </div>
+            <p className="text-sm font-medium text-gray-500">
+              People in my area
+            </p>
+          </div>
+
+          <div className="h-full w-full rounded-xl bg-white border p-2 overflow-auto">
             {usersList.map((user, index) => {
               return (
                 <div key={index}>
-                  <div className="w-full flex items-center gap-3">
-                    <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200"></div>
-                    <div className="flex flex-col truncate">
-                      <h3 className="font-medium text-gray-600">{user.name}</h3>
-                      <p className="font-normal text-gray-400 text-sm">
-                        {user.email}
-                      </p>
-                    </div>
-                  </div>
+                  <OtherUsersTile userData={user} />
                 </div>
               );
             })}
@@ -278,169 +258,14 @@ function CreatePostModal({
   );
 }
 
-// const PostComponent = ({
-//   postID,
-//   title,
-//   content,
-//   likes,
-//   currentUser,
-//   createdAt,
-//   onDelete,
-// }) => {
-//   const [showPostMenu, setShowPostMenu] = useState(false);
-//   const [likeCount, setLikeCount] = useState(likes.length);
-//   const { userID } = useContext(Context);
-//   const [isLiked, setIsLiked] = useState(likes.includes(userID));
-
-//   const handleLike = async () => {
-//     try {
-//       const response = await axios.put(
-//         `http://localhost:8080/posts/${postID}/like`,
-//         { userID: userID }
-//       );
-
-//       setLikeCount(response.data.likes.length);
-//       setIsLiked(!isLiked);
-//     } catch (error) {
-//       console.error("Error liking/unliking post:", error);
-//     }
-//   };
-
-//   function formatDateTime(timeString) {
-//     const date = new Date(timeString);
-//     const year = date.getFullYear();
-//     const month = String(date.getMonth() + 1).padStart(2, "0"); // Add leading zero for single-digit months
-//     const day = String(date.getDate()).padStart(2, "0");
-//     const hours = String(date.getHours()).padStart(2, "0");
-//     const minutes = String(date.getMinutes()).padStart(2, "0");
-
-//     return `${day}-${month}-${year} ${hours}:${minutes}`;
-//   }
-//   const postTime = formatDateTime(createdAt);
-//   const handleDelete = async () => {
-//     try {
-//       await onDelete(postID);
-//       console.log("Post deleted successfully");
-//     } catch (error) {
-//       console.error("Error deleting post:", error);
-//     }
-//   };
-//   return (
-//     <div className="border-2 bg-white mt-4 rounded-lg">
-//       {/* POST AUTHOR */}
-//       <div className="flex items-center justify-between px-4 py-2">
-//         <div className="flex space-x-2 items-center gap-2">
-//           <div className="h-10 w-10 rounded-full overflow-hidden">
-//             <img
-//               src="https://source.unsplash.com/random"
-//               alt="Profile Picture"
-//               className="rounded-full w-full h-full object-cover"
-//             />
-//           </div>
-//           <div>
-//             <div className="font-semibold">
-//               {currentUser && currentUser.name}
-//             </div>
-//             <small>{postTime}</small>
-//           </div>
-//         </div>
-
-//         <div className="relative">
-//           {currentUser._id === userID && (
-//             <button
-//               onClick={() => {
-//                 setShowPostMenu(!showPostMenu);
-//               }}
-//               className="hover:bg-gray-200 rounded-full p-2"
-//             >
-//               <MenuIcon size={"h-6 w-6"} />
-//             </button>
-//           )}
-
-//           <div
-//             className={`${
-//               showPostMenu ? "opacity-100" : "opacity-0 pointer-events-none"
-//             } absolute shadow-lg py-2 bg-white rounded-lg w-[100px] transition-opacity duration-300 right-1`}
-//           >
-//             <button
-//               onClick={() => {
-//                 setShowPostMenu(false);
-//               }}
-//               type="button"
-//               className="w-full hover:bg-gray-100 p-2 text-sm font-medium flex items-center gap-2"
-//             >
-//               <EditIcon size="h-4 w-4" />
-//               Edit
-//             </button>
-//             <button
-//               type="button"
-//               className="w-full hover:bg-gray-100 p-2 flex items-center gap-2 text-sm font-medium"
-//               onClick={() => {
-//                 handleDelete();
-//                 setShowPostMenu(false);
-//               }}
-//             >
-//               <DeleteIcon size="h-4 w-4" />
-//               Delete
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-
-//       <div className="text-justify px-4 py-2">{content}</div>
-
-//       <div className="bg-gray-100">
-//         <img
-//           className="max-h-[300px] mx-auto"
-//           src="https://source.unsplash.com/random"
-//           alt="post-image"
-//         />
-//       </div>
-
-//       <div className="px-4 py-2">
-//         <div className="flex items-center justify-between">
-//           <div className="flex flex-row-reverse items-center">
-//             <span className="ml-2 text-gray-500 dark:text-dark-txt">
-//               {likeCount || "0"} Likes
-//             </span>
-//             <span className="rounded-full grid place-items-center text-2xl -ml-1 text-red-800">
-//               <i className="bx bxs-angry" />
-//             </span>
-//             <span className="rounded-full grid place-items-center text-2xl -ml-1 text-red-500">
-//               <i className="bx bxs-heart-circle" />
-//             </span>
-//             <span className="rounded-full grid place-items-center text-2xl -ml-1 text-yellow-500">
-//               <i className="bx bx-happy-alt" />
-//             </span>
-//           </div>
-//         </div>
-//       </div>
-
-//       <div className="py-2 px-4">
-//         <div>
-//           <div className="flex space-x-2">
-//             <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
-//               <i className="bx bx-like" />
-//               <span
-//                 className="text-sm font-semibold flex gap-2"
-//                 onClick={handleLike}
-//               >
-//                 {!isLiked ? <LikeIcon /> : <LikeFilledIcon />}
-//                 {!isLiked ? "Like" : "Unlike"}
-//               </span>
-//             </div>
-//             <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
-//               <CommentIcon />
-//               <span className="text-sm font-semibold">Comment</span>
-//             </div>
-//             <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
-//               <ShareIcon />
-//               <span className="text-sm font-semibold">Share</span>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//       {/* END POST ACTION */}
-//     </div>
-//   );
-// };
+function OtherUsersTile({ userData }) {
+  return (
+    <div className="w-full flex items-center gap-3 mb-2 p-2 hover:bg-gray-100 rounded-xl cursor-pointer">
+      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200"></div>
+      <div className="flex flex-col truncate">
+        <h3 className="font-medium text-gray-600">{userData.name}</h3>
+        <p className="font-normal text-gray-400 text-sm">{userData.email}</p>
+      </div>
+    </div>
+  );
+}
