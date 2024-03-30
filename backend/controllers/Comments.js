@@ -3,16 +3,35 @@ import { UserModel } from '../models/User_model.js';
 
 
 // Create a new comment
-export const createComment  = async (req, res) => {
+export const createComment = async (req, res) => {
   try {
-    const { content, userID, postID } = req.body;
+    const { content, userID, postID, parentComment } = req.body;
     const user = await UserModel.findById(userID);
-    const newComment = new CommentModel({ content, user_id:userID,name:user.name, post_id:postID });
-    const savedComment = await newComment.save();
-    res.status(201).json(savedComment);
-    console.log();
+    const commentData = {
+      content,
+      user_id: userID,
+      name: user.name,
+      post_id: postID,
+      replies: [],
+    };
+
+    if (parentComment) {
+      const parentCommentDoc = await CommentModel.findById(parentComment);
+      if (!parentCommentDoc) {
+        return res.status(404).json({ error: true, message: 'Parent comment not found' });
+      }
+      const newReply = new CommentModel(commentData);
+      const savedReply = await newReply.save();
+      parentCommentDoc.replies.push(savedReply._id);
+      await parentCommentDoc.save();
+      return res.status(201).json(savedReply);
+    } else {
+      const newComment = new CommentModel(commentData);
+      const savedComment = await newComment.save();
+      res.status(201).json(savedComment);
+    }
   } catch (e) {
-    res.status(400).json({error:true, message: e.message });
+    res.status(400).json({ error: true, message: e.message });
   }
 };
 
@@ -29,10 +48,18 @@ export const getComments =  async (req, res) => {
 };
 
 // Like a comment
-export const likeComment = async (req, res) => {
+export const likeComment = async (req, res) => { 
   try {
-    const comment = await CommentModel.findById(req.params.id);
-    comment.likes.push(req.body.userId);
+    console.log(req.params.commentID)
+    const comment = await CommentModel.findById(req.params.commentID);
+    const userID = req.body.userID;
+    const isLiked = comment.likes.includes(userID);
+    if (isLiked) {
+      comment.likes = comment.likes.filter((id) => id.toString() !== userID);
+    }
+    else{
+      comment.likes.push(userID);
+    }
     const updatedComment = await comment.save();
     res.json(updatedComment);
   } catch (err) {
@@ -51,3 +78,4 @@ export const deleteComment = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+

@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.post('/', createComment);
 router.get('/post/:postID',getComments);
-router.put('/:id/like', likeComment);
+router.put('/:commentID/like', likeComment);
 router.delete('/:id', deleteComment);
 
 export {router as commentRouter};
