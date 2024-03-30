@@ -37,10 +37,31 @@ export const Register = () => {
           setLatitude(coords.latitude);
           setLongitude(coords.longitude);
 
-          var res = await axios.get(
-            `https://api.maptiler.com/geocoding/${coords.longitude},${coords.latitude}.json?key=${import.meta.env.VITE_MAPTILER_API}`
-          );
-          console.log(res);
+          // var res = await axios.get(
+          //   `https://api.maptiler.com/geocoding/${coords.longitude},${coords.latitude}.json?key=${import.meta.env.VITE_MAPTILER_API}`
+          // );
+
+          const options = {
+            method: "GET",
+            url: "https://trueway-geocoding.p.rapidapi.com/ReverseGeocode",
+            params: {
+              location: `${coords.latitude},${coords.longitude}`,
+              language: "en",
+            },
+            headers: {
+              "X-RapidAPI-Key":
+                "a18010f01cmshaea7be3e2bb831ep146244jsnd20f6687f9aa",
+              "X-RapidAPI-Host": "trueway-geocoding.p.rapidapi.com",
+            },
+          };
+
+          try {
+            const response = await axios.request(options);
+            console.log(response.data);
+          } catch (error) {
+            console.error(error);
+          }
+
           var res2 = await axios.get(
             `https://maps.googleapis.com/maps/api/geocode/json?latlng=${
               coords.latitude
