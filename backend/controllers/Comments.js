@@ -5,31 +5,18 @@ import { UserModel } from '../models/User_model.js';
 // Create a new comment
 export const createComment = async (req, res) => {
   try {
-    const { content, userID, postID, parentComment } = req.body;
+    const { content, userID, postID, parent_id } = req.body;
     const user = await UserModel.findById(userID);
     const commentData = {
       content,
       user_id: userID,
       name: user.name,
       post_id: postID,
-      replies: [],
+      parent_id: parent_id,
     };
-
-    if (parentComment) {
-      const parentCommentDoc = await CommentModel.findById(parentComment);
-      if (!parentCommentDoc) {
-        return res.status(404).json({ error: true, message: 'Parent comment not found' });
-      }
-      const newReply = new CommentModel(commentData);
-      const savedReply = await newReply.save();
-      parentCommentDoc.replies.push(savedReply._id);
-      await parentCommentDoc.save();
-      return res.status(201).json(savedReply);
-    } else {
       const newComment = new CommentModel(commentData);
       const savedComment = await newComment.save();
       res.status(201).json(savedComment);
-    }
   } catch (e) {
     res.status(400).json({ error: true, message: e.message });
   }

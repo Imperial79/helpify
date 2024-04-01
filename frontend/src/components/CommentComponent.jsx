@@ -25,7 +25,10 @@ export const CommentComponent = ({ postID, userID }) => {
 
     setNewComment("");
   };
-  // const handleReplySubmit = async (e, parentCommentId) => {
+
+  const rootComments = comments.filter(comment=>comment.parent_id===null);
+  const replyComments = (parentCommentID)=>comments.filter(comment=>comment.parent_id===parentCommentID);
+  // const handleReplySubmit = async (e, parentCommentID) => {
   //   e.preventDefault();
 
   //   try {
@@ -88,13 +91,15 @@ export const CommentComponent = ({ postID, userID }) => {
       <div className="py-2 px-4">
         {/* COMMENT */}
 
-        {comments.length > 0 &&
-          comments.map((commentData, index) => {
+        {rootComments.length > 0 &&
+          rootComments.map((commentData, index) => {
             return (
               <div key={index}>
                 <CommentTile
-                  commentsList={comments}
                   commentData={commentData}
+                  replies={replyComments(commentData._id)}
+                  userID={userID}
+                  postID={postID}
                 />
               </div>
             );

@@ -1,30 +1,26 @@
 import React, { useState } from "react";
 import { SendIcon } from "./Icons";
+import axios from "axios";
 
-function CommentTile({ commentsList, commentData }) {
+function CommentTile({ commentData, replies, userID, postID }) {
   const [newReply, setNewReply] = useState("");
   const [likeComment, setLikeComment] = useState(false);
-
+  const [incomingReplies,setIncomingReplies] = useState(replies);
   //   --------------------------------------------------------------
   const handleReplySubmit = async (e, parentCommentId) => {
     e.preventDefault();
-
+    console.log(newReply);
+    console.log(postID);
+    console.log(parentCommentId);
     try {
       const res = await axios.post("http://localhost:8080/comments/", {
         userID,
         postID,
         content: newReply,
-        parentComment: parentCommentId,
+        parent_id: parentCommentId,
       });
-
-      setComments((prevComments) =>
-        prevComments.map((comment) =>
-          comment._id === parentCommentId
-            ? { ...comment, replies: [...comment.replies, res.data] }
-            : comment
-        )
-      );
-
+      // console.log(res)
+      setIncomingReplies((prevReplies) =>[...prevReplies, res.data]);
       // Clear the reply input field
       setNewReply("");
     } catch (e) {
@@ -76,22 +72,52 @@ function CommentTile({ commentsList, commentData }) {
           10m
         </div>
         {/* Replies */}
-        {/* {commentData.replies.length > 0 && (
-          <div className="ml-8">
-            {
-              <RenderReplies
-                commentsList={commentsList}
-                comment={commentData}
-                replyIds={commentData.replies}
-                handleReplySubmit={handleReplySubmit}
-                setNewReply={setNewReply}
-              />
-            }
-          </div>
-        )} */}
+        {incomingReplies.length > 0 &&
+          incomingReplies.map((reply, index) => {
+            return (
+                <div key={index} className="flex space-x-2">
+                  {" "}
+                  <div className="h-8 w-8 rounded-full overflow-hidden flex-shrink-0">
+                    {" "}
+                    <img
+                      src="https://source.unsplash.com/random"
+                      alt="Profile Picture"
+                      className="rounded-full w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <div className="bg-gray-100 dark:bg-dark-third p-2 rounded-2xl text-sm">
+                      <span className="font-semibold block">{reply.name}</span>
+                      <span>{reply.content}</span>
+                    </div>
+                    <div className="p-2 text-xs text-gray-500 dark:text-dark-txt">
+                      <span className="font-semibold cursor-pointer">Like</span>
+                      <span>.</span>
+                      <span className="font-semibold cursor-pointer">
+                        Reply
+                      </span>
+                      <span>.</span>
+                      10m
+                    </div>
+                    {/* Nested Replies
+                    {reply.replies.length > 0 && (
+                      <div className="ml-8">
+                        {renderReplies(reply.replies, setNewReply)}
+                      </div>
+                    )} */}
+                    {/* Reply Form */}
+                    {/* <div className="ml-8">
+                      <form onSubmit={(e) => handleReplySubmit(e, reply._id)}> */}
+                        {/* ... (reply form) */}
+                      {/* </form>
+                    </div> */}
+                  </div>
+                </div>
+            );
+          })}
 
         <div className="ml-8">
-          <form onSubmit={(e) => handleReplySubmit(e, comment._id)}>
+          <form onSubmit={(e) => handleReplySubmit(e, commentData._id)}>
             <input
               type="text"
               placeholder="Reply..."
@@ -152,40 +178,7 @@ const RenderReplies = ({
   //     const reply = comments.find((comment) => comment._id === replyId);
   //     if (!reply) return null;
   //     return (
-  //       <div key={replyId} className="flex space-x-2">
-  //         <div className="h-8 w-8 rounded-full overflow-hidden flex-shrink-0">
-  //           <img
-  //             src="https://source.unsplash.com/random"
-  //             alt="Profile Picture"
-  //             className="rounded-full w-full h-full object-cover"
-  //           />
-  //         </div>
-  //         <div>
-  //           <div className="bg-gray-100 dark:bg-dark-third p-2 rounded-2xl text-sm">
-  //             <span className="font-semibold block">{reply.name}</span>
-  //             <span>{reply.content}</span>
-  //           </div>
-  //           <div className="p-2 text-xs text-gray-500 dark:text-dark-txt">
-  //             <span className="font-semibold cursor-pointer">Like</span>
-  //             <span>.</span>
-  //             <span className="font-semibold cursor-pointer">Reply</span>
-  //             <span>.</span>
-  //             10m
-  //           </div>
-  //           {/* Nested Replies */}
-  //           {reply.replies.length > 0 && (
-  //             <div className="ml-8">
-  //               {renderReplies(reply.replies, setNewReply)}
-  //             </div>
-  //           )}
-  //           {/* Reply Form */}
-  //           <div className="ml-8">
-  //             <form onSubmit={(e) => handleReplySubmit(e, reply._id)}>
-  //               {/* ... (reply form) */}
-  //             </form>
-  //           </div>
-  //         </div>
-  //       </div>
+  //
   //     );
   //   });
 };
