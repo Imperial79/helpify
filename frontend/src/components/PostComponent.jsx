@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { Context } from "../context/ContextProvider";
+import LinearProgress from "@mui/joy/LinearProgress";
 import {
   AnncounceIcon,
   CommentIcon,
@@ -11,6 +12,7 @@ import {
   LostnFoundIcon,
   MenuIcon,
   ShareIcon,
+  MoneyIcon,
 } from "./Icons";
 import axios from "axios";
 import { CommentComponent } from "./CommentComponent";
@@ -22,9 +24,8 @@ export const PostComponent = ({
   likes,
   currentUser,
   createdAt,
-  setPosts,
 }) => {
-  const { userID } = useContext(Context);
+  const { userID, setPosts, posts } = useContext(Context);
   const [showPostMenu, setShowPostMenu] = useState(false);
   const [likeCount, setLikeCount] = useState(likes.length);
   const [isLiked, setIsLiked] = useState(likes.includes(userID));
@@ -44,13 +45,18 @@ export const PostComponent = ({
 
   const handleLike = async () => {
     try {
-      const response = await axios.put(
+      const res = await axios.put(
         `http://localhost:8080/posts/${postID}/like`,
         { userID: userID }
       );
-
-      setLikeCount(response.data.likes.length);
-      setIsLiked(!isLiked);
+      if (res.data.success) {
+        setLikeCount(res.data.likes.length);
+        if (res.data.likes.includes(userID)) {
+          setIsLiked(true);
+        } else {
+          setIsLiked(false);
+        }
+      }
     } catch (error) {
       console.error("Error liking/unliking post:", error);
     }
@@ -73,7 +79,11 @@ export const PostComponent = ({
   const postTime = formatDateTime(createdAt);
 
   return (
-    <div className="border-2 bg-white mt-4 rounded-lg">
+    <div
+      className={`border-2 bg-white mt-4 rounded-lg ${
+        postType == "Lost & Found" ? "border-red-200 bg-red-100" : ""
+      }`}
+    >
       {/* POST AUTHOR */}
       <div className="flex items-center justify-between px-4 py-2">
         <div className="flex space-x-2 items-center gap-2">
@@ -93,7 +103,7 @@ export const PostComponent = ({
         </div>
 
         <div className="relative">
-          {currentUser._id === userID && (
+          {currentUser && currentUser._id === userID && (
             <button
               onClick={() => {
                 setShowPostMenu(!showPostMenu);
@@ -144,6 +154,10 @@ export const PostComponent = ({
         />
       </div>
 
+      {/* For fund raiser */}
+      {postType == "Fund Raiser" ? <FundRaiserComponent /> : <></>}
+      {/* end */}
+
       <div className="px-4 py-2">
         <div className="flex items-center justify-between">
           <div className="flex flex-row-reverse items-center">
@@ -151,13 +165,23 @@ export const PostComponent = ({
               {likeCount || "0"} Likes
             </span>
           </div>
-          <p className="text-xs uppercase tracking-widest font-medium text-gray-400 flex gap-2 items-center truncate">
+          <p
+            className={`text-xs uppercase tracking-widest font-medium flex gap-2 items-center truncate ${
+              postType == "Announcement"
+                ? "text-blue-700"
+                : postType == "Lost & Found"
+                ? "text-red-500"
+                : "text-green-500"
+            }`}
+          >
             {postType == "Announcement" ? (
               <AnncounceIcon />
-            ) : (
+            ) : postType == "Lost & Found" ? (
               <LostnFoundIcon />
+            ) : (
+              <MoneyIcon />
             )}
-            {postType}
+            <p>{postType}</p>
           </p>
         </div>
       </div>
@@ -206,3 +230,20 @@ export const PostComponent = ({
     </div>
   );
 };
+
+function FundRaiserComponent() {
+  return (
+    <div className="p-5 flex items-center gap-10">
+      <div className="w-full">
+        <div className="flex justify-between mb-2">
+          <p className="font-medium text-gray-700 text-lg">₹100</p>
+          <p className="font-bold text-green-500 text-lg">₹1000</p>
+        </div>
+        <LinearProgress thickness={10} value={25} determinate />
+      </div>
+      <button type="button" className="kButton">
+        Donate
+      </button>
+    </div>
+  );
+}

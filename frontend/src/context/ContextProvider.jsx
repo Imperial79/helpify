@@ -37,71 +37,6 @@ function ContextProvider({ children }) {
   const [city, setCity] = useState("");
   const [isLoading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   if(userID!=null){
-  //     if (location.pathname == "/") {
-  //       const fetchUsers = async () => {
-  //         try {
-  //           setLoading(true);
-  //           const response = await axios.get(`http://localhost:8080/users/`);
-  //           setUsers(response.data);
-  //         } catch (error) {
-  //           console.error("Error fetching user:", error);
-  //         } finally {
-  //           setLoading(false);
-  //         }
-  //       };
-  //       const fetchPosts = async () => {
-  //         try {
-  //           setLoading(true);
-  //           const response = await axios.get(`http://localhost:8080/posts/`);
-  //           setPosts(response.data);
-  //         } catch (error) {
-  //           console.error("Error fetching user:", error);
-  //         } finally {
-  //           setLoading(false);
-  //         }
-  //       };
-  //       fetchUsers();
-  //       fetchPosts();
-  //     }else if(location.pathname == "/profile"){
-  //       console.log(userID)
-  //       const profileUserData = async () => {
-  //         try {
-  //           const response = await axios.get(
-  //             `http://localhost:8080/users/profile/${userID}`
-  //           );
-  //           setProfileUser(response.data);
-  //         } catch (error) {
-  //           console.error("Error fetching user:", error);
-  //         }
-  //       };
-  //       profileUserData();
-  //       const profilePostData = async () => {
-  //         try {
-  //           const response = await axios.get(
-  //             `http://localhost:8080/posts/profile-post/${userID}`
-  //           );
-  //           setProfilePosts(response.data);
-  //         } catch (error) {
-  //           console.error("Error fetching user:", error);
-  //         }
-  //       };
-  //       profilePostData();
-  //     }
-  //   }
-
-  // }, [location]);
-
-  // const uid = window.localStorage.getItem("userID");
-  // useEffect(() => {
-  //   if (uid) {
-  //     console.log("My UID -> " + uid);
-  //     setuserID(uid);
-  //   } else {
-  //     navigate("/login", { replace: true });
-  //   }
-  // }, [uid]);
   const uid = window.localStorage.getItem("userID");
   useEffect(() => {
     if (uid) {
@@ -113,25 +48,30 @@ function ContextProvider({ children }) {
         navigate("/login", { replace: true });
     }
   }, [navigate]);
+
   const fetchData = async (uid) => {
     try {
       setLoading(true);
-      const profileUserResponse = await axios.get(`http://localhost:8080/users/profile/${uid}`);
-      console.log(profileUserResponse)
+      const profileUserResponse = await axios.get(
+        `http://localhost:8080/users/profile/${uid}`
+      );
+
       setProfileUser(profileUserResponse.data);
       setCity(profileUserResponse.data.city);
       const place_id = profileUserResponse.data.place_id;
-      setPlaceID(profileUserResponse.data.place_id);
+      setPlaceID(place_id);
 
-        const [usersResponse, postsResponse] = await Promise.all([
-          axios.get(`http://localhost:8080/users/${place_id}`),
-          axios.get(`http://localhost:8080/posts/${place_id}`),
-        ]);
-        setUsers(usersResponse.data);
-        setPosts(postsResponse.data);
-        if (location.pathname === "/profile") {
-      const profilePostsResponse = await axios.get(`http://localhost:8080/posts/profile-post/${uid}`);
-      setProfilePosts(profilePostsResponse.data);
+      const [usersResponse, postsResponse] = await Promise.all([
+        axios.get(`http://localhost:8080/users/${place_id}`),
+        axios.get(`http://localhost:8080/posts/${place_id}`),
+      ]);
+      setUsers(usersResponse.data);
+      setPosts(postsResponse.data);
+      if (location.pathname === "/profile") {
+        const profilePostsResponse = await axios.get(
+          `http://localhost:8080/posts/profile-post/${uid}`
+        );
+        setProfilePosts(profilePostsResponse.data);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -160,7 +100,8 @@ function ContextProvider({ children }) {
         posts,
         setPosts,
         city,
-        place_id
+        place_id,
+        fetchData,
       }}
     >
       {children}

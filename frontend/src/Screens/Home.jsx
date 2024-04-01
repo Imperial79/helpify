@@ -5,26 +5,12 @@ import { CloseIcon, ImageIcon, LocationIcon } from "../components/Icons";
 import { Context } from "../context/ContextProvider";
 import Modal from "../components/Modal";
 import { PostComponent } from "../components/PostComponent";
-import { Link } from "react-router-dom";
 function Home() {
   const { isLoading, setLoading, profileUser, usersList, posts, setPosts } =
     useContext(Context);
 
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
 
-  // const deletePost = async (postID) => {
-  //   try {
-  //     console.log(postID)
-  //     await axios.delete(`http://localhost:8080/posts/${postID}`);
-  //     // Remove the deleted post from the posts state
-  //     setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postID));
-  //   } catch (error) {
-  //     console.error("Error deleting post:", error);
-  //   }
-  // };
-
-  // const userName = usersList? (usersList.find((user) => user._id === userID).name.split(" ")[0]) :'userName';
-  // console.log(userName);
   return (
     <Scaffold isLoading={isLoading}>
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 sm:gap-0 lg:gap-10 gap-0 mx-auto">
@@ -51,6 +37,24 @@ function Home() {
             </div>
           </div>
           <div>
+            <PostComponent
+              postType="Fund Raiser"
+              postID={1}
+              // currentUser={currentUser}
+              title={""}
+              content={"Fund Raiser Content (Testing post)"}
+              likes={[1, 2, 3]}
+              createdAt={"post.createdAt"}
+            />
+            <PostComponent
+              postType="Lost & Found"
+              postID={2}
+              // currentUser={currentUser}
+              title={""}
+              content={"Lost and Found Content (Testing post)"}
+              likes={[1, 2, 3]}
+              createdAt={"post.createdAt"}
+            />
             {posts && posts.length > 0 ? (
               posts
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -67,7 +71,6 @@ function Home() {
                         content={post.content}
                         likes={post.likes}
                         createdAt={post.createdAt}
-                        setPosts={setPosts}
                       />
                     </div>
                   ) : (
@@ -133,34 +136,38 @@ function CreatePostModal({
 }) {
   const [imagePreview, setImagePreview] = useState(null);
   const [postContent, setPostContent] = useState("");
-  const { userID, showAlert, place_id, city } = useContext(Context);
-  const p = place_id;
-  function handlePostSubmit() {
-    setShowPostModal(false);
+  const { userID, showAlert, place_id, city, fetchData, posts } =
+    useContext(Context);
 
-    const createPosts = async () => {
-      try {
-        setLoading(true);
+  async function handlePostSubmit() {
+    try {
+      setLoading(true);
 
-        const res = await axios.post(
-          "http://localhost:8080/posts/create-post",
-          { user_id: userID, title: "", content: postContent, place_id: p }
-        );
+      const res = await axios.post("http://localhost:8080/posts/create-post", {
+        user_id: userID,
+        title: "",
+        content: postContent,
+        place_id: place_id,
+      });
 
-        if (!res.data.error) {
-          setPosts((prevPosts) => [...prevPosts, res.data.response]);
-        }
-        showAlert(res.data.message, res.data.error);
-      } catch (error) {
-        console.error("Error creating post:", error);
-      } finally {
-        setLoading(false);
+      if (!res.data.error) {
+        console.log("Previous Posts --------------->");
+        console.log(posts);
+        console.log("Previous Posts end --------------->");
+        setPosts((prevPosts) => [...prevPosts, res.data.response]);
       }
+      showAlert(res.data.message, res.data.error);
 
+      //  if the post is success then close and clear the fields
+      fetchData();
+      setShowPostModal(false);
       setPostContent("");
       setImagePreview(null);
-    };
-    createPosts();
+    } catch (error) {
+      console.error("Error creating post:", error);
+    } finally {
+      setLoading(false);
+    }
   }
   return (
     <Modal
