@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import bodyParser from 'body-parser';
+import path from 'path';
+import {fileURLToPath} from 'url';
 import { userRouter } from "./routes/Users.js";
 import { postRouter } from "./routes/Post.js";
 import { commentRouter } from "./routes/Comments.js";
@@ -9,6 +12,18 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
+
+
+const __filename = fileURLToPath(import.meta.url);
+
+// 👇️ "/home/john/Desktop/javascript"
+const __dirname = path.dirname(__filename);
+console.log('directory-name 👉️', __dirname);
+app.use("/",express.static('public/uploads'));
+
+app.use (bodyParser.json ());
+app.use (bodyParser.urlencoded ({extended: true}));
+app.use (cors ());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

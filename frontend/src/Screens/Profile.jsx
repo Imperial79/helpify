@@ -34,6 +34,8 @@ function Profile() {
   const [showEditUserModal, setShowEditUserModal] = useState(false);
   const [editedUser, setEditedUser] = useState({ ...profileUser });
   const [isLoading, setLoading] = useState(false);
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [newAvatar, setNewAvatar] = useState(null);
 
   const handlePostSubmit = () => {
     setShowPostModal(false);
@@ -82,6 +84,30 @@ function Profile() {
     const { name, value } = e.target;
     setEditedUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
+  const handleAvatarUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append('avatar', newAvatar);
+  
+      // Make a request to update the user's avatar
+      const response = await axios.put(`http://localhost:8080/users/update-avatar/${userID}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+  
+      // Update the profileUser state with the new avatar URL
+      setProfileUser((prevUser) => ({
+        ...prevUser,
+        avatar: response.data.avatar,
+      }));
+      setShowAvatarModal(false);
+    } catch (error) {
+      console.error('Error updating avatar:', error);
+    }
+  };
+
   return profileUser != null ? (
     <Scaffold isLoading={isLoading}>
       <div>
@@ -89,13 +115,18 @@ function Profile() {
         <div className="flex flex-col">
           <div className="md:flex items-center md:gap-5 gap-5 bg-gray-50 p-5 justify-between">
             <div className="flex items-center gap-5">
-              <div className="rounded-full md:h-20 md:w-20 h-10 w-10 bg-gray-200 overflow-hidden flex-shrink-0">
-                {/* Profile Details */}
+              <div className="rounded-full md:h-20 md:w-20 h-10 w-10 bg-gray-200 overflow-hidden flex-shrink-0 relative">
                 <img
-                  src="https://source.unsplash.com/random"
-                  alt="profile-img"
+                  src={profileUser.avatar?`/public/${profileUser.avatar}`:"https://source.unsplash.com/random"}
+                  alt={profileUser.avatar}
                   className="h-full w-full object-cover"
                 />
+                <button
+                  className="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-1 m-1"
+                  onClick={() => setShowAvatarModal(true)}
+                >
+                  Change Avatar
+                </button>
               </div>
               <div className="flex flex-col truncate">
                 <h1 className="md:text-xl text-sm font-medium">
@@ -300,6 +331,40 @@ function Profile() {
               <button
                 className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
                 onClick={() => setShowEditUserModal(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </Modal>
+        <Modal
+          isOpen={showAvatarModal}
+          toggleModal={() => setShowAvatarModal(!showAvatarModal)}
+        >
+          <div>
+            <h2 className="text-xl font-bold mb-4">Change Avatar</h2>
+            <form onSubmit={handleAvatarUpdate} encType="multipart/form-data">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                setNewAvatar(e.target.files[0]);
+              }}
+              className="mb-4"
+            />
+            <button
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
+                onClick={() => {
+                  setShowAvatarModal(false);
+                }}
+              >
+                Save
+              </button>
+            </form>
+            <div className="flex justify-end">
+              <button
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                onClick={() => setShowAvatarModal(false)}
               >
                 Cancel
               </button>
