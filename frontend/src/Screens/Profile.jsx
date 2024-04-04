@@ -88,23 +88,24 @@ function Profile() {
     e.preventDefault();
     try {
       const formData = new FormData();
-      formData.append('avatar', newAvatar);
-  
+      formData.append("avatar", newAvatar);
+
       // Make a request to update the user's avatar
-      const response = await axios.put(`http://localhost:8080/users/update-avatar/${userID}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-  
+      const response = await axios.put(
+        `http://localhost:8080/users/update-avatar/${userID}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
       // Update the profileUser state with the new avatar URL
-      setProfileUser((prevUser) => ({
-        ...prevUser,
-        avatar: response.data.avatar,
-      }));
+      setNewAvatar(newAvatar);
       setShowAvatarModal(false);
     } catch (error) {
-      console.error('Error updating avatar:', error);
+      console.error("Error updating avatar:", error);
     }
   };
 
@@ -117,8 +118,12 @@ function Profile() {
             <div className="flex items-center gap-5">
               <div className="rounded-full md:h-20 md:w-20 h-10 w-10 bg-gray-200 overflow-hidden flex-shrink-0 relative">
                 <img
-                  src={profileUser.avatar?`/public/${profileUser.avatar}`:"https://source.unsplash.com/random"}
-                  alt={profileUser.avatar}
+                  src={
+                    profileUser.avatar
+                      ? `http://localhost:8080/images/${profileUser.avatar}`
+                      : "https://source.unsplash.com/random"
+                  }
+                  alt={profileUser.name}
                   className="h-full w-full object-cover"
                 />
                 <button
@@ -196,7 +201,14 @@ function Profile() {
             </div>
             <div className="flex gap-2 items-center mb-5">
               <div className="circleAvatar bg-gray-100">
-                <img src="https://source.unsplash.com/random" alt="" />
+                <img
+                  src={
+                    profileUser.avatar
+                      ? `http://localhost:8080/images/${profileUser.avatar}`
+                      : "https://source.unsplash.com/random"
+                  }
+                  alt={profileUser.name}
+                />
               </div>
               <div>
                 <h1 className="font-medium">{profileUser.name}</h1>
@@ -344,15 +356,15 @@ function Profile() {
           <div>
             <h2 className="text-xl font-bold mb-4">Change Avatar</h2>
             <form onSubmit={handleAvatarUpdate} encType="multipart/form-data">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                setNewAvatar(e.target.files[0]);
-              }}
-              className="mb-4"
-            />
-            <button
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  setNewAvatar(e.target.files[0]);
+                }}
+                className="mb-4"
+              />
+              <button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
                 onClick={() => {
                   setShowAvatarModal(false);

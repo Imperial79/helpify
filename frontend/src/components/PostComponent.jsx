@@ -32,7 +32,7 @@ export const PostComponent = ({
   const [showCommentComponent, setShowCommentComponent] = useState(false);
 
   //   ----------------------------------------------------
-
+  
   async function deletePost(postID) {
     try {
       const res = await axios.delete(`http://localhost:8080/posts/${postID}`);
@@ -89,9 +89,12 @@ export const PostComponent = ({
         <div className="flex space-x-2 items-center gap-2">
           <div className="h-10 w-10 rounded-full overflow-hidden flex-shrink-0">
             <img
-              src="https://source.unsplash.com/random"
-              alt="Profile Picture"
-              className="rounded-full w-full h-full object-cover"
+              src={
+                currentUser && (currentUser.avatar
+                  ? `http://localhost:8080/images/${currentUser.avatar}`
+                  : "https://source.unsplash.com/random")
+              }
+              alt={currentUser && currentUser.name}
             />
           </div>
           <div>

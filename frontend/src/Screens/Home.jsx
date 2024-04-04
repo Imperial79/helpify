@@ -20,9 +20,12 @@ function Home() {
             <div className="p-2 flex items-center gap-5">
               <div className="h-10 w-10 overflow-hidden rounded-full flex-shrink-0">
                 <img
-                  src="https://source.unsplash.com/random"
-                  alt="profile-img"
-                  className="h-full w-full object-cover"
+                  src={
+                    profileUser.avatar
+                      ? `http://localhost:8080/images/${profileUser.avatar}`
+                      : "https://source.unsplash.com/random"
+                  }
+                  alt={profileUser.name}
                 />
               </div>
               <button
@@ -159,7 +162,7 @@ function CreatePostModal({
       showAlert(res.data.message, res.data.error);
 
       //  if the post is success then close and clear the fields
-      fetchData();
+      fetchData(userID);
       setShowPostModal(false);
       setPostContent("");
       setImagePreview(null);
@@ -182,7 +185,14 @@ function CreatePostModal({
         </div>
         <div className="flex gap-2 items-center mb-5">
           <div className="circleAvatar bg-gray-100">
-            <img src="https://source.unsplash.com/random" alt="" />
+            <img
+              src={
+                profileUser.avatar
+                  ? `http://localhost:8080/images/${profileUser.avatar}`
+                  : "https://source.unsplash.com/random"
+              }
+              alt={profileUser.name}
+            />
           </div>
           <div>
             <h1 className="font-medium">{profileUser.name}</h1>
@@ -238,6 +248,7 @@ function CreatePostModal({
           rows={6}
           className="w-full p-2 bg-gray-100 rounded-xl mb-5"
           placeholder="What's on your mind?"
+          value={postContent}
           onChange={(e) => {
             setPostContent(e.target.value);
           }}
@@ -268,7 +279,16 @@ function CreatePostModal({
 function OtherUsersTile({ userData }) {
   return (
     <div className="w-full flex items-center gap-3 mb-2 p-2 hover:bg-gray-100 rounded-xl cursor-pointer">
-      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200"></div>
+      <div className="flex-shrink-0 circleAvatar">
+        <img
+          src={
+            userData.avatar
+              ? `http://localhost:8080/images/${userData.avatar}`
+              : "https://source.unsplash.com/random"
+          }
+          alt={userData.name}
+        />
+      </div>
       <div className="flex flex-col truncate">
         <h3 className="font-medium text-gray-600">{userData.name}</h3>
         <p className="font-normal text-gray-400 text-sm">{userData.email}</p>

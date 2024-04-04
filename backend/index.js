@@ -19,7 +19,7 @@ const __filename = fileURLToPath(import.meta.url);
 // 👇️ "/home/john/Desktop/javascript"
 const __dirname = path.dirname(__filename);
 console.log('directory-name 👉️', __dirname);
-app.use("/",express.static('public/uploads'));
+app.use("/images",express.static(path.join(__dirname,'public/uploads')));
 
 app.use (bodyParser.json ());
 app.use (bodyParser.urlencoded ({extended: true}));

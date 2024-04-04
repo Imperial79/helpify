@@ -47,7 +47,7 @@ function ContextProvider({ children }) {
       if (location.pathname != "/register")
         navigate("/login", { replace: true });
     }
-  }, [navigate]);
+  }, [navigate,uid]);
 
   const fetchData = async (uid) => {
     try {

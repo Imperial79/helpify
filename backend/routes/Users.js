@@ -14,7 +14,7 @@ router.post("/login", Login);
 router.put("/edit-user/:userID", editUser);
 
 const storageEngine = multer.diskStorage ({
-    destination: './public/uploads/',
+    destination: './backend/public/uploads/',
     filename: function (req, file, callback) {
       callback (
         null,
@@ -25,7 +25,7 @@ const storageEngine = multer.diskStorage ({
 
   // file filter for multer
 const fileFilter = (req, file, callback) => {
-  let pattern = /jpg|png|svg/; // reqex
+  let pattern = /jpg|jpeg|png|svg/; // reqex
 
   if (pattern.test (path.extname (file.originalname))) {
     callback (null, true);

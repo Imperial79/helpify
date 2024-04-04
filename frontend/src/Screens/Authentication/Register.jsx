@@ -103,6 +103,7 @@ export const Register = () => {
                 (result) => result.types[0] === "administrative_area_level_4"
               )[0].long_name
             );
+             console.log(city)
           }
           setLoading(false);
         } else {
