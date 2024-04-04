@@ -9,6 +9,7 @@ const PostSchema = new mongoose.Schema({
   postType:{type: String, default: 'Announcement'},
   content: { type: String, required: true },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+  image: {type:String,default:""},
   place_id: {type:String, ref: "location"},
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

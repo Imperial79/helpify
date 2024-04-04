@@ -18,12 +18,13 @@ import axios from "axios";
 import { CommentComponent } from "./CommentComponent";
 
 export const PostComponent = ({
-  postType = "Announcement",
+  postType,
   postID,
   content,
   likes,
   currentUser,
   createdAt,
+  image
 }) => {
   const { userID, setPosts, posts } = useContext(Context);
   const [showPostMenu, setShowPostMenu] = useState(false);
@@ -91,7 +92,7 @@ export const PostComponent = ({
             <img
               src={
                 currentUser && (currentUser.avatar
-                  ? `http://localhost:8080/images/${currentUser.avatar}`
+                  ? `http://localhost:8080/users-images/${currentUser.avatar}`
                   : "https://source.unsplash.com/random")
               }
               alt={currentUser && currentUser.name}
@@ -152,7 +153,7 @@ export const PostComponent = ({
       <div className="bg-gray-100">
         <img
           className="max-h-[300px] mx-auto"
-          src="https://source.unsplash.com/random"
+          src={image!==""?`http://localhost:8080/post-images/${image}`:"https://source.unsplash.com/random"}
           alt="post-image"
         />
       </div>

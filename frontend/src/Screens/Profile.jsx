@@ -84,8 +84,7 @@ function Profile() {
     const { name, value } = e.target;
     setEditedUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
-  const handleAvatarUpdate = async (e) => {
-    e.preventDefault();
+  const handleAvatarUpdate = async () => {
     try {
       const formData = new FormData();
       formData.append("avatar", newAvatar);
@@ -104,6 +103,10 @@ function Profile() {
       // Update the profileUser state with the new avatar URL
       setNewAvatar(newAvatar);
       setShowAvatarModal(false);
+      setProfileUser((prevUser) => ({
+        ...prevUser,
+        avatar: response.data.avatar,
+      }));
     } catch (error) {
       console.error("Error updating avatar:", error);
     }
@@ -120,7 +123,7 @@ function Profile() {
                 <img
                   src={
                     profileUser.avatar
-                      ? `http://localhost:8080/images/${profileUser.avatar}`
+                      ? `http://localhost:8080/users-images/${profileUser.avatar}`
                       : "https://source.unsplash.com/random"
                   }
                   alt={profileUser.name}
@@ -204,7 +207,7 @@ function Profile() {
                 <img
                   src={
                     profileUser.avatar
-                      ? `http://localhost:8080/images/${profileUser.avatar}`
+                      ? `http://localhost:8080/users-images/${profileUser.avatar}`
                       : "https://source.unsplash.com/random"
                   }
                   alt={profileUser.name}
@@ -355,7 +358,6 @@ function Profile() {
         >
           <div>
             <h2 className="text-xl font-bold mb-4">Change Avatar</h2>
-            <form onSubmit={handleAvatarUpdate} encType="multipart/form-data">
               <input
                 type="file"
                 accept="image/*"
@@ -364,16 +366,16 @@ function Profile() {
                 }}
                 className="mb-4"
               />
-              <button
+            <div className="flex justify-end">
+            <button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
                 onClick={() => {
                   setShowAvatarModal(false);
+                  handleAvatarUpdate();
                 }}
               >
                 Save
               </button>
-            </form>
-            <div className="flex justify-end">
               <button
                 className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
                 onClick={() => setShowAvatarModal(false)}

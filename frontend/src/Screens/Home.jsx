@@ -6,11 +6,10 @@ import { Context } from "../context/ContextProvider";
 import Modal from "../components/Modal";
 import { PostComponent } from "../components/PostComponent";
 function Home() {
-  const { isLoading, setLoading, profileUser, usersList, posts, setPosts } =
+  const { isLoading, setLoading, profileUser, usersList, posts, setPosts, userID } =
     useContext(Context);
 
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
-
   return (
     <Scaffold isLoading={isLoading}>
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 sm:gap-0 lg:gap-10 gap-0 mx-auto">
@@ -22,7 +21,7 @@ function Home() {
                 <img
                   src={
                     profileUser.avatar
-                      ? `http://localhost:8080/images/${profileUser.avatar}`
+                      ? `http://localhost:8080/users-images/${profileUser.avatar}`
                       : "https://source.unsplash.com/random"
                   }
                   alt={profileUser.name}
@@ -74,6 +73,7 @@ function Home() {
                         content={post.content}
                         likes={post.likes}
                         createdAt={post.createdAt}
+                        image={post.image}
                       />
                     </div>
                   ) : (
@@ -105,7 +105,7 @@ function Home() {
           </div>
 
           <div className="h-full w-full rounded-xl bg-white border p-2 overflow-auto">
-            {usersList.map((user, index) => {
+            {usersList.filter((user)=>user._id!==userID).map((user, index) => {
               return (
                 <div key={index}>
                   <OtherUsersTile userData={user} />
@@ -139,18 +139,28 @@ function CreatePostModal({
 }) {
   const [imagePreview, setImagePreview] = useState(null);
   const [postContent, setPostContent] = useState("");
-  const { userID, showAlert, place_id, city, fetchData, posts } =
+  const [postImage,setPostImage] = useState(null);
+  const {showAlert, place_id, city, fetchData, posts } =
     useContext(Context);
 
   async function handlePostSubmit() {
+    console.log(postImage)
     try {
       setLoading(true);
-
-      const res = await axios.post("http://localhost:8080/posts/create-post", {
-        user_id: userID,
-        title: "",
-        content: postContent,
-        place_id: place_id,
+      const formData = new FormData();
+      formData.append("user_id", profileUser._id);
+      formData.append("title", "");
+      formData.append("content", postContent);
+      formData.append("place_id", place_id);
+      if (postImage !== null) {
+        formData.append("image", postImage);
+      } else {
+        formData.append("image", ""); // or any other placeholder value
+      }
+      const res = await axios.post("http://localhost:8080/posts/create-post", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       if (!res.data.error) {
@@ -162,10 +172,11 @@ function CreatePostModal({
       showAlert(res.data.message, res.data.error);
 
       //  if the post is success then close and clear the fields
-      fetchData(userID);
+      fetchData(profileUser._id);
       setShowPostModal(false);
       setPostContent("");
       setImagePreview(null);
+      setPostImage(null);
     } catch (error) {
       console.error("Error creating post:", error);
     } finally {
@@ -188,7 +199,7 @@ function CreatePostModal({
             <img
               src={
                 profileUser.avatar
-                  ? `http://localhost:8080/images/${profileUser.avatar}`
+                  ? `http://localhost:8080/users-images/${profileUser.avatar}`
                   : "https://source.unsplash.com/random"
               }
               alt={profileUser.name}
@@ -238,6 +249,7 @@ function CreatePostModal({
           accept=".jpeg, .jpg, .png, .webp"
           onChange={(e) => {
             setImagePreview(URL.createObjectURL(e.target.files[0]));
+            setPostImage(e.target.files[0]);
           }}
         />
 
@@ -283,7 +295,7 @@ function OtherUsersTile({ userData }) {
         <img
           src={
             userData.avatar
-              ? `http://localhost:8080/images/${userData.avatar}`
+              ? `http://localhost:8080/users-images/${userData.avatar}`
               : "https://source.unsplash.com/random"
           }
           alt={userData.name}
