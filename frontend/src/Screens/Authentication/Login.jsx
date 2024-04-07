@@ -25,7 +25,6 @@ export const Login = () => {
         email,
         password,
       });
-
       if (!res.data.error) {
         setCookies("token", res.data.response.token);
         window.localStorage.setItem("userID", res.data.response.user._id);

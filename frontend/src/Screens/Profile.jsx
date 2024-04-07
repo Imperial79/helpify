@@ -51,7 +51,7 @@ function Profile() {
         if (!res.data.error) {
           setProfilePosts((prevPosts) => [...prevPosts, res.data.response]);
         }
-        showAlert(res.data.message, res.data.error);
+        // showAlert(res.data.message, res.data.error);
       } catch (error) {
         console.error("Error creating post:", error);
       } finally {
@@ -358,16 +358,16 @@ function Profile() {
         >
           <div>
             <h2 className="text-xl font-bold mb-4">Change Avatar</h2>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  setNewAvatar(e.target.files[0]);
-                }}
-                className="mb-4"
-              />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                setNewAvatar(e.target.files[0]);
+              }}
+              className="mb-4"
+            />
             <div className="flex justify-end">
-            <button
+              <button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
                 onClick={() => {
                   setShowAvatarModal(false);

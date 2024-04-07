@@ -4,8 +4,8 @@ import { Context } from "../context/ContextProvider";
 function Alert() {
   const { alert, isAlertShow, setisAlertShow } = useContext(Context);
   const label = alert["isDanger"] ? "Oops!" : "Success!";
-  const content = alert["content"];
-  const isDanger = alert["isDanger"];
+  const content = alert["content"] ?? "";
+  const isDanger = alert["isDanger"] ?? false;
 
   useEffect(() => {
     setTimeout(() => {
@@ -15,14 +15,12 @@ function Alert() {
 
   return (
     <div
-      className={`z-50 fixed top-0 mx-auto transition-opacity duration-300 w-screen ${
-        !isAlertShow ? "opacity-0 pointer-events-none" : "opacity-100"
-      }`}
+      className={`z-50 fixed top-0 mx-auto transition-opacity duration-300 w-screen ${!isAlertShow ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}
     >
       <div
-        className={`max-w-[1000px] mx-auto flex items-center p-3 m-2 text-sm border ${
-          isDanger ? "bg-red-950 text-white" : "bg-blue-950 text-white"
-        } rounded-sm`}
+        className={`max-w-[1000px] mx-auto flex items-center p-3 m-2 text-sm border ${isDanger ? "bg-black text-white" : "bg-blue-950 text-white"
+          } rounded-sm`}
         role="alert"
       >
         <svg

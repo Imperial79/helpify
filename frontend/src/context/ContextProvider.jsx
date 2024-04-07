@@ -8,8 +8,9 @@ function ContextProvider({ children }) {
     isDanger: false,
   });
   const [isAlertShow, setisAlertShow] = useState(false);
-  //YAHAPE KYA KIYA THA AVISHEEEKKKK TERE ERROR K WAJE SEY MERA KITNA TIME GEYA BEYYYY DIRECTLY PARAMETER BHEJTA HAIN BEY
-  const showAlert = ({message, isDanger}) => {
+
+
+  const showAlert = (message = "", isDanger = false) => {
     setisAlertShow(true);
     setAlert({
       content: message,
@@ -47,7 +48,7 @@ function ContextProvider({ children }) {
       if (location.pathname != "/register")
         navigate("/login", { replace: true });
     }
-  }, [navigate,uid]);
+  }, [navigate, uid]);
 
   const fetchData = async (uid) => {
     try {

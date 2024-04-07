@@ -3,7 +3,7 @@ import { PostModel } from "../models/Post_model.js";
 export const allPosts = async (req, res) => {
   try {
     const place_id = req.params.place_id;
-    const Posts = await PostModel.find({place_id});
+    const Posts = await PostModel.find({ place_id });
     // console.log(Posts);
     res.status(200).json(Posts);
   } catch (e) {
@@ -30,18 +30,18 @@ export const createPost = async (req, res) => {
       title,
       content,
       place_id,
-      image:fileName
+      image: fileName
     });
     const post = await newPost.save();
     res.json({
       error: false,
-      message: "Post created successfully!",
+      message: "Post created successfully! " + fileName,
       response: post,
     });
   } catch (e) {
     res.json({
       error: true,
-      message: e,
+      message: "Something went wrong! " + e,
     });
   }
 };

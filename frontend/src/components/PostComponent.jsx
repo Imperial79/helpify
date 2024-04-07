@@ -33,7 +33,7 @@ export const PostComponent = ({
   const [showCommentComponent, setShowCommentComponent] = useState(false);
 
   //   ----------------------------------------------------
-  
+
   async function deletePost(postID) {
     try {
       const res = await axios.delete(`http://localhost:8080/posts/${postID}`);
@@ -81,9 +81,8 @@ export const PostComponent = ({
 
   return (
     <div
-      className={`border-2 bg-white mt-4 rounded-lg ${
-        postType == "Lost & Found" ? "border-red-200 bg-red-100" : ""
-      }`}
+      className={`border-2 bg-white mt-4 rounded-lg ${postType == "Lost & Found" ? "border-red-200 bg-red-100" : ""
+        }`}
     >
       {/* POST AUTHOR */}
       <div className="flex items-center justify-between px-4 py-2">
@@ -119,9 +118,8 @@ export const PostComponent = ({
           )}
 
           <div
-            className={`${
-              showPostMenu ? "opacity-100" : "opacity-0 pointer-events-none"
-            } absolute shadow-lg py-2 bg-white rounded-lg w-[100px] transition-opacity duration-300 right-1`}
+            className={`${showPostMenu ? "opacity-100" : "opacity-0 pointer-events-none"
+              } absolute shadow-lg py-2 bg-white rounded-lg w-[100px] transition-opacity duration-300 right-1`}
           >
             <button
               onClick={() => {
@@ -153,7 +151,7 @@ export const PostComponent = ({
       <div className="bg-gray-100">
         <img
           className="max-h-[300px] mx-auto"
-          src={image!==""?`http://localhost:8080/post-images/${image}`:"https://source.unsplash.com/random"}
+          src={image !== "" ? `http://localhost:8080/post-images/${image}` : "https://source.unsplash.com/random"}
           alt="post-image"
         />
       </div>
@@ -169,14 +167,13 @@ export const PostComponent = ({
               {likeCount || "0"} Likes
             </span>
           </div>
-          <p
-            className={`text-xs uppercase tracking-widest font-medium flex gap-2 items-center truncate ${
-              postType == "Announcement"
+          <div
+            className={`text-xs uppercase tracking-widest font-medium flex gap-2 items-center truncate ${postType == "Announcement"
                 ? "text-blue-700"
                 : postType == "Lost & Found"
-                ? "text-red-500"
-                : "text-green-500"
-            }`}
+                  ? "text-red-500"
+                  : "text-green-500"
+              }`}
           >
             {postType == "Announcement" ? (
               <AnncounceIcon />
@@ -186,7 +183,7 @@ export const PostComponent = ({
               <MoneyIcon />
             )}
             <p>{postType}</p>
-          </p>
+          </div>
         </div>
       </div>
 

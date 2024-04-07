@@ -105,7 +105,7 @@ function Home() {
           </div>
 
           <div className="h-full w-full rounded-xl bg-white border p-2 overflow-auto">
-            {usersList.filter((user)=>user._id!==userID).map((user, index) => {
+            {usersList.filter((user) => user._id !== userID).map((user, index) => {
               return (
                 <div key={index}>
                   <OtherUsersTile userData={user} />
@@ -139,12 +139,12 @@ function CreatePostModal({
 }) {
   const [imagePreview, setImagePreview] = useState(null);
   const [postContent, setPostContent] = useState("");
-  const [postImage,setPostImage] = useState(null);
-  const {showAlert, place_id, city, fetchData, posts } =
+  const [postImage, setPostImage] = useState(null);
+  const { showAlert, place_id, city, fetchData, posts } =
     useContext(Context);
 
   async function handlePostSubmit() {
-    console.log(postImage)
+    console.log("postImage-> " + postImage);
     try {
       setLoading(true);
       const formData = new FormData();
@@ -155,20 +155,22 @@ function CreatePostModal({
       if (postImage !== null) {
         formData.append("image", postImage);
       } else {
-        formData.append("image", ""); // or any other placeholder value
+        // formData.append("image", ""); // or any other placeholder value
       }
       const res = await axios.post("http://localhost:8080/posts/create-post", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
+      console.log(res);
       if (!res.data.error) {
         console.log("Previous Posts --------------->");
         console.log(posts);
         console.log("Previous Posts end --------------->");
         setPosts((prevPosts) => [...prevPosts, res.data.response]);
       }
+
+
       showAlert(res.data.message, res.data.error);
 
       //  if the post is success then close and clear the fields
