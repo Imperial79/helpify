@@ -24,12 +24,10 @@ export const PostComponent = ({
   likes,
   currentUser,
   createdAt,
-  image
+  image,
 }) => {
   const { userID, setPosts, posts } = useContext(Context);
   const [showPostMenu, setShowPostMenu] = useState(false);
-  const [likeCount, setLikeCount] = useState(likes.length);
-  const [isLiked, setIsLiked] = useState(likes.includes(userID));
   const [showCommentComponent, setShowCommentComponent] = useState(false);
 
   //   ----------------------------------------------------
@@ -50,13 +48,23 @@ export const PostComponent = ({
         `http://localhost:8080/posts/${postID}/like`,
         { userID: userID }
       );
-      if (res.data.success) {
-        setLikeCount(res.data.likes.length);
-        if (res.data.likes.includes(userID)) {
-          setIsLiked(true);
-        } else {
-          setIsLiked(false);
-        }
+      // console.log(res);
+      if (!res.data.error) {
+        const newPosts = [...posts];
+        const index = newPosts.findIndex((post) => post._id == postID);
+        // console.log(newPosts[index]);
+        // console.log(res.data.response.likes);
+        newPosts[index].likes = res.data.response.likes;
+        // console.log(newPosts);
+        setPosts(newPosts);
+
+        // setLikeCount(res.data.likes.length);
+        // console.log(posts.filter((id) => id.toString !== postID));
+        // if (res.data.likes.includes(userID)) {
+        //   setIsLiked(true);
+        // } else {
+        //   setIsLiked(false);
+        // }
       }
     } catch (error) {
       console.error("Error liking/unliking post:", error);
@@ -81,8 +89,9 @@ export const PostComponent = ({
 
   return (
     <div
-      className={`border-2 bg-white mt-4 rounded-lg ${postType == "Lost & Found" ? "border-red-200 bg-red-100" : ""
-        }`}
+      className={`border-2 bg-white mt-4 rounded-lg ${
+        postType == "Lost & Found" ? "border-red-200 bg-red-100" : ""
+      }`}
     >
       {/* POST AUTHOR */}
       <div className="flex items-center justify-between px-4 py-2">
@@ -90,7 +99,8 @@ export const PostComponent = ({
           <div className="h-10 w-10 rounded-full overflow-hidden flex-shrink-0">
             <img
               src={
-                currentUser && (currentUser.avatar
+                currentUser &&
+                (currentUser.avatar
                   ? `http://localhost:8080/users-images/${currentUser.avatar}`
                   : "https://source.unsplash.com/random")
               }
@@ -118,8 +128,9 @@ export const PostComponent = ({
           )}
 
           <div
-            className={`${showPostMenu ? "opacity-100" : "opacity-0 pointer-events-none"
-              } absolute shadow-lg py-2 bg-white rounded-lg w-[100px] transition-opacity duration-300 right-1`}
+            className={`${
+              showPostMenu ? "opacity-100" : "opacity-0 pointer-events-none"
+            } absolute shadow-lg py-2 bg-white rounded-lg w-[100px] transition-opacity duration-300 right-1`}
           >
             <button
               onClick={() => {
@@ -151,7 +162,11 @@ export const PostComponent = ({
       <div className="bg-gray-100">
         <img
           className="max-h-[300px] mx-auto"
-          src={image !== "" ? `http://localhost:8080/post-images/${image}` : "https://source.unsplash.com/random"}
+          src={
+            image !== ""
+              ? `http://localhost:8080/post-images/${image}`
+              : "https://source.unsplash.com/random"
+          }
           alt="post-image"
         />
       </div>
@@ -164,16 +179,18 @@ export const PostComponent = ({
         <div className="flex items-center justify-between">
           <div className="flex flex-row-reverse items-center">
             <span className="ml-2 text-gray-500 dark:text-dark-txt">
-              {likeCount || "0"} Likes
+              {/* {likeCount || "0"} Likes */}
+              {likes.length} Likes
             </span>
           </div>
           <div
-            className={`text-xs uppercase tracking-widest font-medium flex gap-2 items-center truncate ${postType == "Announcement"
+            className={`text-xs uppercase tracking-widest font-medium flex gap-2 items-center truncate ${
+              postType == "Announcement"
                 ? "text-blue-700"
                 : postType == "Lost & Found"
-                  ? "text-red-500"
-                  : "text-green-500"
-              }`}
+                ? "text-red-500"
+                : "text-green-500"
+            }`}
           >
             {postType == "Announcement" ? (
               <AnncounceIcon />
@@ -195,8 +212,8 @@ export const PostComponent = ({
                 className="text-sm font-semibold flex gap-2"
                 onClick={handleLike}
               >
-                {!isLiked ? <LikeIcon /> : <LikeFilledIcon />}
-                {!isLiked ? "Like" : "Unlike"}
+                {!likes.includes(userID) ? <LikeIcon /> : <LikeFilledIcon />}
+                {!likes.includes(userID) ? "Like" : "Unlike"}
               </span>
             </div>
             <div

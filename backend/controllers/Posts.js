@@ -30,7 +30,7 @@ export const createPost = async (req, res) => {
       title,
       content,
       place_id,
-      image: fileName
+      image: fileName,
     });
     const post = await newPost.save();
     res.json({
@@ -71,17 +71,18 @@ export const likePost = async (req, res) => {
     if (!post) {
       return res.status(404).json({ error: true, message: "Post not found" });
     }
-    const isLiked = post.likes.includes(userID);
 
-    if (isLiked) {
+    if (post.likes.includes(userID)) {
       post.likes = post.likes.filter((id) => id.toString() !== userID);
     } else {
       post.likes.push(userID);
     }
     await post.save();
-    res.json({ success: true, likes: post.likes });
+    res.json({ error: false, likes: post.likes, response: post });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: true, message: "Something went wrong" });
+    res
+      .status(500)
+      .json({ error: true, message: `Something went wrong ${error}` });
   }
 };
