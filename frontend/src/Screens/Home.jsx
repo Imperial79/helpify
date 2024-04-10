@@ -123,7 +123,7 @@ function Home() {
                   );
                 })
             ) : (
-              <div className="flex">
+              <div className="flex flex-col items-center justify-center">
                 <img src="/no_data.svg" className="h-56 p-10 mx-auto" />
                 <h1>No Users Yet!</h1>
               </div>
