@@ -28,8 +28,6 @@ export const PostComponent = ({
 }) => {
   const { userID, setPosts, posts } = useContext(Context);
   const [showPostMenu, setShowPostMenu] = useState(false);
-  const [likeCount, setLikeCount] = useState(likes.length);
-  const [isLiked, setIsLiked] = useState(likes.includes(userID));
   const [showCommentComponent, setShowCommentComponent] = useState(false);
 
   //   ----------------------------------------------------
