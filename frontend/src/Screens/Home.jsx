@@ -6,8 +6,15 @@ import { Context } from "../context/ContextProvider";
 import Modal from "../components/Modal";
 import { PostComponent } from "../components/PostComponent";
 function Home() {
-  const { isLoading, setLoading, profileUser, usersList, posts, setPosts, userID } =
-    useContext(Context);
+  const {
+    isLoading,
+    setLoading,
+    profileUser,
+    usersList,
+    posts,
+    setPosts,
+    userID,
+  } = useContext(Context);
 
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
   return (
@@ -105,13 +112,22 @@ function Home() {
           </div>
 
           <div className="h-full w-full rounded-xl bg-white border p-2 overflow-auto">
-            {usersList.filter((user) => user._id !== userID).map((user, index) => {
-              return (
-                <div key={index}>
-                  <OtherUsersTile userData={user} />
-                </div>
-              );
-            })}
+            {usersList > 0 ? (
+              usersList
+                .filter((user) => user._id !== userID)
+                .map((user, index) => {
+                  return (
+                    <div key={index}>
+                      <OtherUsersTile userData={user} />
+                    </div>
+                  );
+                })
+            ) : (
+              <div className="flex">
+                <img src="/no_data.svg" className="h-56 p-10 mx-auto" />
+                <h1>No Users Yet!</h1>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -140,8 +156,7 @@ function CreatePostModal({
   const [imagePreview, setImagePreview] = useState(null);
   const [postContent, setPostContent] = useState("");
   const [postImage, setPostImage] = useState(null);
-  const { showAlert, place_id, city, fetchData, posts } =
-    useContext(Context);
+  const { showAlert, place_id, city, fetchData, posts } = useContext(Context);
 
   async function handlePostSubmit() {
     console.log("postImage-> " + postImage);
@@ -157,11 +172,15 @@ function CreatePostModal({
       } else {
         // formData.append("image", ""); // or any other placeholder value
       }
-      const res = await axios.post("http://localhost:8080/posts/create-post", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const res = await axios.post(
+        "http://localhost:8080/posts/create-post",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       console.log(res);
       if (!res.data.error) {
         console.log("Previous Posts --------------->");
@@ -169,7 +188,6 @@ function CreatePostModal({
         console.log("Previous Posts end --------------->");
         setPosts((prevPosts) => [...prevPosts, res.data.response]);
       }
-
 
       showAlert(res.data.message, res.data.error);
 

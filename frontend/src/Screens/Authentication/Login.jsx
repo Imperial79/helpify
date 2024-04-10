@@ -34,7 +34,7 @@ export const Login = () => {
         showAlert(res.data.message, true);
       }
     } catch (e) {
-      console.log(e);
+      showAlert("Some error occurred! Try again later ...", true);
     } finally {
       setLoading(false);
     }

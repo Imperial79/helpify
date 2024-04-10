@@ -119,18 +119,20 @@ function Profile() {
         <div className="flex flex-col">
           <div className="md:flex items-center md:gap-5 gap-5 bg-gray-50 p-5 justify-between">
             <div className="flex items-center gap-5">
-              <div className="rounded-full md:h-20 md:w-20 h-10 w-10 bg-gray-200 overflow-hidden flex-shrink-0 relative">
-                <img
-                  src={
-                    profileUser.avatar
-                      ? `http://localhost:8080/users-images/${profileUser.avatar}`
-                      : "https://source.unsplash.com/random"
-                  }
-                  alt={profileUser.name}
-                  className="h-full w-full object-cover"
-                />
+              <div className="flex flex-col items-center gap-1">
+                <div className="rounded-full md:h-20 md:w-20 h-10 w-10 bg-gray-200 overflow-hidden flex-shrink-0 relative">
+                  <img
+                    src={
+                      profileUser.avatar
+                        ? `http://localhost:8080/users-images/${profileUser.avatar}`
+                        : "https://source.unsplash.com/random"
+                    }
+                    alt={profileUser.name}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
                 <button
-                  className="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-1 m-1"
+                  className="kTextButton"
                   onClick={() => setShowAvatarModal(true)}
                 >
                   Change Avatar
