@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { useState } from "react";
 import axios from "axios";
+import { StaggeredGrid, StaggeredGridItem } from "react-staggered-grid";
 
 import Modal from "../components/Modal";
 import {
@@ -172,21 +173,22 @@ function Profile() {
           <br />
           <p className="text-gray-600 font-medium mb-5">Your Posts</p>
 
-          {profilePosts.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-5">
-              {profilePosts
-                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                .map((post) => {
-                  return (
-                    <div key={post._id}>
-                      <PostCard postData={post} />
-                    </div>
-                  );
-                })}
-            </div>
-          ) : (
-            <img src="/no_data.svg" alt="no-data" className="h-64 md:h-72" />
-          )}
+          <StaggeredGrid
+            columnWidth={400}
+            columns={0}
+            alignment={1}
+            horizontalGap={15}
+            verticalGap={15}
+            fitHorizontalGap={true}
+          >
+            {profilePosts
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+              .map((post, index) => (
+                <StaggeredGridItem key={post._id} index={index}>
+                  <PostCard postData={post} />
+                </StaggeredGridItem>
+              ))}
+          </StaggeredGrid>
         </div>
 
         {/* Create POST Modal */}
@@ -393,20 +395,19 @@ function Profile() {
 export default Profile;
 
 function PostCard({ postData }) {
-  console.log(postData.image);
   return (
     <div className="bg-white border rounded-xl">
-      <div className="w-full h-[200px] bg-gray-100 mb-2">
-        <img
-          src={
-            postData.image !== ""
-              ? `http://localhost:8080/post-images/${postData.image}`
-              : "https://source.unsplash.com/random"
-          }
-          alt="post-index"
-          className="object-contain h-full w-full"
-        />
-      </div>
+      {postData.image !== "" ? (
+        <div className="w-full rounded-t-xl bg-gray-100 mb-2 overflow-hidden">
+          <img
+            src={`http://localhost:8080/post-images/${postData.image}`}
+            alt="post-index"
+            className="object-contain h-full w-full"
+          />
+        </div>
+      ) : (
+        <></>
+      )}
 
       <div className="p-2">
         <h2 className="font-bold text-gray-700 mb-2">{postData.title}</h2>

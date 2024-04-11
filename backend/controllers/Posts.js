@@ -4,7 +4,7 @@ export const allPosts = async (req, res) => {
   try {
     const place_id = req.params.place_id;
     const Posts = await PostModel.find({ place_id });
-    // console.log(Posts);
+
     res.status(200).json(Posts);
   } catch (e) {
     res.sendStatus(400).send(e);

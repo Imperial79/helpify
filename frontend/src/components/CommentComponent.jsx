@@ -10,14 +10,12 @@ export const CommentComponent = ({ postID, userID }) => {
   const [likeComment, setLikeComment] = useState(false);
   const handlePostComment = async (e) => {
     e.preventDefault();
-    console.log("New comment:", newComment);
     try {
       const res = await axios.post("http://localhost:8080/comments/", {
         userID,
         postID,
         content: newComment,
       });
-      console.log(res);
       setComments((prevComments) => [...prevComments, res.data]);
     } catch (e) {
       console.error("Error Creating Comments:-", e);
@@ -26,40 +24,15 @@ export const CommentComponent = ({ postID, userID }) => {
     setNewComment("");
   };
 
-  const rootComments = comments.filter(comment=>comment.parent_id===null);
-  const replyComments = (parentCommentID)=>comments.filter(comment=>comment.parent_id===parentCommentID);
-  // const handleReplySubmit = async (e, parentCommentID) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     const res = await axios.post("http://localhost:8080/comments/", {
-  //       userID,
-  //       postID,
-  //       content: newReply,
-  //       parentComment: parentCommentId,
-  //     });
-
-  //     setComments((prevComments) =>
-  //       prevComments.map((comment) =>
-  //         comment._id === parentCommentId
-  //           ? { ...comment, replies: [...comment.replies, res.data] }
-  //           : comment
-  //       )
-  //     );
-
-  //     // Clear the reply input field
-  //     setNewReply("");
-  //   } catch (e) {
-  //     console.error("Error Creating Reply:-", e);
-  //   }
-  // };
+  const rootComments = comments.filter((comment) => comment.parent_id === null);
+  const replyComments = (parentCommentID) =>
+    comments.filter((comment) => comment.parent_id === parentCommentID);
   useEffect(() => {
     const fetchComments = async (postID) => {
       try {
         const res = await axios.get(
           `http://localhost:8080/comments/post/${postID}`
         );
-        console.log(res.data);
         setComments(res.data);
       } catch (e) {
         console.error("Error Getting Comments:-", e);
@@ -67,24 +40,6 @@ export const CommentComponent = ({ postID, userID }) => {
     };
     fetchComments(postID);
   }, []);
-  // const handleLike = async (commentID) => {
-  //   try {
-  //     const res = await axios.put(
-  //       `http://localhost:8080/comments/${commentID}/like`,
-  //       {
-  //         userID,
-  //       }
-  //     );
-  //     // Update the comments state with the updated comment data
-  //     setComments((prevComments) =>
-  //       prevComments.map((comment) =>
-  //         comment._id === commentID ? res.data : comment
-  //       )
-  //     );
-  //   } catch (e) {
-  //     console.error("Error Liking Comment:-", e);
-  //   }
-  // };
   return (
     <div>
       {/* LIST COMMENT */}

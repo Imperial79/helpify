@@ -56,8 +56,6 @@ export const Register = () => {
           };
 
           try {
-            const response = await axios.request(options);
-            console.log(response.data);
           } catch (error) {
             console.error(error);
           }
@@ -82,28 +80,21 @@ export const Register = () => {
           // console.log(res2);
 
           // -----------------------------
-          console.log(
-            res2.data.results.filter(
-              (result) => result.types[0] === "administrative_area_level_4"
-            )
-          );
+          // console.log(
+          //   res2.data.results.filter(
+          //     (result) => result.types[0] === "administrative_area_level_4"
+          //   )
+          // );
           const locationData = res2.data.results.filter(
             (result) => result.types[0] === "administrative_area_level_4"
           );
           if (locationData.length != 0) {
-            console.log(locationData[0].place_id);
-            console.log(
-              locationData[0].address_components.filter(
-                (result) => result.types[0] === "administrative_area_level_4"
-              )[0].long_name
-            );
             setPlaceID(locationData[0].place_id);
             setCity(
               locationData[0].address_components.filter(
                 (result) => result.types[0] === "administrative_area_level_4"
               )[0].long_name
             );
-            console.log(city);
           }
           setLoading(false);
         } else {
@@ -117,15 +108,7 @@ export const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Registration data:", {
-      name,
-      email,
-      password,
-      latitude,
-      longitude,
-      city,
-      place_id,
-    });
+
     try {
       if (latitude && longitude) {
         setLoading(true);
@@ -147,8 +130,6 @@ export const Register = () => {
       } else {
         showAlert("Please allow location / Get location to continue", true);
       }
-    } catch (e) {
-      console.log(e);
     } finally {
       setLoading(false);
     }

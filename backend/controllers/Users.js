@@ -8,7 +8,7 @@ dotenv.config();
 export const userData = async (req, res) => {
   const place_id = req.params.place_id;
   const users = await UserModel.find({ place_id });
-  // console.log(users)f;
+
   res.status(200).json(users);
 };
 
@@ -20,7 +20,6 @@ export const Profile = async (req, res) => {
     ...user._doc,
     city: location.city,
   };
-  // console.log(user);
   res.status(200).json(user);
 };
 
@@ -69,7 +68,6 @@ export const Register = async (req, res) => {
       response: newUser,
     });
   } catch (e) {
-    console.log(e);
     res.status(400).json({
       message: e,
       error: true,
@@ -103,7 +101,6 @@ export const Login = async (req, res) => {
 export const editUser = async (req, res) => {
   try {
     const user_id = req.params.userID;
-    // console.log(req.body);
     const { name, email } = req.body;
     const User = await UserModel.findByIdAndUpdate(
       user_id,

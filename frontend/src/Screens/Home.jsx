@@ -176,7 +176,6 @@ function CreatePostModal({
   const { showAlert, place_id, city, fetchData, posts } = useContext(Context);
 
   async function handlePostSubmit() {
-    console.log("postImage-> " + postImage);
     try {
       setLoading(true);
       const formData = new FormData();
@@ -198,11 +197,8 @@ function CreatePostModal({
           },
         }
       );
-      console.log(res);
+
       if (!res.data.error) {
-        console.log("Previous Posts --------------->");
-        console.log(posts);
-        console.log("Previous Posts end --------------->");
         setPosts((prevPosts) => [...prevPosts, res.data.response]);
       }
 
@@ -214,8 +210,6 @@ function CreatePostModal({
       setPostContent("");
       setImagePreview(null);
       setPostImage(null);
-    } catch (error) {
-      console.error("Error creating post:", error);
     } finally {
       setLoading(false);
     }

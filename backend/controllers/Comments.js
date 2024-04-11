@@ -1,6 +1,5 @@
-import { CommentModel } from '../models/Comment_model.js';
-import { UserModel } from '../models/User_model.js';
-
+import { CommentModel } from "../models/Comment_model.js";
+import { UserModel } from "../models/User_model.js";
 
 // Create a new comment
 export const createComment = async (req, res) => {
@@ -14,37 +13,34 @@ export const createComment = async (req, res) => {
       post_id: postID,
       parent_id: parent_id,
     };
-      const newComment = new CommentModel(commentData);
-      const savedComment = await newComment.save();
-      res.status(201).json(savedComment);
+    const newComment = new CommentModel(commentData);
+    const savedComment = await newComment.save();
+    res.status(201).json(savedComment);
   } catch (e) {
     res.status(400).json({ error: true, message: e.message });
   }
 };
 
 // Get all comments for a post
-export const getComments =  async (req, res) => {
+export const getComments = async (req, res) => {
   try {
     const post_id = req.params.postID;
-    // console.log(post_id)
-    const comments = await CommentModel.find({post_id});
+    const comments = await CommentModel.find({ post_id });
     res.json(comments);
   } catch (e) {
-    res.status(500).json({error:true, message: e.message });
+    res.status(500).json({ error: true, message: e.message });
   }
 };
 
 // Like a comment
-export const likeComment = async (req, res) => { 
+export const likeComment = async (req, res) => {
   try {
-    console.log(req.params.commentID)
     const comment = await CommentModel.findById(req.params.commentID);
     const userID = req.body.userID;
     const isLiked = comment.likes.includes(userID);
     if (isLiked) {
       comment.likes = comment.likes.filter((id) => id.toString() !== userID);
-    }
-    else{
+    } else {
       comment.likes.push(userID);
     }
     const updatedComment = await comment.save();
@@ -58,11 +54,10 @@ export const likeComment = async (req, res) => {
 export const deleteComment = async (req, res) => {
   try {
     const comment = await CommentModel.findById(req.params.id);
-    if (!comment) return res.status(404).json({ message: 'Comment not found' });
+    if (!comment) return res.status(404).json({ message: "Comment not found" });
     await comment.remove();
-    res.json({ message: 'Comment deleted' });
+    res.json({ message: "Comment deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
-
