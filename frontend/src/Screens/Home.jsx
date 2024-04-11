@@ -1,7 +1,12 @@
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import Scaffold from "../components/Scaffold";
-import { CloseIcon, ImageIcon, LocationIcon } from "../components/Icons";
+import {
+  CloseIcon,
+  ImageIcon,
+  LocationIcon,
+  SendIcon,
+} from "../components/Icons";
 import { Context } from "../context/ContextProvider";
 import Modal from "../components/Modal";
 import { PostComponent } from "../components/PostComponent";
@@ -16,6 +21,7 @@ function Home() {
     userID,
   } = useContext(Context);
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
+  const [showChatUI, setShowChatUI] = useState(false);
   return (
     <Scaffold isLoading={isLoading}>
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 sm:gap-0 lg:gap-10 gap-0 mx-auto">
@@ -109,25 +115,37 @@ function Home() {
             </p>
           </div>
 
-          <div className="h-full w-full rounded-xl bg-white border p-2 overflow-auto">
-            {usersList.length > 0 ? (
-              usersList
-                .filter((user) => user._id !== userID)
-                .map((user, index) => {
-                  console.log(user)
-                  return (
-                    <div key={index}>
-                      <OtherUsersTile userData={user} />
-                    </div>
-                  );
-                })
-            ) : (
-              <div className="flex flex-col items-center justify-center">
-                <img src="/no_data.svg" className="h-56 p-10 mx-auto" />
-                <h1>No Users Yet!</h1>
-              </div>
-            )}
-          </div>
+          {showChatUI ? (
+            <ChatUI
+              closeChat={() => {
+                setShowChatUI(false);
+              }}
+            />
+          ) : (
+            <div className="h-full w-full rounded-xl bg-white border p-2 overflow-auto">
+              {usersList.length > 1 ? (
+                usersList
+                  .filter((user) => user._id !== userID)
+                  .map((user, index) => {
+                    return (
+                      <div
+                        key={index}
+                        onClick={() => {
+                          setShowChatUI(true);
+                        }}
+                      >
+                        <OtherUsersTile userData={user} />
+                      </div>
+                    );
+                  })
+              ) : (
+                <div className="flex flex-col items-center justify-center">
+                  <img src="/no_data.svg" className="h-56 p-10 mx-auto" />
+                  <h1>No Users Yet!</h1>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -294,7 +312,7 @@ function CreatePostModal({
             Create Post
           </button>
           <button
-            className="min-w-[200px] bg-black rounded-full text-white hover:bg-gray-700"
+            className="bg-black text-white py-2 px-10 rounded-full hover:bg-blue-900 select-none"
             onClick={() => {
               setShowPostModal(false);
             }}
@@ -323,6 +341,52 @@ function OtherUsersTile({ userData }) {
       <div className="flex flex-col truncate">
         <h3 className="font-medium text-gray-600">{userData.name}</h3>
         <p className="font-normal text-gray-400 text-sm">{userData.email}</p>
+      </div>
+    </div>
+  );
+}
+
+function ChatUI({ closeChat }) {
+  return (
+    <div className="h-full w-full rounded-xl bg-white border p-2">
+      <div className="flex gap-2">
+        <button
+          onClick={closeChat}
+          className="rounded-xl bg-gray-100 hover:bg-gray-300 flex items-center justify-center p-2"
+        >
+          <CloseIcon />
+        </button>
+        <div className="w-full p-2 bg-gray-100 flex items-center gap-2 rounded-xl">
+          <div className="h-7 w-7 rounded-full overflow-hidden bg-white flex-shrink-0">
+            <img
+              src=""
+              alt="profile-img"
+              className="h-full w-full object-cover"
+            />
+          </div>
+
+          <div>
+            <p className="text-sm font-medium">Username</p>
+            <p className="text-xs">email@mail.com</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="h-[350px] overflow-y-auto w-full bg-red-50 mt-1">
+        ...chat area
+      </div>
+      <div className="flex items-center gap-2">
+        <input
+          type="text"
+          className="textfield outline-none rounded-xl"
+          placeholder="Message..."
+        />
+        <button
+          type="submit"
+          className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-blue-500 bg-blue-700`}
+        >
+          <SendIcon color="text-white" />
+        </button>
       </div>
     </div>
   );

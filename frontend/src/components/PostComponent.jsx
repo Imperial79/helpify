@@ -149,17 +149,17 @@ export const PostComponent = ({
 
       <div className="text-justify px-4 py-2">{content}</div>
 
-      <div className="bg-gray-100">
-        <img
-          className="max-h-[300px] mx-auto"
-          src={
-            image !== ""
-              ? `http://localhost:8080/post-images/${image}`
-              : "https://source.unsplash.com/random"
-          }
-          alt="post-image"
-        />
-      </div>
+      {image !== "" ? (
+        <div className="bg-gray-100">
+          <img
+            className="max-h-[300px] mx-auto"
+            src={`http://localhost:8080/post-images/${image}`}
+            alt="post-image"
+          />
+        </div>
+      ) : (
+        <></>
+      )}
 
       {/* For fund raiser */}
       {postType == "Fund Raiser" ? <FundRaiserComponent /> : <></>}
