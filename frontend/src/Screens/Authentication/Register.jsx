@@ -209,7 +209,7 @@ export const Register = () => {
               />
             </div>
             {/* list of locality */}
-            {addressList &&
+            {/* {addressList &&
               addressList.map((data, index) =>
                 data.types.includes("sublocality") ? (
                   <li key={index} className="flex flex-col gap-2">
@@ -218,15 +218,15 @@ export const Register = () => {
                 ) : (
                   <></>
                 )
-              )}
+              )} */}
             {/* list of locality ends */}
 
             {addressList &&
               addressList.map((data, index) =>
                 data.types[0] == "administrative_area_level_4" ? (
                   <li key={index} className="flex flex-col gap-2">
-                    <div>{data.formatted_address}</div>
-                    <div>
+                    <div>City: {data.formatted_address}</div>
+                    {/* <div>
                       <p>
                         NorthEast - {data.geometry.bounds.northeast.lat},{" "}
                         {data.geometry.bounds.northeast.lng}
@@ -235,7 +235,7 @@ export const Register = () => {
                         Southwest - {data.geometry.bounds.southwest.lat},{" "}
                         {data.geometry.bounds.southwest.lng}
                       </p>
-                    </div>
+                    </div> */}
                   </li>
                 ) : (
                   <></>
