@@ -179,11 +179,7 @@ function Profile() {
                 .map((post) => {
                   return (
                     <div key={post._id}>
-                      <PostCard
-                        title={post.title}
-                        content={post.content}
-                        likes={post.likes}
-                      />
+                      <PostCard postData={post} />
                     </div>
                   );
                 })}
@@ -396,21 +392,26 @@ function Profile() {
 
 export default Profile;
 
-function PostCard({ title, content, likes }) {
+function PostCard({ postData }) {
+  console.log(postData.image);
   return (
     <div className="bg-white border rounded-xl">
       <div className="w-full h-[200px] bg-gray-100 mb-2">
         <img
-          src="https://source.unsplash.com/random"
+          src={
+            postData.image !== ""
+              ? `http://localhost:8080/post-images/${postData.image}`
+              : "https://source.unsplash.com/random"
+          }
           alt="post-index"
           className="object-contain h-full w-full"
         />
       </div>
 
       <div className="p-2">
-        <h2 className="font-bold text-gray-700 mb-2">{title}</h2>
+        <h2 className="font-bold text-gray-700 mb-2">{postData.title}</h2>
 
-        <p className="line-clamp-3">{content}</p>
+        <p className="line-clamp-3">{postData.content}</p>
 
         <div className="flex items-center gap-5 mt-2">
           <button className="flex items-center mt-2 gap-2 hover:bg-gray-200 rounded-full px-2">
@@ -421,7 +422,7 @@ function PostCard({ title, content, likes }) {
             )}
 
             <p className="font-medium text-gray-500">
-              {(likes && likes.length) || "0"}
+              {(postData.likes && postData.likes.length) || "0"}
             </p>
           </button>
           {/* <button className="flex items-center mt-2 gap-2 hover:bg-gray-200 rounded-full px-2">

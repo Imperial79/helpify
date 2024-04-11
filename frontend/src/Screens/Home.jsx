@@ -22,7 +22,6 @@ function Home() {
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 sm:gap-0 lg:gap-10 gap-0 mx-auto">
         <div className="col-span-3 max-w-4xl mx-auto w-full">
           <div className="p-4 rounded-lg bg-white border-2">
-            {/* <div>City: {city} - {place_id}</div> */}
             <div className="p-2 flex items-center gap-5">
               <div className="h-10 w-10 overflow-hidden rounded-full flex-shrink-0">
                 <img

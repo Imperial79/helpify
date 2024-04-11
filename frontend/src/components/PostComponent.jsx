@@ -48,23 +48,13 @@ export const PostComponent = ({
         `http://localhost:8080/posts/${postID}/like`,
         { userID: userID }
       );
-      // console.log(res);
+
       if (!res.data.error) {
         const newPosts = [...posts];
         const index = newPosts.findIndex((post) => post._id == postID);
-        // console.log(newPosts[index]);
-        // console.log(res.data.response.likes);
         newPosts[index].likes = res.data.response.likes;
-        // console.log(newPosts);
-        setPosts(newPosts);
 
-        // setLikeCount(res.data.likes.length);
-        // console.log(posts.filter((id) => id.toString !== postID));
-        // if (res.data.likes.includes(userID)) {
-        //   setIsLiked(true);
-        // } else {
-        //   setIsLiked(false);
-        // }
+        setPosts(newPosts);
       }
     } catch (error) {
       console.error("Error liking/unliking post:", error);
