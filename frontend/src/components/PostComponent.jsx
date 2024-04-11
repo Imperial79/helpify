@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { Context } from "../context/ContextProvider";
+import { Link } from "react-router-dom";
 import LinearProgress from "@mui/joy/LinearProgress";
 import {
   AnncounceIcon,
@@ -87,19 +88,23 @@ export const PostComponent = ({
       <div className="flex items-center justify-between px-4 py-2">
         <div className="flex space-x-2 items-center gap-2">
           <div className="h-10 w-10 rounded-full overflow-hidden flex-shrink-0">
-            <img
-              src={
-                currentUser &&
-                (currentUser.avatar
-                  ? `http://localhost:8080/users-images/${currentUser.avatar}`
-                  : "https://source.unsplash.com/random")
-              }
-              alt={currentUser && currentUser.name}
-            />
+            <Link to={`/profile/${currentUser && currentUser._id}`}>
+              <img
+                src={
+                  currentUser &&
+                  (currentUser.avatar
+                    ? `http://localhost:8080/users-images/${currentUser.avatar}`
+                    : "https://source.unsplash.com/random")
+                }
+                alt={currentUser && currentUser.name}
+              />
+            </Link>
           </div>
           <div>
             <div className="font-semibold">
-              {currentUser && currentUser.name}
+              <Link to={`/profile/${currentUser && currentUser._id}`}>
+                {currentUser && currentUser.name}
+              </Link>
             </div>
             <small>{postTime}</small>
           </div>

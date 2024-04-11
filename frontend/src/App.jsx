@@ -9,6 +9,7 @@ import { Register } from "./Screens/Authentication/Register";
 import { Login } from "./Screens/Authentication/Login";
 import Geolocation from "./Screens/GeoLocation";
 import Profile from "./Screens/Profile";
+import OtherProfile from "./Screens/OtherProfile";
 import ContextProvider from "./context/ContextProvider";
 import Alert from "./components/Alert";
 import ChatRoom from "./components/ChatRoom";
@@ -28,8 +29,9 @@ function App() {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/geo" element={<Geolocation />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/:profileID" element={<OtherProfile/>}/>
           </Routes>
-          <ChatRoom/>
+          {/* <ChatRoom/> */}
         </ContentArea>
         <Footer />
       </div>

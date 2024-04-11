@@ -61,7 +61,7 @@ function ContextProvider({ children }) {
       setCity(profileUserResponse.data.city);
       const place_id = profileUserResponse.data.place_id;
       setPlaceID(place_id);
-
+        console.log(1234)
       const [usersResponse, postsResponse] = await Promise.all([
         axios.get(`http://localhost:8080/users/${place_id}`),
         axios.get(`http://localhost:8080/posts/${place_id}`),
