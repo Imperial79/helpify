@@ -15,7 +15,6 @@ function Home() {
     setPosts,
     userID,
   } = useContext(Context);
-
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
   return (
     <Scaffold isLoading={isLoading}>
@@ -111,10 +110,11 @@ function Home() {
           </div>
 
           <div className="h-full w-full rounded-xl bg-white border p-2 overflow-auto">
-            {usersList > 0 ? (
+            {usersList.length > 0 ? (
               usersList
                 .filter((user) => user._id !== userID)
                 .map((user, index) => {
+                  console.log(user)
                   return (
                     <div key={index}>
                       <OtherUsersTile userData={user} />

@@ -11,6 +11,7 @@ import Geolocation from "./Screens/GeoLocation";
 import Profile from "./Screens/Profile";
 import ContextProvider from "./context/ContextProvider";
 import Alert from "./components/Alert";
+import ChatRoom from "./components/ChatRoom";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="/geo" element={<Geolocation />} />
             <Route path="/profile" element={<Profile />} />
           </Routes>
+          <ChatRoom/>
         </ContentArea>
         <Footer />
       </div>
