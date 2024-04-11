@@ -103,7 +103,7 @@ export const Register = () => {
                 (result) => result.types[0] === "administrative_area_level_4"
               )[0].long_name
             );
-             console.log(city)
+            console.log(city);
           }
           setLoading(false);
         } else {
@@ -225,7 +225,7 @@ export const Register = () => {
               addressList.map((data, index) =>
                 data.types[0] == "administrative_area_level_4" ? (
                   <li key={index} className="flex flex-col gap-2">
-                    <div>City: {data.formatted_address}</div>
+                    <div>Your Location: {data.formatted_address}</div>
                     {/* <div>
                       <p>
                         NorthEast - {data.geometry.bounds.northeast.lat},{" "}
@@ -242,8 +242,14 @@ export const Register = () => {
                 )
               )}
 
-            <p>Lat: {latitude}</p>
-            <p>Long: {longitude}</p>
+            {latitude && longitude ? (
+              <>
+                <p>Lat: {latitude}</p>
+                <p>Long: {longitude}</p>
+              </>
+            ) : (
+              <></>
+            )}
 
             <button
               type="button"
