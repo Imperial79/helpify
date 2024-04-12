@@ -1,5 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
+import io from "socket.io-client";
+const socket = io("http://localhost:8080");
 import Scaffold from "../components/Scaffold";
 import {
   CloseIcon,
@@ -141,7 +143,7 @@ function Home() {
               ) : (
                 <div className="flex flex-col items-center justify-center">
                   <img src="/no_data.svg" className="h-56 p-10 mx-auto" />
-                  <h1>No Users Yet!</h1>
+                  <h1>No other users in your area yet!</h1>
                 </div>
               )}
             </div>
@@ -341,6 +343,30 @@ function OtherUsersTile({ userData }) {
 }
 
 function ChatUI({ closeChat }) {
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+
+  useEffect(() => {
+    socket.on('chat message', (msg) => {
+      setMessages((prevMessages) => [...prevMessages, msg]);
+    });
+
+    return () => {
+      socket.off('chat message');
+    };
+  }, []);
+
+  const handleSendMessage = () => {
+    if (newMessage.trim() !== '') {
+      socket.emit('chat message', {
+        conversationId: '12345',
+        senderId: '67890',
+        content: newMessage,
+      });
+      setNewMessage('');
+    }
+  };
+
   return (
     <div className="h-full w-full rounded-xl bg-white border p-2">
       <div className="flex gap-2">
@@ -352,32 +378,33 @@ function ChatUI({ closeChat }) {
         </button>
         <div className="w-full p-2 bg-gray-100 flex items-center gap-2 rounded-xl">
           <div className="h-7 w-7 rounded-full overflow-hidden bg-white flex-shrink-0">
-            <img
-              src=""
-              alt="profile-img"
-              className="h-full w-full object-cover"
-            />
+            <img src="" alt="profile-img" className="h-full w-full object-cover" />
           </div>
-
           <div>
             <p className="text-sm font-medium">Username</p>
             <p className="text-xs">email@mail.com</p>
           </div>
         </div>
       </div>
-
       <div className="h-[350px] overflow-y-auto w-full bg-red-50 mt-1">
-        ...chat area
+        {messages.map((msg, index) => (
+          <div key={index} className="p-2">
+            <p className="text-sm">{msg.content}</p>
+          </div>
+        ))}
       </div>
       <div className="flex items-center gap-2">
         <input
           type="text"
           className="textfield outline-none rounded-xl"
           placeholder="Message..."
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
         />
         <button
           type="submit"
-          className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-blue-500 bg-blue-700`}
+          className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-blue-500 bg-blue-700"
+          onClick={handleSendMessage}
         >
           <SendIcon color="text-white" />
         </button>
