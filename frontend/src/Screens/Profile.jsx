@@ -29,6 +29,7 @@ function Profile() {
     city,
   } = useContext(Context);
   const [imagePreview, setImagePreview] = useState(null);
+  const [postImage, setPostImage] = useState(null);
 
   const [showPostModal, setShowPostModal] = useState(false);
   const [postContent, setPostContent] = useState("");
@@ -42,17 +43,29 @@ function Profile() {
     setShowPostModal(false);
 
     const createPosts = async () => {
-      const p = place_id;
       try {
         setLoading(true);
+        const formData = new FormData();
+        formData.append("user_id", userID);
+        formData.append("title", "");
+        formData.append("content", postContent);
+        formData.append("place_id", place_id);
+        if (postImage !== null) {
+          formData.append("image", postImage);
+        }
         const res = await axios.post(
           "http://localhost:8080/posts/create-post",
-          { user_id: userID, title: "", content: postContent, place_id: p }
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
         );
         if (!res.data.error) {
           setProfilePosts((prevPosts) => [...prevPosts, res.data.response]);
         }
-        // showAlert(res.data.message, res.data.error);
+        showAlert(res.data.message, res.data.error);
       } catch (error) {
         console.error("Error creating post:", error);
       } finally {
@@ -60,6 +73,7 @@ function Profile() {
       }
 
       setPostContent("");
+      setPostImage(null);
       document.getElementById("postContent").value = "";
       setImagePreview(null);
     };
@@ -199,9 +213,8 @@ function Profile() {
           }}
         >
           <div>
-            <div className="flex items-center justify-between mb-5">
-              <h1 className="font-medium text-xl">Create Post</h1>
-            </div>
+            <h1 className="font-medium text-xl mb-5">Create Post</h1>
+
             <div className="flex gap-2 items-center mb-5">
               <div className="circleAvatar bg-gray-100">
                 <img
@@ -257,6 +270,7 @@ function Profile() {
               accept=".jpeg, .jpg, .png, .webp"
               onChange={(e) => {
                 setImagePreview(URL.createObjectURL(e.target.files[0]));
+                setPostImage(e.target.files[0]);
               }}
             />
 
@@ -302,11 +316,11 @@ function Profile() {
           }}
         >
           <div>
-            <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
+            <h1 className="font-medium text-xl mb-5">Edit Profile</h1>
             <div className="mb-4">
               <label
                 htmlFor="name"
-                className="block text-gray-700 font-bold mb-2"
+                className="block text-black font-medium mb-2"
               >
                 Name
               </label>
@@ -322,7 +336,7 @@ function Profile() {
             <div className="mb-4">
               <label
                 htmlFor="email"
-                className="block text-gray-700 font-bold mb-2"
+                className="block text-black font-medium mb-2"
               >
                 Email
               </label>
@@ -336,15 +350,15 @@ function Profile() {
               />
             </div>
             {/* Save and Cancel Button */}
-            <div className="flex justify-end mt-4">
+            <div className="flex justify-end mt-4 gap-2">
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
+                className="bg-blue-700 text-white py-2 px-10 rounded-full hover:bg-blue-900 select-none"
                 onClick={handleEditSubmit}
               >
-                Save
+                Update
               </button>
               <button
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                className="bg-black text-white py-2 px-4 rounded-full hover:bg-gray-700 select-none"
                 onClick={() => setShowEditUserModal(false)}
               >
                 Cancel
@@ -412,7 +426,7 @@ function PostCard({ postData }) {
       <div className="p-2">
         <h2 className="font-bold text-gray-700 mb-2">{postData.title}</h2>
 
-        <p className="line-clamp-3">{postData.content}</p>
+        <p className="line-clamp-5">{postData.content}</p>
 
         <div className="flex items-center gap-5 mt-2">
           <button className="flex items-center mt-2 gap-2 hover:bg-gray-200 rounded-full px-2">

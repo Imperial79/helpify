@@ -187,8 +187,6 @@ function CreatePostModal({
       formData.append("place_id", place_id);
       if (postImage !== null) {
         formData.append("image", postImage);
-      } else {
-        // formData.append("image", ""); // or any other placeholder value
       }
       const res = await axios.post(
         "http://localhost:8080/posts/create-post",
@@ -344,26 +342,26 @@ function OtherUsersTile({ userData }) {
 
 function ChatUI({ closeChat }) {
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState("");
 
   useEffect(() => {
-    socket.on('chat message', (msg) => {
+    socket.on("chat message", (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
 
     return () => {
-      socket.off('chat message');
+      socket.off("chat message");
     };
   }, []);
 
   const handleSendMessage = () => {
-    if (newMessage.trim() !== '') {
-      socket.emit('chat message', {
-        conversationId: '12345',
-        senderId: '67890',
+    if (newMessage.trim() !== "") {
+      socket.emit("chat message", {
+        conversationId: "12345",
+        senderId: "67890",
         content: newMessage,
       });
-      setNewMessage('');
+      setNewMessage("");
     }
   };
 
@@ -378,7 +376,11 @@ function ChatUI({ closeChat }) {
         </button>
         <div className="w-full p-2 bg-gray-100 flex items-center gap-2 rounded-xl">
           <div className="h-7 w-7 rounded-full overflow-hidden bg-white flex-shrink-0">
-            <img src="" alt="profile-img" className="h-full w-full object-cover" />
+            <img
+              src=""
+              alt="profile-img"
+              className="h-full w-full object-cover"
+            />
           </div>
           <div>
             <p className="text-sm font-medium">Username</p>
