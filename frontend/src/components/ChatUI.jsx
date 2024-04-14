@@ -72,13 +72,17 @@ function ChatUI({ closeChat, activeChat, setActiveChat }) {
           </div>
         </div>
         <div className="h-[400px] overflow-y-auto w-full bg-gray-50 mt-1 rounded-xl">
-          {messages
-            .sort((a, b) => a.createdAt.seconds - b.createdAt.seconds)
-            .map((data, index) => (
-              <div key={data.id}>
-                <MessageBox myUserID={userID} data={data} />
-              </div>
-            ))}
+          {messages.length > 0 ? (
+            messages
+              .sort((a, b) => a.createdAt.seconds - b.createdAt.seconds)
+              .map((data, index) => (
+                <div key={data.id}>
+                  <MessageBox myUserID={userID} data={data} />
+                </div>
+              ))
+          ) : (
+            <p className="mx-auto">No Chats!</p>
+          )}
         </div>
         <div className="flex items-center gap-2 mt-2">
           <input
