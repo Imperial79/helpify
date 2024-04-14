@@ -6,7 +6,7 @@ import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDEJ_TYxKiSULHpO5ZUKSpIWLG2iz1kSlM",
+  apiKey: import.meta.env.FIREBASE_API_KEY,
   authDomain: "helpify-3a458.firebaseapp.com",
   projectId: "helpify-3a458",
   storageBucket: "helpify-3a458.appspot.com",
