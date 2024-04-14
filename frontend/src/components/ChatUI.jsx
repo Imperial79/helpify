@@ -8,14 +8,16 @@ import {
 } from "firebase/firestore";
 import { firebaseApp } from "../services/firebase_init";
 import { Context } from "../context/ContextProvider";
+import { getChatId } from "../services/constants";
 
 function ChatUI({ closeChat, activeChat, setActiveChat }) {
   const { userID, showAlert } = useContext(Context);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const chatRef = collection(firebaseApp, "chats/userID1-userID2/chatRoom");
 
   const handleSubmit = async (e) => {
+    const chatId = getChatId(userID, activeChat._id);
+    const chatRef = collection(firebaseApp, `chats/${chatId}/chatRoom`);
     e.preventDefault();
     try {
       if (newMessage.trim() === "") return;
@@ -33,6 +35,8 @@ function ChatUI({ closeChat, activeChat, setActiveChat }) {
   };
 
   useEffect(() => {
+    const chatId = getChatId(userID, activeChat._id);
+    const chatRef = collection(firebaseApp, `chats/${chatId}/chatRoom`);
     const unsubscribe = onSnapshot(chatRef, (snapshot) => {
       const documents = snapshot.docs.map((doc) => ({ ...doc.data() }));
       setMessages(documents);
