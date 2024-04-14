@@ -12,6 +12,7 @@ import {
 import { Context } from "../context/ContextProvider";
 import Modal from "../components/Modal";
 import { PostComponent } from "../components/PostComponent";
+import ChatUI from "../components/ChatUI";
 function Home() {
   const {
     isLoading,
@@ -24,6 +25,8 @@ function Home() {
   } = useContext(Context);
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
   const [showChatUI, setShowChatUI] = useState(false);
+
+  const [activeChat, setActiveChat] = useState(null);
   return (
     <Scaffold isLoading={isLoading}>
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 sm:gap-0 lg:gap-10 gap-0 mx-auto">
@@ -117,8 +120,10 @@ function Home() {
             </p>
           </div>
 
-          {showChatUI ? (
+          {showChatUI && activeChat ? (
             <ChatUI
+              activeChat={activeChat}
+              setActiveChat={setActiveChat}
               closeChat={() => {
                 setShowChatUI(false);
               }}
@@ -133,6 +138,7 @@ function Home() {
                       <div
                         key={index}
                         onClick={() => {
+                          setActiveChat(user);
                           setShowChatUI(true);
                         }}
                       >
@@ -340,77 +346,83 @@ function OtherUsersTile({ userData }) {
   );
 }
 
-function ChatUI({ closeChat }) {
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
+// function ChatUI({ closeChat, activeChat, setActiveChat }) {
+//   const [messages, setMessages] = useState([]);
+//   const [newMessage, setNewMessage] = useState("");
 
-  useEffect(() => {
-    socket.on("chat message", (msg) => {
-      setMessages((prevMessages) => [...prevMessages, msg]);
-    });
+//   useEffect(() => {
+//     socket.on("chat message", (msg) => {
+//       setMessages((prevMessages) => [...prevMessages, msg]);
+//     });
 
-    return () => {
-      socket.off("chat message");
-    };
-  }, []);
+//     return () => {
+//       socket.off("chat message");
+//     };
+//   }, []);
 
-  const handleSendMessage = () => {
-    if (newMessage.trim() !== "") {
-      socket.emit("chat message", {
-        conversationId: "12345",
-        senderId: "67890",
-        content: newMessage,
-      });
-      setNewMessage("");
-    }
-  };
+//   const handleSendMessage = () => {
+//     if (newMessage.trim() !== "") {
+//       socket.emit("chat message", {
+//         conversationId: "12345",
+//         senderId: "67890",
+//         content: newMessage,
+//       });
+//       setNewMessage("");
+//     }
+//   };
 
-  return (
-    <div className="h-full w-full rounded-xl bg-white border p-2">
-      <div className="flex gap-2">
-        <button
-          onClick={closeChat}
-          className="rounded-xl bg-gray-100 hover:bg-gray-300 flex items-center justify-center p-2"
-        >
-          <CloseIcon />
-        </button>
-        <div className="w-full p-2 bg-gray-100 flex items-center gap-2 rounded-xl">
-          <div className="h-7 w-7 rounded-full overflow-hidden bg-white flex-shrink-0">
-            <img
-              src=""
-              alt="profile-img"
-              className="h-full w-full object-cover"
-            />
-          </div>
-          <div>
-            <p className="text-sm font-medium">Username</p>
-            <p className="text-xs">email@mail.com</p>
-          </div>
-        </div>
-      </div>
-      <div className="h-[350px] overflow-y-auto w-full bg-red-50 mt-1">
-        {messages.map((msg, index) => (
-          <div key={index} className="p-2">
-            <p className="text-sm">{msg.content}</p>
-          </div>
-        ))}
-      </div>
-      <div className="flex items-center gap-2">
-        <input
-          type="text"
-          className="textfield outline-none rounded-xl"
-          placeholder="Message..."
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-blue-500 bg-blue-700"
-          onClick={handleSendMessage}
-        >
-          <SendIcon color="text-white" />
-        </button>
-      </div>
-    </div>
-  );
-}
+//   return (
+//     <div className="h-full w-full rounded-xl bg-white border p-2">
+//       <div className="flex gap-2">
+//         <button
+//           onClick={() => {
+//             closeChat();
+//             setActiveChat(null);
+//           }}
+//           className="rounded-xl bg-gray-100 hover:bg-gray-300 flex items-center justify-center p-2"
+//         >
+//           <CloseIcon />
+//         </button>
+//         <div className="w-full p-2 bg-gray-100 flex items-center gap-2 rounded-xl">
+//           <div className="h-7 w-7 rounded-full overflow-hidden bg-white flex-shrink-0">
+//             <img
+//               src={`http://localhost:8080/users-images/${activeChat.avatar}`}
+//               alt="profile-img"
+//               className="h-full w-full object-cover"
+//             />
+//           </div>
+//           <div>
+//             <p className="text-sm font-medium">{activeChat.name}</p>
+//             <p className="text-xs">{activeChat.email}</p>
+//           </div>
+//         </div>
+//       </div>
+//       <div className="h-[350px] overflow-y-auto w-full bg-gray-50 mt-1 rounded-xl">
+//         <div className="p-2 flex justify-end">
+//           <div className="flex flex-col justify-end items-end gap-1">
+//             <div className="bg-white px-2 py-1 max-w-[70%] border">
+//               <p className="text-sm">Hey</p>
+//             </div>
+//             <p className="text-xs text-gray-500">12-10-1010</p>
+//           </div>
+//         </div>
+//       </div>
+//       <div className="flex items-center gap-2 mt-2">
+//         <input
+//           type="text"
+//           className="textfield outline-none rounded-xl"
+//           placeholder="Message..."
+//           value={newMessage}
+//           onChange={(e) => setNewMessage(e.target.value)}
+//         />
+//         <button
+//           type="submit"
+//           className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-blue-500 bg-blue-700"
+//           onClick={handleSendMessage}
+//         >
+//           <SendIcon color="text-white" />
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }
