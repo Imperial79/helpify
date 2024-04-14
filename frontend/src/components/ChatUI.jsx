@@ -103,10 +103,14 @@ function MessageBox({ data, myUserID }) {
     data && (
       <div
         className={`p-2 flex ${
-          data.sendBy == myUserID ? "justify-end" : "justify-start"
+          data.sendBy == myUserID ? "justify-end " : "justify-start "
         }`}
       >
-        <div className="flex flex-col justify-end items-end gap-1">
+        <div
+          className={`flex flex-col justify-end ${
+            data.sendBy == myUserID ? "items-end" : "items-start"
+          } gap-1`}
+        >
           <div className="bg-white px-2 py-1 border">
             <p className="text-sm">{data.message}</p>
           </div>
