@@ -16,22 +16,22 @@ function ChatUI({ closeChat, activeChat, setActiveChat }) {
   const [newMessage, setNewMessage] = useState("");
 
   const handleSubmit = async (e) => {
-    const chatId = getChatId(userID, activeChat._id);
-    const chatRef = collection(firebaseApp, `chats/${chatId}/chatRoom`);
-    e.preventDefault();
-    try {
-      if (newMessage.trim() === "") return;
-
-      await addDoc(chatRef, {
-        message: newMessage,
-        sendBy: userID,
-        id: serverTimestamp(),
-        createdAt: new Date().toLocaleDateString("en-US"),
-      });
-      setNewMessage("");
-    } catch (error) {
-      console.log(error);
-    }
+    if (e.key === "Enter" && newMessage.trim() !== "") {
+      e.preventDefault();
+      try {
+        const chatId = getChatId(userID, activeChat._id);
+        const chatRef = collection(firebaseApp, `chats/${chatId}/chatRoom`);
+        await addDoc(chatRef, {
+          message: newMessage,
+          sendBy: userID,
+          id: serverTimestamp(),
+          createdAt: new Date().toLocaleDateString("en-US"),
+        });
+        setNewMessage("");
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (newMessage.trim() === "") return;
   };
 
   useEffect(() => {
@@ -39,7 +39,12 @@ function ChatUI({ closeChat, activeChat, setActiveChat }) {
     const chatRef = collection(firebaseApp, `chats/${chatId}/chatRoom`);
     const unsubscribe = onSnapshot(chatRef, (snapshot) => {
       const documents = snapshot.docs.map((doc) => ({ ...doc.data() }));
-      setMessages(documents);
+      setMessages(
+        documents.sort(
+          (a, b) =>
+            new Date(a.id.seconds).getTime() - new Date(b.id.seconds).getTime()
+        )
+      );
     });
 
     return unsubscribe;
@@ -74,7 +79,6 @@ function ChatUI({ closeChat, activeChat, setActiveChat }) {
         <div className="h-[400px] overflow-y-auto w-full bg-gray-50 mt-1 rounded-xl">
           {messages.length > 0 ? (
             messages
-              .sort((a, b) => a.createdAt.seconds - b.createdAt.seconds)
               .map((data, index) => (
                 <div key={data.id}>
                   <MessageBox myUserID={userID} data={data} />
@@ -91,6 +95,7 @@ function ChatUI({ closeChat, activeChat, setActiveChat }) {
             placeholder="Message..."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
+            onKeyDown={handleSubmit}
           />
           <button
             type="submit"
