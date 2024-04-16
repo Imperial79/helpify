@@ -30,6 +30,7 @@ function ChatUI({ closeChat, activeChat, setActiveChat }) {
         setNewMessage("");
       } catch (error) {
         console.log(error);
+        showAlert("Unable to send message!", true);
       }
     } else if (newMessage.trim() === "") return;
   };
@@ -67,7 +68,7 @@ function ChatUI({ closeChat, activeChat, setActiveChat }) {
             <div className="h-7 w-7 overflow-hidden rounded-full flex-shrink-0">
               <img
                 src={`http://localhost:8080/users-images/${activeChat.avatar}`}
-                alt=""
+                alt="profile-image"
               />
             </div>
             <div>
@@ -76,18 +77,19 @@ function ChatUI({ closeChat, activeChat, setActiveChat }) {
             </div>
           </div>
         </div>
+
         <div className="h-[400px] overflow-y-auto w-full bg-gray-50 mt-1 rounded-xl">
           {messages.length > 0 ? (
-            messages
-              .map((data, index) => (
-                <div key={data.id}>
-                  <MessageBox myUserID={userID} data={data} />
-                </div>
-              ))
+            messages.map((data, index) => (
+              <div key={data.id}>
+                <MessageBox myUserID={userID} data={data} />
+              </div>
+            ))
           ) : (
-            <p className="mx-auto">No Chats!</p>
+            <p className="mx-auto text-center">No Chats!</p>
           )}
         </div>
+
         <div className="flex items-center gap-2 mt-2">
           <input
             type="text"

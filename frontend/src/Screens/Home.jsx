@@ -33,13 +33,14 @@ function Home() {
         <div className="col-span-3 max-w-4xl mx-auto w-full">
           <div className="p-4 rounded-lg bg-white border-2">
             <div className="p-2 flex items-center gap-5">
-              <div className="h-10 w-10 overflow-hidden rounded-full flex-shrink-0">
+              <div className="circleAvatar flex-shrink-0">
                 <img
                   src={
                     profileUser.avatar
                       ? `http://localhost:8080/users-images/${profileUser.avatar}`
-                      : "https://source.unsplash.com/random"
+                      : "/no-image.jpg"
                   }
+                  className="object-cover h-full w-full"
                   alt={profileUser.name}
                 />
               </div>
@@ -237,8 +238,9 @@ function CreatePostModal({
               src={
                 profileUser.avatar
                   ? `http://localhost:8080/users-images/${profileUser.avatar}`
-                  : "https://source.unsplash.com/random"
+                  : "/no-image.jpg"
               }
+              className="object-cover h-full w-full"
               alt={profileUser.name}
             />
           </div>
@@ -333,8 +335,9 @@ function OtherUsersTile({ userData }) {
           src={
             userData.avatar
               ? `http://localhost:8080/users-images/${userData.avatar}`
-              : "https://source.unsplash.com/random"
+              : "/no-image.jpg"
           }
+          className="object-cover h-full w-full"
           alt={userData.name}
         />
       </div>
