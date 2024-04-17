@@ -12,7 +12,6 @@ import Profile from "./Screens/Profile";
 import OtherProfile from "./Screens/OtherProfile";
 import ContextProvider from "./context/ContextProvider";
 import Alert from "./components/Alert";
-import ChatRoom from "./components/ChatRoom";
 
 function App() {
   return (
@@ -31,7 +30,6 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/profile/:profileID" element={<OtherProfile/>}/>
           </Routes>
-          {/* <ChatRoom/> */}
         </ContentArea>
         <Footer />
       </div>

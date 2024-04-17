@@ -23,7 +23,7 @@ export const profilePost = async (req, res) => {
 
 export const createPost = async (req, res) => {
   try {
-    const { user_id, title, content, place_id } = req.body;
+    const { user_id, title, content, place_id, postType } = req.body;
     const fileName = req.file !== undefined ? req.file.filename : "";
 
     const newPost = new PostModel({
@@ -32,6 +32,7 @@ export const createPost = async (req, res) => {
       content,
       place_id,
       image: fileName,
+      postType
     });
     const post = await newPost.save();
     res.json({

@@ -1,13 +1,11 @@
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import io from "socket.io-client";
-const socket = io("http://localhost:8080");
 import Scaffold from "../components/Scaffold";
 import {
   CloseIcon,
   ImageIcon,
   LocationIcon,
-  SendIcon,
+  ChevronDownIcon,
 } from "../components/Icons";
 import { Context } from "../context/ContextProvider";
 import Modal from "../components/Modal";
@@ -55,7 +53,7 @@ function Home() {
             </div>
           </div>
           <div>
-            <PostComponent
+            {/* <PostComponent
               postType="Fund Raiser"
               postID={1}
               // currentUser={currentUser}
@@ -72,7 +70,7 @@ function Home() {
               content={"Lost and Found Content (Testing post)"}
               likes={[1, 2, 3]}
               createdAt={"post.createdAt"}
-            />
+            /> */}
             {posts && posts.length > 0 ? (
               posts
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -90,6 +88,7 @@ function Home() {
                         likes={post.likes}
                         createdAt={post.createdAt}
                         image={post.image}
+                        postType={post.postType}
                       />
                     </div>
                   ) : (
@@ -181,6 +180,7 @@ function CreatePostModal({
   const [imagePreview, setImagePreview] = useState(null);
   const [postContent, setPostContent] = useState("");
   const [postImage, setPostImage] = useState(null);
+  const [postType, setPostType] = useState("");
   const { showAlert, place_id, city, fetchData, posts } = useContext(Context);
 
   async function handlePostSubmit() {
@@ -191,6 +191,7 @@ function CreatePostModal({
       formData.append("title", "");
       formData.append("content", postContent);
       formData.append("place_id", place_id);
+      formData.append("postType", postType);
       if (postImage !== null) {
         formData.append("image", postImage);
       }
@@ -215,6 +216,7 @@ function CreatePostModal({
       setShowPostModal(false);
       setPostContent("");
       setImagePreview(null);
+      setPostType("");
       setPostImage(null);
     } finally {
       setLoading(false);
@@ -289,7 +291,29 @@ function CreatePostModal({
             setPostImage(e.target.files[0]);
           }}
         />
-
+        {/* Post Type Dropdown */}
+        <div className="flex gap-1 items-center mb-5">
+          {/* <label htmlFor="postType" className="font-medium text-gray-500">
+            Post Type:
+          </label> */}
+          <div className="relative w-full">
+            <select
+              name="postType"
+              id="postType"
+              value={postType}
+              onChange={(e) => setPostType(e.target.value)}
+              className="appearance-none w-full bg-gray-100 rounded-xl px-4 py-2 pr-8 focus:outline-none"
+            >
+              <option value="">Select Post Type</option>
+              <option value="Announcement">Announcement</option>
+              <option value="Fund Raiser">Fund Raiser</option>
+              <option value="Lost & Found">Lost & Found</option>
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+              <ChevronDownIcon size={"h-5 w-5"} color={"text-gray-500"} />
+            </div>
+          </div>
+        </div>
         {/* Post Body */}
         <textarea
           name="postContent"

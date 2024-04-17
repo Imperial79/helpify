@@ -239,3 +239,20 @@ export const MoneyIcon = ({ size = "h-4 w-4", color = "" }) => (
     />
   </svg>
 );
+
+export const ChevronDownIcon = ({ size = 'h-6 w-6', color = 'text-gray-500' }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      className={`${size} ${color}`}
+    >
+      <path
+        fillRule="evenodd"
+        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+};

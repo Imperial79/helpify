@@ -19,13 +19,13 @@ import axios from "axios";
 import { CommentComponent } from "./CommentComponent";
 
 export const PostComponent = ({
-  postType,
   postID,
   content,
   likes,
   currentUser,
   createdAt,
   image,
+  postType
 }) => {
   const { userID, setPosts, posts } = useContext(Context);
   const [showPostMenu, setShowPostMenu] = useState(false);

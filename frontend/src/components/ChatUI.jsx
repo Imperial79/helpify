@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { CloseIcon, SendIcon } from "./Icons";
 import {
   collection,
@@ -14,7 +14,15 @@ function ChatUI({ closeChat, activeChat, setActiveChat }) {
   const { userID, showAlert } = useContext(Context);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  //focusing on the new message whenever sent or received!
+  const chatContainerRef = useRef(null);
 
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
   const handleSubmit = async (e) => {
     if (e.key === "Enter" && newMessage.trim() !== "") {
       e.preventDefault();
@@ -76,14 +84,16 @@ function ChatUI({ closeChat, activeChat, setActiveChat }) {
             </div>
           </div>
         </div>
-        <div className="h-[400px] overflow-y-auto w-full bg-gray-50 mt-1 rounded-xl">
+        <div
+          className="h-[400px] overflow-y-auto w-full bg-gray-50 mt-1 rounded-xl"
+          ref={chatContainerRef}
+        >
           {messages.length > 0 ? (
-            messages
-              .map((data, index) => (
-                <div key={data.id}>
-                  <MessageBox myUserID={userID} data={data} />
-                </div>
-              ))
+            messages.map((data, index) => (
+              <div key={data.id}>
+                <MessageBox myUserID={userID} data={data} />
+              </div>
+            ))
           ) : (
             <p className="mx-auto">No Chats!</p>
           )}
