@@ -223,6 +223,7 @@ function Profile() {
                       ? `http://localhost:8080/users-images/${profileUser.avatar}`
                       : "https://source.unsplash.com/random"
                   }
+                  className="object-cover h-full w-full"
                   alt={profileUser.name}
                 />
               </div>

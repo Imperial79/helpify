@@ -5,35 +5,31 @@ Helipfy is a location-based community service platform designed to facilitate as
 ## Background:
 Helipfy was developed as a College Major Project for MCA degree in Heritage Institute of Technology, Kolkata College by contributors Soumik Sil, Avishek Verma, and Adhiraj Saha.
 
+## Contributors:
+- [Soumik Sil](https://github.com/soumik-aj12)
+- [Avishek Verma](https://github.com/Imperial79)
+- [Adhiraj Saha](https://github.com/adhirajcs)
+
 ## Features: 
 - Create and view posts specific to your city.
 - Request and offer assistance for various needs.
-- Chat with other users in real-time for immediate communication.
+- Chat with other users in real-time for immediate communication within the same region.
 - Like and comment on posts to engage with the community.
 - Receive real-time alerts for relevant activities in your locality.
 
 ## Technologies Used:
 - Frontend: React JS, Tailwind CSS
-- Backend: Express.js, Node.js, MongoDB Database, Socket.IO
+- Backend: Express.js, Node.js, MongoDB Database, Cloud Firestore (Firebase)
 - Geolocation API, Google Maps API
 
 ## Installation:
 1. Clone the repository: `git clone https://github.com/Imperial79/helpify.git`
 2. Navigate to the project directory: `cd helipfy`
-3. Install dependencies: `npm install`
-4. Start the server: `npm start`
-
-## Usage:
-1. Sign up for an account or log in if you already have one.
-2. Create a post or browse existing posts within your city.
-3. Interact with posts by liking, commenting, or initiating a chat.
-4. Donate to or support posts that resonate with you.
-5. Stay updated with real-time alerts and notifications.
-
-## Contributors:
-- [Soumik Sil](https://github.com/soumik-aj12)
-- [Avishek Verma](https://github.com/Imperial79)
-- [Adhiraj Saha](https://github.com/adhirajcs)
+3. Install dependencies for backend: `npm i`
+4. Start the backend server: `npm run dev`
+5. Navigate to the frontend of the project: `cd frontend`
+6. Install dependencies for frontend: `npm i`
+7. Start the frontend: `npm run dev`
 
 ## License
 

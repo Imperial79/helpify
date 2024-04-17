@@ -37,7 +37,6 @@
   @apply bg-white border-2 w-full p-2;
 }
 
-
 .circleAvatar{
   @apply h-10 w-10 rounded-full overflow-hidden;
 }
