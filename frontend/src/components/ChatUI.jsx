@@ -85,15 +85,10 @@ function ChatUI({ closeChat, activeChat, setActiveChat }) {
             </div>
           </div>
         </div>
-<<<<<<< HEAD
         <div
           className="h-[400px] overflow-y-auto w-full bg-gray-50 mt-1 rounded-xl"
           ref={chatContainerRef}
         >
-=======
-
-        <div className="h-[400px] overflow-y-auto w-full bg-gray-50 mt-1 rounded-xl">
->>>>>>> 97545eaef1121da36eb26b888bd7fb923a4d13b9
           {messages.length > 0 ? (
             messages.map((data, index) => (
               <div key={data.id}>
