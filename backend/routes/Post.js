@@ -1,5 +1,5 @@
 import express from "express";
-import { createPost,profilePost,allPosts,likePost,deletePost } from "../controllers/Posts.js";
+import { createPost,profilePost,allPosts,likePost,deletePost, donation } from "../controllers/Posts.js";
 import { PostModel } from "../models/Post_model.js";
 import multer from 'multer';
 import path from "path";
@@ -36,8 +36,7 @@ const upload = multer ({
   fileFilter  
 });
 router.post("/create-post", upload.single ('image'), createPost);
-
 router.put('/:postID/like',likePost);
-
+router.post("/donate/:postID", donation);
 
 export {router as postRouter};

@@ -25,7 +25,7 @@ export const createPost = async (req, res) => {
   try {
     const { user_id, title, content, place_id, postType } = req.body;
     const fileName = req.file !== undefined ? req.file.filename : "";
-
+    const target = req.body.targetAmount !== undefined ? req.body.targetAmount : null;
     const newPost = new PostModel({
       user_id,
       title,
@@ -34,6 +34,7 @@ export const createPost = async (req, res) => {
       image: fileName,
       postType
     });
+    newPost.donation.target = target;
     const post = await newPost.save();
     res.json({
       error: false,
@@ -88,3 +89,24 @@ export const likePost = async (req, res) => {
       .json({ error: true, message: `Something went wrong ${error}` });
   }
 };
+
+export const donation = async (req, res) => {
+  try {
+    const { postID } = req.params;
+    const { amount, userID } = req.body;
+
+    const post = await PostModel.findById(postID);
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    // Update the post's total amount raised and user's donation
+    post.donation.amount += parseInt(amount);
+    post.donation.users.push(userID);
+    await post.save();
+
+    res.json({ message: "Donation successful", post });
+  } catch (error) {
+    res.status(500).json({ error: "Error processing donation" });
+  }
+}

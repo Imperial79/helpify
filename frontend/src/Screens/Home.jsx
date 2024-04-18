@@ -93,6 +93,7 @@ function Home() {
                         createdAt={post.createdAt}
                         image={post.image}
                         postType={post.postType}
+                        donation={post.donation}
                       />
                     </div>
                   ) : (
@@ -185,6 +186,7 @@ function CreatePostModal({
   const [postContent, setPostContent] = useState("");
   const [postImage, setPostImage] = useState(null);
   const [postType, setPostType] = useState("Announcement");
+  const [targetAmount,setTargetAmount] = useState(200);
   const { showAlert, place_id, city, fetchData, posts } = useContext(Context);
 
   async function handlePostSubmit() {
@@ -196,6 +198,9 @@ function CreatePostModal({
       formData.append("content", postContent);
       formData.append("place_id", place_id);
       formData.append("postType", postType);
+      if (targetAmount !== null) {
+        formData.append("targetAmount", targetAmount);
+      }
       if (postImage !== null) {
         formData.append("image", postImage);
       }
@@ -359,6 +364,17 @@ function CreatePostModal({
         >
           {postType}
         </p>
+        {postType!==null && postType==="Fund Raiser"?
+        <input
+          name="targetAmount"
+          id="targetAmount"
+          className="w-full px-3 py-2 my-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+          placeholder="Set a Target Amount!"
+          value={targetAmount}
+          onChange={(e) => {
+            setTargetAmount(e.target.value);
+          }}
+        />:<></>}
         {/* Post Type Dropdown */}
         {/* <div className="flex gap-1 items-center mb-5">
           <div className="relative w-full">
