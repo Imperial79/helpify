@@ -6,6 +6,9 @@ import {
   ImageIcon,
   LocationIcon,
   ChevronDownIcon,
+  AnncounceIcon,
+  MoneyIcon,
+  LostnFoundIcon,
 } from "../components/Icons";
 import { Context } from "../context/ContextProvider";
 import Modal from "../components/Modal";
@@ -181,7 +184,7 @@ function CreatePostModal({
   const [imagePreview, setImagePreview] = useState(null);
   const [postContent, setPostContent] = useState("");
   const [postImage, setPostImage] = useState(null);
-  const [postType, setPostType] = useState("");
+  const [postType, setPostType] = useState("Announcement");
   const { showAlert, place_id, city, fetchData, posts } = useContext(Context);
 
   async function handlePostSubmit() {
@@ -293,11 +296,71 @@ function CreatePostModal({
             setPostImage(e.target.files[0]);
           }}
         />
+
+        <div className="flex text-center mb-5">
+          <button
+            type="button"
+            onClick={() => {
+              setPostType("Announcement");
+            }}
+            className={`flex-1 gap-2 justify-center flex items-center px-5 py-2 rounded-l-full border transition-colors duration-200 ${
+              postType == "Announcement"
+                ? "border-blue-700 bg-blue-100"
+                : "border-blue-100 bg-blue-100"
+            }`}
+          >
+            <AnncounceIcon color="text-blue-700" />
+            <p className="truncate text-sm font-medium text-blue-700 hidden md:block">
+              Announcement
+            </p>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setPostType("Fund Raiser");
+            }}
+            className={`flex-1 gap-2 justify-center flex items-center px-5 py-2 border transition-colors duration-200 ${
+              postType == "Fund Raiser"
+                ? "border-green-700 bg-green-100"
+                : "border-green-100 bg-green-100"
+            }`}
+          >
+            <MoneyIcon color="text-green-700" />
+            <p className="truncate text-sm font-medium text-green-700 hidden md:block">
+              Fund Raiser
+            </p>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setPostType("Lost & Found");
+            }}
+            className={`flex-1 gap-2 justify-center flex items-center px-5 py-2 rounded-r-full border transition-colors duration-200 ${
+              postType == "Lost & Found"
+                ? "border-red-700 bg-red-100"
+                : "border-red-100 bg-red-100"
+            }`}
+          >
+            <LostnFoundIcon color="text-red-700" />
+            <p className="truncate text-sm font-medium text-red-700 hidden md:block">
+              Lost & Found
+            </p>
+          </button>
+        </div>
+
+        <p
+          className={`${
+            postType == "Announcement"
+              ? "text-blue-700"
+              : postType == "Fund Raiser"
+              ? "text-green-700"
+              : "text-red-700"
+          } font-medium md:hidden lg:hidden`}
+        >
+          {postType}
+        </p>
         {/* Post Type Dropdown */}
-        <div className="flex gap-1 items-center mb-5">
-          {/* <label htmlFor="postType" className="font-medium text-gray-500">
-            Post Type:
-          </label> */}
+        {/* <div className="flex gap-1 items-center mb-5">
           <div className="relative w-full">
             <select
               name="postType"
@@ -315,7 +378,7 @@ function CreatePostModal({
               <ChevronDownIcon size={"h-5 w-5"} color={"text-gray-500"} />
             </div>
           </div>
-        </div>
+        </div> */}
         {/* Post Body */}
         <textarea
           name="postContent"
@@ -372,84 +435,3 @@ function OtherUsersTile({ userData }) {
     </div>
   );
 }
-
-// function ChatUI({ closeChat, activeChat, setActiveChat }) {
-//   const [messages, setMessages] = useState([]);
-//   const [newMessage, setNewMessage] = useState("");
-
-//   useEffect(() => {
-//     socket.on("chat message", (msg) => {
-//       setMessages((prevMessages) => [...prevMessages, msg]);
-//     });
-
-//     return () => {
-//       socket.off("chat message");
-//     };
-//   }, []);
-
-//   const handleSendMessage = () => {
-//     if (newMessage.trim() !== "") {
-//       socket.emit("chat message", {
-//         conversationId: "12345",
-//         senderId: "67890",
-//         content: newMessage,
-//       });
-//       setNewMessage("");
-//     }
-//   };
-
-//   return (
-//     <div className="h-full w-full rounded-xl bg-white border p-2">
-//       <div className="flex gap-2">
-//         <button
-//           onClick={() => {
-//             closeChat();
-//             setActiveChat(null);
-//           }}
-//           className="rounded-xl bg-gray-100 hover:bg-gray-300 flex items-center justify-center p-2"
-//         >
-//           <CloseIcon />
-//         </button>
-//         <div className="w-full p-2 bg-gray-100 flex items-center gap-2 rounded-xl">
-//           <div className="h-7 w-7 rounded-full overflow-hidden bg-white flex-shrink-0">
-//             <img
-//               src={`http://localhost:8080/users-images/${activeChat.avatar}`}
-//               alt="profile-img"
-//               className="h-full w-full object-cover"
-//             />
-//           </div>
-//           <div>
-//             <p className="text-sm font-medium">{activeChat.name}</p>
-//             <p className="text-xs">{activeChat.email}</p>
-//           </div>
-//         </div>
-//       </div>
-//       <div className="h-[350px] overflow-y-auto w-full bg-gray-50 mt-1 rounded-xl">
-//         <div className="p-2 flex justify-end">
-//           <div className="flex flex-col justify-end items-end gap-1">
-//             <div className="bg-white px-2 py-1 max-w-[70%] border">
-//               <p className="text-sm">Hey</p>
-//             </div>
-//             <p className="text-xs text-gray-500">12-10-1010</p>
-//           </div>
-//         </div>
-//       </div>
-//       <div className="flex items-center gap-2 mt-2">
-//         <input
-//           type="text"
-//           className="textfield outline-none rounded-xl"
-//           placeholder="Message..."
-//           value={newMessage}
-//           onChange={(e) => setNewMessage(e.target.value)}
-//         />
-//         <button
-//           type="submit"
-//           className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-blue-500 bg-blue-700"
-//           onClick={handleSendMessage}
-//         >
-//           <SendIcon color="text-white" />
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }

@@ -25,7 +25,7 @@ export const PostComponent = ({
   currentUser,
   createdAt,
   image,
-  postType
+  postType,
 }) => {
   const { userID, setPosts, posts } = useContext(Context);
   const [showPostMenu, setShowPostMenu] = useState(false);
@@ -87,7 +87,7 @@ export const PostComponent = ({
       {/* POST AUTHOR */}
       <div className="flex items-center justify-between px-4 py-2">
         <div className="flex space-x-2 items-center gap-2">
-          <div className="h-10 w-10 rounded-full overflow-hidden flex-shrink-0">
+          <div className="circleAvatar flex-shrink-0">
             <Link to={`/profile/${currentUser && currentUser._id}`}>
               <img
                 src={
@@ -96,6 +96,7 @@ export const PostComponent = ({
                     ? `http://localhost:8080/users-images/${currentUser.avatar}`
                     : "https://source.unsplash.com/random")
                 }
+                className="h-full w-full object-cover"
                 alt={currentUser && currentUser.name}
               />
             </Link>

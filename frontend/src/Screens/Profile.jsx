@@ -12,6 +12,9 @@ import {
   LikeFilledIcon,
   CommentIcon,
   CommentFilledIcon,
+  AnncounceIcon,
+  MoneyIcon,
+  LostnFoundIcon,
 } from "../components/Icons";
 import Scaffold from "../components/Scaffold";
 import { Context } from "../context/ContextProvider";
@@ -30,6 +33,7 @@ function Profile() {
   } = useContext(Context);
   const [imagePreview, setImagePreview] = useState(null);
   const [postImage, setPostImage] = useState(null);
+  const [targetAmount, setTargetAmount] = useState(0);
 
   const [showPostModal, setShowPostModal] = useState(false);
   const [postContent, setPostContent] = useState("");
@@ -38,44 +42,57 @@ function Profile() {
   const [isLoading, setLoading] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [newAvatar, setNewAvatar] = useState(null);
+  const [postType, setPostType] = useState("Announcement");
 
   const handlePostSubmit = () => {
-    setShowPostModal(false);
-
     const createPosts = async () => {
       try {
-        setLoading(true);
-        const formData = new FormData();
-        formData.append("user_id", userID);
-        formData.append("title", "");
-        formData.append("content", postContent);
-        formData.append("place_id", place_id);
-        if (postImage !== null) {
-          formData.append("image", postImage);
-        }
-        const res = await axios.post(
-          "http://localhost:8080/posts/create-post",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
+        if (postType == "Fund Raiser") {
+          if (postImage == null) {
+            showAlert("Image is required when raising a fund campaign!", true);
           }
-        );
-        if (!res.data.error) {
-          setProfilePosts((prevPosts) => [...prevPosts, res.data.response]);
+          if (targetAmount == 0) {
+            showAlert("Target amount is required!", true);
+          }
+          if (postContent == "") {
+            showAlert("Details are necessary!", true);
+          }
+          return;
+        } else {
+          setShowPostModal(false);
+          setLoading(true);
+          const formData = new FormData();
+          formData.append("user_id", userID);
+          formData.append("title", "");
+          formData.append("content", postContent);
+          formData.append("place_id", place_id);
+          if (postImage !== null) {
+            formData.append("image", postImage);
+          }
+          const res = await axios.post(
+            "http://localhost:8080/posts/create-post",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+          if (!res.data.error) {
+            setProfilePosts((prevPosts) => [...prevPosts, res.data.response]);
+          }
+
+          showAlert(res.data.message, res.data.error);
+          setPostContent("");
+          setPostImage(null);
+          document.getElementById("postContent").value = "";
+          setImagePreview(null);
         }
-        showAlert(res.data.message, res.data.error);
       } catch (error) {
         console.error("Error creating post:", error);
       } finally {
         setLoading(false);
       }
-
-      setPostContent("");
-      setPostImage(null);
-      document.getElementById("postContent").value = "";
-      setImagePreview(null);
     };
     createPosts();
   };
@@ -275,13 +292,98 @@ function Profile() {
               }}
             />
 
+            <div className="flex text-center mb-5">
+              <button
+                type="button"
+                onClick={() => {
+                  setPostType("Announcement");
+                }}
+                className={`flex-1 gap-2 justify-center flex items-center px-5 py-2 rounded-l-full border transition-colors duration-200 ${
+                  postType == "Announcement"
+                    ? "border-blue-700 bg-blue-100"
+                    : "border-blue-100 bg-blue-100"
+                }`}
+              >
+                <AnncounceIcon color="text-blue-700" />
+                <p className="truncate text-sm font-medium text-blue-700 hidden md:block">
+                  Announcement
+                </p>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setPostType("Fund Raiser");
+                }}
+                className={`flex-1 gap-2 justify-center flex items-center px-5 py-2 border transition-colors duration-200 ${
+                  postType == "Fund Raiser"
+                    ? "border-green-700 bg-green-100"
+                    : "border-green-100 bg-green-100"
+                }`}
+              >
+                <MoneyIcon color="text-green-700" />
+                <p className="truncate text-sm font-medium text-green-700 hidden md:block">
+                  Fund Raiser
+                </p>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setPostType("Lost & Found");
+                }}
+                className={`flex-1 gap-2 justify-center flex items-center px-5 py-2 rounded-r-full border transition-colors duration-200 ${
+                  postType == "Lost & Found"
+                    ? "border-red-700 bg-red-100"
+                    : "border-red-100 bg-red-100"
+                }`}
+              >
+                <LostnFoundIcon color="text-red-700" />
+                <p className="truncate text-sm font-medium text-red-700 hidden md:block">
+                  Lost & Found
+                </p>
+              </button>
+            </div>
+
+            <p
+              className={`${
+                postType == "Announcement"
+                  ? "text-blue-700"
+                  : postType == "Fund Raiser"
+                  ? "text-green-700"
+                  : "text-red-700"
+              } font-medium md:hidden lg:hidden`}
+            >
+              {postType}
+            </p>
+            {postType == "Fund Raiser" ? (
+              <div className="flex flex-col">
+                <label htmlFor="targetAmount">Target Amount (₹)</label>
+                <input
+                  id="targetAmount"
+                  type="number"
+                  className="mt-2 w-full p-2 bg-gray-100 rounded-xl mb-5"
+                  placeholder="Provide the amount you want to raise ..."
+                  value={targetAmount}
+                  onChange={(e) => {
+                    setTargetAmount(e.target.value);
+                  }}
+                />
+              </div>
+            ) : (
+              <></>
+            )}
             {/* Post Body */}
             <textarea
               name="postContent"
               id="postContent"
               rows={6}
               className="w-full p-2 bg-gray-100 rounded-xl mb-5"
-              placeholder="What's on your mind?"
+              placeholder={
+                postType == "Announcement"
+                  ? "What's on your mind?"
+                  : postType == "Fund Raiser"
+                  ? "Please enter the details of the campaign"
+                  : "Enter the details about the lost one"
+              }
               onChange={(e) => {
                 setPostContent(e.target.value);
               }}

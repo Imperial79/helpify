@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { Context } from "../context/ContextProvider";
 import { LocationIcon } from "./Icons";
@@ -46,6 +46,9 @@ export default function Navbar() {
               </NavLink>
               <NavLink to="/about" className="navLink">
                 About Us
+              </NavLink>
+              <NavLink to="/contact" className="navLink">
+                Contact Us
               </NavLink>
               <button
                 onClick={Logout}
