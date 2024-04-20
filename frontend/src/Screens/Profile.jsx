@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useState } from "react";
 import axios from "axios";
-import { StaggeredGrid, StaggeredGridItem } from "react-staggered-grid";
+import Masonry from "@mui/lab/Masonry";
 
 import Modal from "../components/Modal";
 import {
@@ -42,6 +42,7 @@ function Profile() {
   const [isLoading, setLoading] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [newAvatar, setNewAvatar] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(null);
   const [postType, setPostType] = useState("Announcement");
 
   const handlePostSubmit = () => {
@@ -204,22 +205,11 @@ function Profile() {
           <br />
           <p className="text-gray-600 font-medium mb-5">Your Posts</p>
 
-          <StaggeredGrid
-            columnWidth={400}
-            columns={0}
-            alignment={1}
-            horizontalGap={15}
-            verticalGap={15}
-            fitHorizontalGap={true}
-          >
-            {profilePosts
-              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-              .map((post, index) => (
-                <StaggeredGridItem key={post._id} index={index}>
-                  <PostCard postData={post} />
-                </StaggeredGridItem>
-              ))}
-          </StaggeredGrid>
+          <Masonry columns={2} spacing={2}>
+            {profilePosts.map((post, index) => (
+              <PostCard key={index} postData={post} />
+            ))}
+          </Masonry>
         </div>
 
         {/* Create POST Modal */}
@@ -238,7 +228,7 @@ function Profile() {
                   src={
                     profileUser.avatar
                       ? `http://localhost:8080/users-images/${profileUser.avatar}`
-                      : "https://source.unsplash.com/random"
+                      : "/no-image.jpg"
                   }
                   className="object-cover h-full w-full"
                   alt={profileUser.name}
@@ -476,28 +466,52 @@ function Profile() {
           <div>
             <h2 className="text-xl font-bold mb-4">Change Avatar</h2>
             <input
+              id="avatarPicker"
               type="file"
               accept="image/*"
               onChange={(e) => {
                 setNewAvatar(e.target.files[0]);
+                setAvatarPreview(URL.createObjectURL(e.target.files[0]));
               }}
-              className="mb-4"
+              className="mb-4 hidden"
             />
-            <div className="flex justify-end">
+
+            <div
+              onClick={() => {
+                document.getElementById("avatarPicker").click();
+              }}
+              className="h-40 w-40 rounded-full overflow-hidden bg-gray-300 mx-auto"
+            >
+              <img
+                src={
+                  avatarPreview ||
+                  `http://localhost:8080/users-images/${profileUser.avatar}`
+                }
+                alt=""
+                className="object-cover h-full w-full"
+              />
+            </div>
+
+            <p className="text-center mt-1 italic">Click to choose image</p>
+            <div className="flex justify-center mt-10">
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
+                className="bg-blue-700 text-white px-5 py-2 rounded-full hover:bg-blue-600 mr-2"
                 onClick={() => {
                   setShowAvatarModal(false);
                   handleAvatarUpdate();
                 }}
               >
-                Save
+                Update
               </button>
               <button
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
-                onClick={() => setShowAvatarModal(false)}
+                className="bg-gray-200 text-white px-5 py-2 rounded-full hover:bg-gray-300"
+                onClick={() => {
+                  setShowAvatarModal(false);
+                  setAvatarPreview(null);
+                  setNewAvatar(null);
+                }}
               >
-                Cancel
+                <CloseIcon color="text-black" />
               </button>
             </div>
           </div>

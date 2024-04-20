@@ -32,6 +32,12 @@ export const PostComponent = ({
   const { userID, setPosts, posts } = useContext(Context);
   const [showPostMenu, setShowPostMenu] = useState(false);
   const [showCommentComponent, setShowCommentComponent] = useState(false);
+  const [showDonationModal, setShowDonationModal] = useState(false);
+  const [updatedDonationData, setUpdatedDonationData] = useState(donation);
+  const [donationAmount, setDonationAmount] = useState(100);
+  const [donationPercentage, setDonationPercentage] = useState(
+    Math.round((donation.amount / donation.target) * 100)
+  );
 
   //   ----------------------------------------------------
 
@@ -79,6 +85,31 @@ export const PostComponent = ({
     return `${day}-${month}-${year} ${hours}:${minutes}`;
   }
   const postTime = formatDateTime(createdAt);
+
+  const handleDonation = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/posts/donate/${postID}`,
+        {
+          amount: donationAmount,
+          userID: postUserID,
+        }
+      );
+      // Handle the successful donation response
+      console.log(response.data);
+      setUpdatedDonationData(response.data.donation);
+      setDonationPercentage(
+        Math.round(
+          (updatedDonationData.amount / updatedDonationData.target) * 100
+        )
+      );
+    } catch (error) {
+      // Handle the error
+      console.error(error);
+    } finally {
+      setShowDonationModal(false);
+    }
+  };
 
   return (
     <div
@@ -175,6 +206,8 @@ export const PostComponent = ({
           postID={postID}
           postUserID={currentUser._id}
           donation={donation}
+          donationPercentage={donationPercentage}
+          setShowDonationModal={setShowDonationModal}
         />
       ) : (
         <></>
@@ -251,97 +284,82 @@ export const PostComponent = ({
       )}
 
       {/* END POST ACTION */}
+
+      <Modal
+        isOpen={showDonationModal}
+        toggleModal={() => {
+          setShowDonationModal(!showDonationModal);
+        }}
+      >
+        <div>
+          <h1 className="font-medium text-xl mb-5">Edit Profile</h1>
+          <div className="mb-4">
+            <label
+              htmlFor="donate"
+              className="block text-black font-medium mb-2"
+            >
+              Donate (Min Donation ₹100/-)
+            </label>
+            <input
+              type="number"
+              id="donate"
+              name="donate"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              min="100"
+              value={donationAmount}
+              onChange={(e) => setDonationAmount(e.target.value)}
+              required
+            />
+          </div>
+          {/* Save and Cancel Button */}
+          <div className="flex justify-end mt-4 gap-2">
+            <button
+              className="bg-green-700 text-white py-2 px-10 rounded-full hover:bg-green-900 select-none"
+              onClick={handleDonation}
+            >
+              Donate
+            </button>
+            <button
+              className="bg-black text-white py-2 px-4 rounded-full hover:bg-gray-700 select-none"
+              onClick={() => setShowDonationModal(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
 
-function FundRaiserComponent({ postID, postUserID, donation }) {
-  const [showDonationModal, setShowDonationModal] = useState(false);
-  const [updatedDonationData, setUpdatedDonationData] = useState(donation);
-  const [donationAmount, setDonationAmount] = useState(100);
-  const [donationPercentage, setDonationPercentage] = useState(
-    Math.round((donation.amount / donation.target) * 100)
-  );
-  const handleDonation = async () => {
-    try {
-      const response = await axios.post(
-        `http://localhost:8080/posts/donate/${postID}`,
-        {
-          amount: donationAmount,
-          userID: postUserID,
-        }
-      );
-      // Handle the successful donation response
-      console.log(response.data);
-      setUpdatedDonationData(response.data.donation);
-      setDonationPercentage(Math.round((updatedDonationData.amount / updatedDonationData.target) * 100))
-    } catch (error) {
-      // Handle the error
-      console.error(error);
-    } finally {
-      setShowDonationModal(false);
-    }
-  };
+function FundRaiserComponent({
+  postID,
+  postUserID,
+  donation,
+  donationPercentage,
+  setShowDonationModal,
+}) {
   return (
     <div className="p-5 flex items-center gap-10">
       <div className="w-full">
         <div className="flex justify-between mb-2">
           <p className="font-medium text-gray-700 text-lg">₹100</p>
-          <p className="font-bold text-green-500 text-lg">
-            ₹{donation.target}
-          </p>
+          <p className="font-bold text-green-500 text-lg">₹{donation.target}</p>
         </div>
-        <Modal
-          isOpen={showDonationModal}
-          toggleModal={() => {
-            setShowDonationModal(!showDonationModal);
-          }}
-        >
-          <div>
-            <h1 className="font-medium text-xl mb-5">Edit Profile</h1>
-            <div className="mb-4">
-              <label
-                htmlFor="donate"
-                className="block text-black font-medium mb-2"
-              >
-                Donate (Min Donation ₹100/-)
-              </label>
-              <input
-                type="number"
-                id="donate"
-                name="donate"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                min="100"
-                value={donationAmount}
-                onChange={(e) => setDonationAmount(e.target.value)}
-                required
-              />
-            </div>
-            {/* Save and Cancel Button */}
-            <div className="flex justify-end mt-4 gap-2">
-              <button
-                className="bg-green-700 text-white py-2 px-10 rounded-full hover:bg-green-900 select-none"
-                onClick={handleDonation}
-              >
-                Donate
-              </button>
-              <button
-                className="bg-black text-white py-2 px-4 rounded-full hover:bg-gray-700 select-none"
-                onClick={() => setShowDonationModal(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </Modal>
-        <LinearProgress thickness={10} value={donationPercentage && donationPercentage} determinate />
+        <LinearProgress
+          thickness={10}
+          value={donationPercentage && donationPercentage}
+          determinate
+        />
         Raise Amount:- {donation.amount}
       </div>
       <button
         type="button"
         className="kButton"
         onClick={() => setShowDonationModal(true)}
-        disabled={donationPercentage && donationPercentage === 100 ? true : false}
+        disabled={
+          donationPercentage && donationPercentage === 100 ? true : false
+        }
       >
         Donate
       </button>
