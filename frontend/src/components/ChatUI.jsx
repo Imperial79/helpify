@@ -24,8 +24,8 @@ function ChatUI({ closeChat, activeChat, setActiveChat }) {
     }
   }, [messages]);
   const handleSubmit = async (e) => {
-    if (e.key === "Enter" && newMessage.trim() !== "") {
-      e.preventDefault();
+    e.preventDefault(); // Prevent default form submission behavior
+    if (newMessage.trim() !== "") {
       try {
         const chatId = getChatId(userID, activeChat._id);
         const chatRef = collection(firebaseApp, `chats/${chatId}/chatRoom`);
@@ -40,8 +40,16 @@ function ChatUI({ closeChat, activeChat, setActiveChat }) {
         console.log(error);
         showAlert("Unable to send message!", true);
       }
-    } else if (newMessage.trim() === "") return;
+    }
   };
+  
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit(e);
+    }
+  };
+  
+  
 
   useEffect(() => {
     const chatId = getChatId(userID, activeChat._id);
@@ -107,7 +115,7 @@ function ChatUI({ closeChat, activeChat, setActiveChat }) {
             placeholder="Message..."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            onKeyDown={handleSubmit}
+            onKeyDown={handleKeyDown}
           />
           <button
             type="submit"
