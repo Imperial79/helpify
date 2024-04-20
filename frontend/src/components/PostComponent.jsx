@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { Context } from "../context/ContextProvider";
 import { Link } from "react-router-dom";
 import LinearProgress from "@mui/joy/LinearProgress";
+import useRazorpay from "react-razorpay";
 import {
   AnncounceIcon,
   CommentIcon,
@@ -18,6 +19,7 @@ import {
 import axios from "axios";
 import { CommentComponent } from "./CommentComponent";
 import Modal from "./Modal";
+// import Razorpay from "razorpay";
 
 export const PostComponent = ({
   postID,
@@ -28,8 +30,9 @@ export const PostComponent = ({
   image,
   postType,
   donation,
+  setLoading,
 }) => {
-  const { userID, setPosts, posts } = useContext(Context);
+  const { userID, setPosts, posts, showAlert } = useContext(Context);
   const [showPostMenu, setShowPostMenu] = useState(false);
   const [showCommentComponent, setShowCommentComponent] = useState(false);
   const [showDonationModal, setShowDonationModal] = useState(false);
@@ -38,6 +41,12 @@ export const PostComponent = ({
   const [donationPercentage, setDonationPercentage] = useState(
     Math.round((donation.amount / donation.target) * 100)
   );
+  const [Razorpay, isLoaded] = useRazorpay();
+
+  // var rzrpay = new Razorpay({
+  //   key_id: "rzp_test_vs55RW4qfRA2ST",
+  //   key_secret: "LiQWHDUJVBd9MJC1saAHWdae",
+  // });
 
   //   ----------------------------------------------------
 
@@ -86,30 +95,53 @@ export const PostComponent = ({
   }
   const postTime = formatDateTime(createdAt);
 
-  const handleDonation = async () => {
-    try {
-      const response = await axios.post(
-        `http://localhost:8080/posts/donate/${postID}`,
-        {
-          amount: donationAmount,
-          userID: postUserID,
-        }
-      );
-      // Handle the successful donation response
-      console.log(response.data);
-      setUpdatedDonationData(response.data.donation);
-      setDonationPercentage(
-        Math.round(
-          (updatedDonationData.amount / updatedDonationData.target) * 100
-        )
-      );
-    } catch (error) {
-      // Handle the error
-      console.error(error);
-    } finally {
-      setShowDonationModal(false);
-    }
-  };
+  async function generateOrderId() {
+    const res = await axios.post("http://localhost:8080/payment/create-order", {
+      amount: donationAmount,
+    });
+    return res.data.response.id;
+  }
+
+  async function handleDonation(postUserID) {
+    setLoading(true);
+    const options = {
+      key: "rzp_test_vs55RW4qfRA2ST",
+      amount: donationAmount,
+      currency: "INR",
+      name: "Helpify",
+      description: "",
+      image: "/vite.svg",
+      order_id: await generateOrderId(),
+      handler: async function (response) {
+        setLoading(false);
+        console.log(response);
+        const res = await axios.post(
+          `http://localhost:8080/posts/donate/${postID}`,
+          {
+            amount: donationAmount,
+            userID: postUserID,
+          }
+        );
+
+        showAlert("Payment Successful!", false);
+        setShowDonationModal(false);
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+
+    const rzp1 = new Razorpay(options);
+    rzp1.on("payment.failed", function (response) {
+      setLoading(false);
+      showAlert("Payment Failed: " + response.error.description, true);
+    });
+    rzp1.open();
+    setLoading(false);
+  }
 
   return (
     <div
@@ -292,7 +324,7 @@ export const PostComponent = ({
         }}
       >
         <div>
-          <h1 className="font-medium text-xl mb-5">Edit Profile</h1>
+          <h1 className="font-medium text-xl mb-5">Donate</h1>
           <div className="mb-4">
             <label
               htmlFor="donate"
@@ -315,7 +347,9 @@ export const PostComponent = ({
           <div className="flex justify-end mt-4 gap-2">
             <button
               className="bg-green-700 text-white py-2 px-10 rounded-full hover:bg-green-900 select-none"
-              onClick={handleDonation}
+              onClick={() => {
+                handleDonation(currentUser._id);
+              }}
             >
               Donate
             </button>
@@ -333,8 +367,6 @@ export const PostComponent = ({
 };
 
 function FundRaiserComponent({
-  postID,
-  postUserID,
   donation,
   donationPercentage,
   setShowDonationModal,

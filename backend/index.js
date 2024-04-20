@@ -8,6 +8,7 @@ import { userRouter } from "./routes/Users.js";
 import { postRouter } from "./routes/Post.js";
 import { commentRouter } from "./routes/Comments.js";
 import dotenv from "dotenv";
+import { paymentRouter } from "./routes/Razorpay-route.js";
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/users", userRouter);
 app.use("/posts", postRouter);
 app.use("/comments", commentRouter);
+app.use("/payment", paymentRouter);
 
 mongoose
   .connect(
@@ -47,7 +49,6 @@ mongoose
 app.get("/", (req, res) => {
   res.send("Hello universe!");
 });
-
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Server running at ${PORT}`));
