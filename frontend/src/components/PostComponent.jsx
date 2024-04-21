@@ -37,7 +37,7 @@ export const PostComponent = ({
   const [showCommentComponent, setShowCommentComponent] = useState(false);
   const [showDonationModal, setShowDonationModal] = useState(false);
   const [updatedDonationData, setUpdatedDonationData] = useState(donation);
-  const [donationAmount, setDonationAmount] = useState(100);
+  const [donationAmount, setDonationAmount] = useState(10);
   const [donationPercentage, setDonationPercentage] = useState(
     Math.round((donation.amount / donation.target) * 100)
   );
@@ -103,44 +103,48 @@ export const PostComponent = ({
   }
 
   async function handleDonation(postUserID) {
-    setLoading(true);
-    const options = {
-      key: "rzp_test_vs55RW4qfRA2ST",
-      amount: donationAmount,
-      currency: "INR",
-      name: "Helpify",
-      description: "",
-      image: "/vite.svg",
-      order_id: await generateOrderId(),
-      handler: async function (response) {
+    if (donation >= 10) {
+      setLoading(true);
+      const options = {
+        key: "rzp_test_vs55RW4qfRA2ST",
+        amount: donationAmount,
+        currency: "INR",
+        name: "Helpify",
+        description: "",
+        image: "/vite.svg",
+        order_id: await generateOrderId(),
+        handler: async function (response) {
+          setLoading(false);
+          console.log(response);
+          const res = await axios.post(
+            `http://localhost:8080/posts/donate/${postID}`,
+            {
+              amount: donationAmount,
+              userID: postUserID,
+            }
+          );
+
+          showAlert("Payment Successful!", false);
+          setShowDonationModal(false);
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+
+      const rzp1 = new Razorpay(options);
+      rzp1.on("payment.failed", function (response) {
         setLoading(false);
-        console.log(response);
-        const res = await axios.post(
-          `http://localhost:8080/posts/donate/${postID}`,
-          {
-            amount: donationAmount,
-            userID: postUserID,
-          }
-        );
-
-        showAlert("Payment Successful!", false);
-        setShowDonationModal(false);
-      },
-      notes: {
-        address: "Razorpay Corporate Office",
-      },
-      theme: {
-        color: "#3399cc",
-      },
-    };
-
-    const rzp1 = new Razorpay(options);
-    rzp1.on("payment.failed", function (response) {
+        showAlert("Payment Failed: " + response.error.description, true);
+      });
+      rzp1.open();
       setLoading(false);
-      showAlert("Payment Failed: " + response.error.description, true);
-    });
-    rzp1.open();
-    setLoading(false);
+    } else {
+      showAlert("Min. Donation is ₹10", true);
+    }
   }
 
   return (
@@ -330,7 +334,7 @@ export const PostComponent = ({
               htmlFor="donate"
               className="block text-black font-medium mb-2"
             >
-              Donate (Min Donation ₹100/-)
+              Donate (Min Donation ₹10/-)
             </label>
             <input
               type="number"
@@ -375,7 +379,9 @@ function FundRaiserComponent({
     <div className="p-5 flex items-center gap-10">
       <div className="w-full">
         <div className="flex justify-between mb-2">
-          <p className="font-medium text-gray-700 text-lg">₹100</p>
+          <p className="font-medium text-gray-700 text-lg">
+            ₹{donation.amount}
+          </p>
           <p className="font-bold text-green-500 text-lg">₹{donation.target}</p>
         </div>
         <LinearProgress
@@ -383,7 +389,6 @@ function FundRaiserComponent({
           value={donationPercentage && donationPercentage}
           determinate
         />
-        Raise Amount:- {donation.amount}
       </div>
       <button
         type="button"
