@@ -15,6 +15,7 @@ import Modal from "../components/Modal";
 import { PostComponent } from "../components/PostComponent";
 import ChatUI from "../components/ChatUI";
 import { Skeleton } from "@mui/material";
+import PostsList from "../components/PostsList";
 function Home() {
   const {
     isLoading,
@@ -57,7 +58,7 @@ function Home() {
               </button>
             </div>
           </div>
-          <div>
+          {/* <div>
             {posts && posts.length > 0 ? (
               posts
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -95,7 +96,8 @@ function Home() {
                 </h1>
               </div>
             )}
-          </div>
+          </div> */}
+          <PostsList posts={posts} usersList={usersList} />
         </div>
 
         <div className="flex flex-col gap-2 h-[500px] col-span-1 mt-10 sm:mt-10 lg:mt-0 md:sticky md:top-[85px]">
