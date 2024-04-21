@@ -4,8 +4,9 @@ import { PostComponent } from "./PostComponent";
 import { Context } from "../context/ContextProvider";
 import axios from "axios";
 
-function PostsList({ posts, usersList }) {
-  const { isLoading, setLoading, showAlert } = useContext(Context);
+function PostsList({ usersList }) {
+  const { isLoading, setLoading, showAlert, posts, setPosts } =
+    useContext(Context);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [donationAmount, setDonationAmount] = useState(10);
   const [donationData, setDonationData] = useState({});
@@ -32,7 +33,7 @@ function PostsList({ posts, usersList }) {
         order_id: await generateOrderId(),
         handler: async function (response) {
           setLoading(false);
-          console.log(response);
+
           const res = await axios.post(
             `http://localhost:8080/posts/donate/${postID}`,
             {
@@ -41,6 +42,14 @@ function PostsList({ posts, usersList }) {
             }
           );
 
+          if (!res.error) {
+            const newPosts = [...posts];
+            const index = newPosts.findIndex((post) => post._id == postID);
+            newPosts[index].donation = res.data.response.donation;
+
+            setPosts(newPosts);
+          }
+          console.log(res);
           showAlert("Payment Successful!", false);
           setIsModalOpen(false);
         },
