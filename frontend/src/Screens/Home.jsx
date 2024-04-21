@@ -14,6 +14,7 @@ import { Context } from "../context/ContextProvider";
 import Modal from "../components/Modal";
 import { PostComponent } from "../components/PostComponent";
 import ChatUI from "../components/ChatUI";
+import { Skeleton } from "@mui/material";
 function Home() {
   const {
     isLoading,
@@ -57,24 +58,6 @@ function Home() {
             </div>
           </div>
           <div>
-            {/* <PostComponent
-              postType="Fund Raiser"
-              postID={1}
-              // currentUser={currentUser}
-              title={""}
-              content={"Fund Raiser Content (Testing post)"}
-              likes={[1, 2, 3]}
-              createdAt={"post.createdAt"}
-            />
-            <PostComponent
-              postType="Lost & Found"
-              postID={2}
-              // currentUser={currentUser}
-              title={""}
-              content={"Lost and Found Content (Testing post)"}
-              likes={[1, 2, 3]}
-              createdAt={"post.createdAt"}
-            /> */}
             {posts && posts.length > 0 ? (
               posts
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
