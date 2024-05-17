@@ -2,6 +2,8 @@ import { UserModel } from "../models/User_model.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import nodemailer from 'nodemailer';
+import crypto from 'crypto';
 import { LocationModel } from "../models/Location_model.js";
 dotenv.config();
 
@@ -115,3 +117,72 @@ export const editUser = async (req, res) => {
     res.sendStatus(400).send(e);
   }
 };
+
+const otpStorage = {};
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "noreply2601@gmail.com",
+    pass: process.env.EMAIL_PWD,
+  },
+});
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const User = await UserModel.findOne({ email });
+
+    if (!User) {
+      return res.json({ error: true, message:"User doesn't exist" });
+    }
+      const otp = crypto.randomInt(100000, 999999).toString();
+
+      otpStorage[email] = {
+        otp,
+        expiresAt: Date.now() + 60 * 60 * 1000,
+      };
+
+      const mailOptions = {
+        from: "noreply2601@gmail.com",
+        to: email,
+        subject: "OTP for password reset",
+        text: `Your OTP for password reset is: ${otp}`,
+      };
+      await transporter.sendMail(mailOptions);
+      res.status(200).send("OTP sent successfully");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Failed to send OTP");
+  }
+}
+
+export const verifyOtp = (req, res) => {
+  const { email, otp } = req.body;
+
+  const storedOtp = otpStorage[email];
+  if (!storedOtp || storedOtp.otp !== otp || storedOtp.expiresAt < Date.now()) {
+    return res.status(400).send("Invalid or expired OTP");
+  }
+
+  res.status(200).send("OTP verified");
+}
+
+export const resetPassword = async (req, res) => {
+  try{
+    const { email, newPassword } = req.body;
+    const User = await UserModel.findOne({email});
+    const samePwd = await bcrypt.compare(newPassword, User.password);
+    if(samePwd){
+      return res.json({error:true, message: "Cannot use the same password!"})
+    }
+    const hashPWD = await bcrypt.hash(newPassword, 10);
+    User.password = hashPWD;
+    await User.save();
+    console.log(`Reset password for ${email} to ${newPassword}`);
+    res.status(200).json({error:false, message: "Password changed"});
+  }catch(e){
+    console.log(e);
+  }
+
+}

@@ -214,7 +214,8 @@ function CreatePostModal({
           },
         }
       );
-
+      console.log(res)
+      console.log(postImage)
       if (!res.data.error) {
         setPosts((prevPosts) => [...prevPosts, res.data.response]);
       }
@@ -379,26 +380,6 @@ function CreatePostModal({
         ) : (
           <></>
         )}
-        {/* Post Type Dropdown */}
-        {/* <div className="flex gap-1 items-center mb-5">
-          <div className="relative w-full">
-            <select
-              name="postType"
-              id="postType"
-              value={postType}
-              onChange={(e) => setPostType(e.target.value)}
-              className="appearance-none w-full bg-gray-100 rounded-xl px-4 py-2 pr-8 focus:outline-none"
-            >
-              <option value="">Select Post Type</option>
-              <option value="Announcement">Announcement</option>
-              <option value="Fund Raiser">Fund Raiser</option>
-              <option value="Lost & Found">Lost & Found</option>
-            </select>
-            <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-              <ChevronDownIcon size={"h-5 w-5"} color={"text-gray-500"} />
-            </div>
-          </div>
-        </div> */}
         {/* Post Body */}
         <textarea
           name="postContent"
