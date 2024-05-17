@@ -28,7 +28,7 @@ function App() {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/geo" element={<Geolocation />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/profile/:profileID" element={<OtherProfile/>}/>
+            <Route path="/profile/:profileID" element={<OtherProfile />} />
           </Routes>
         </ContentArea>
         <Footer />

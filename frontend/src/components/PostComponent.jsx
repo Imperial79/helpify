@@ -18,8 +18,6 @@ import {
 } from "./Icons";
 import axios from "axios";
 import { CommentComponent } from "./CommentComponent";
-import Modal from "./Modal";
-// import Razorpay from "razorpay";
 
 export const PostComponent = ({
   postID,
@@ -30,14 +28,14 @@ export const PostComponent = ({
   image,
   postType,
   donation,
-  setLoading,
+  openDonationModal,
 }) => {
   const { userID, setPosts, posts, showAlert } = useContext(Context);
   const [showPostMenu, setShowPostMenu] = useState(false);
   const [showCommentComponent, setShowCommentComponent] = useState(false);
   const [showDonationModal, setShowDonationModal] = useState(false);
   const [updatedDonationData, setUpdatedDonationData] = useState(donation);
-  const [donationAmount, setDonationAmount] = useState(100);
+  const [donationAmount, setDonationAmount] = useState(10);
   const [donationPercentage, setDonationPercentage] = useState(
     Math.round((donation.amount / donation.target) * 100)
   );
@@ -94,54 +92,6 @@ export const PostComponent = ({
     return `${day}-${month}-${year} ${hours}:${minutes}`;
   }
   const postTime = formatDateTime(createdAt);
-
-  async function generateOrderId() {
-    const res = await axios.post("http://localhost:8080/payment/create-order", {
-      amount: donationAmount,
-    });
-    return res.data.response.id;
-  }
-
-  async function handleDonation(postUserID) {
-    setLoading(true);
-    const options = {
-      key: "rzp_test_vs55RW4qfRA2ST",
-      amount: donationAmount,
-      currency: "INR",
-      name: "Helpify",
-      description: "",
-      image: "/vite.svg",
-      order_id: await generateOrderId(),
-      handler: async function (response) {
-        setLoading(false);
-        console.log(response);
-        const res = await axios.post(
-          `http://localhost:8080/posts/donate/${postID}`,
-          {
-            amount: donationAmount,
-            userID: postUserID,
-          }
-        );
-
-        showAlert("Payment Successful!", false);
-        setShowDonationModal(false);
-      },
-      notes: {
-        address: "Razorpay Corporate Office",
-      },
-      theme: {
-        color: "#3399cc",
-      },
-    };
-
-    const rzp1 = new Razorpay(options);
-    rzp1.on("payment.failed", function (response) {
-      setLoading(false);
-      showAlert("Payment Failed: " + response.error.description, true);
-    });
-    rzp1.open();
-    setLoading(false);
-  }
 
   return (
     <div
@@ -239,7 +189,7 @@ export const PostComponent = ({
           postUserID={currentUser._id}
           donation={donation}
           donationPercentage={donationPercentage}
-          setShowDonationModal={setShowDonationModal}
+          openDonationModal={openDonationModal}
         />
       ) : (
         <></>
@@ -310,72 +260,27 @@ export const PostComponent = ({
         </div>
       </div>
 
-      {/* Comment Section */}
       {showCommentComponent && (
         <CommentComponent postID={postID} userID={userID} />
       )}
-
-      {/* END POST ACTION */}
-
-      <Modal
-        isOpen={showDonationModal}
-        toggleModal={() => {
-          setShowDonationModal(!showDonationModal);
-        }}
-      >
-        <div>
-          <h1 className="font-medium text-xl mb-5">Donate</h1>
-          <div className="mb-4">
-            <label
-              htmlFor="donate"
-              className="block text-black font-medium mb-2"
-            >
-              Donate (Min Donation ₹100/-)
-            </label>
-            <input
-              type="number"
-              id="donate"
-              name="donate"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              min="100"
-              value={donationAmount}
-              onChange={(e) => setDonationAmount(e.target.value)}
-              required
-            />
-          </div>
-          {/* Save and Cancel Button */}
-          <div className="flex justify-end mt-4 gap-2">
-            <button
-              className="bg-green-700 text-white py-2 px-10 rounded-full hover:bg-green-900 select-none"
-              onClick={() => {
-                handleDonation(currentUser._id);
-              }}
-            >
-              Donate
-            </button>
-            <button
-              className="bg-black text-white py-2 px-4 rounded-full hover:bg-gray-700 select-none"
-              onClick={() => setShowDonationModal(false)}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 };
 
 function FundRaiserComponent({
   donation,
+  postUserID,
+  postID,
   donationPercentage,
-  setShowDonationModal,
+  openDonationModal,
 }) {
   return (
     <div className="p-5 flex items-center gap-10">
       <div className="w-full">
         <div className="flex justify-between mb-2">
-          <p className="font-medium text-gray-700 text-lg">₹100</p>
+          <p className="font-medium text-gray-700 text-lg">
+            ₹{donation.amount}
+          </p>
           <p className="font-bold text-green-500 text-lg">₹{donation.target}</p>
         </div>
         <LinearProgress
@@ -383,12 +288,16 @@ function FundRaiserComponent({
           value={donationPercentage && donationPercentage}
           determinate
         />
-        Raise Amount:- {donation.amount}
       </div>
       <button
         type="button"
         className="kButton"
-        onClick={() => setShowDonationModal(true)}
+        onClick={() => {
+          openDonationModal({
+            postID: postID,
+            postUserID: postUserID,
+          });
+        }}
         disabled={
           donationPercentage && donationPercentage === 100 ? true : false
         }
