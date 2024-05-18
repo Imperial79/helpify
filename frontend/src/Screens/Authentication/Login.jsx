@@ -14,7 +14,7 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setshowPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [showforgotPwdModal,setShowforgotPwdModal] = useState(false);
+  const [showforgotPwdModal, setShowforgotPwdModal] = useState(false);
   const navigate = useNavigate();
   const [_, setCookies] = useCookies(["token"]);
   if (userID) {
@@ -54,14 +54,16 @@ export const Login = () => {
           <p className="mt-2 text-gray-500 md:text-xl text-sm mb-5">
             Enter your login credentials to get started
           </p>
-          <Modal
-          isOpen={showforgotPwdModal}
-          toggleModal={() => {
-            setShowforgotPwdModal(!showforgotPwdModal);
-          }}
-        >
-          <ForgotPassword setShowforgotPwdModal={setShowforgotPwdModal}/>
-        </Modal>
+          <div>
+            <Modal
+              isOpen={showforgotPwdModal}
+              toggleModal={() => {
+                setShowforgotPwdModal(!showforgotPwdModal);
+              }}
+            >
+              <ForgotPassword setShowforgotPwdModal={setShowforgotPwdModal} />
+            </Modal>
+          </div>
           <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-5">
             <div>
               <label htmlFor="email" className="block font-semibold mb-1">
@@ -146,7 +148,7 @@ export const Login = () => {
               <button
                 type="button"
                 className="kTextButton"
-                onClick={()=>setShowforgotPwdModal(true)}
+                onClick={() => setShowforgotPwdModal(true)}
               >
                 Forgot Password?
               </button>
