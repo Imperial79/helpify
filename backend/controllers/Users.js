@@ -146,7 +146,7 @@ export const forgotPassword = async (req, res) => {
       const mailOptions = {
         from: "noreply2601@gmail.com",
         to: email,
-        subject: "OTP for password reset",
+        subject: "Helpify:OTP for password reset",
         text: `Your OTP for password reset is: ${otp}`,
       };
       await transporter.sendMail(mailOptions);
@@ -154,6 +154,24 @@ export const forgotPassword = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send("Failed to send OTP");
+  }
+}
+
+export const sendFeedback = async (req, res) => {
+  try {
+    const { email,feedback } = req.body;
+
+      const mailOptions = {
+        from: "noreply2601@gmail.com",
+        to: "soumiksilco@gmail.com",
+        subject: "Feedback on Helpify!",
+        text: `Email: ${email}\nFeedback: ${feedback}`,
+      };
+      await transporter.sendMail(mailOptions);
+      res.json({error:false, message:"Feedback sent!"});
+  } catch (err) {
+    console.error(err);
+    res.json({error:true, message:"Could not send Feedback"});
   }
 }
 

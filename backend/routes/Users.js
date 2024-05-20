@@ -1,5 +1,5 @@
 import express from 'express';
-import { Login, Profile, Register, editUser,forgotPassword,resetPassword,userData, verifyEmail, verifyOtp } from '../controllers/Users.js';
+import { Login, Profile, Register, editUser,forgotPassword,resetPassword,sendFeedback,userData, verifyEmail, verifyOtp } from '../controllers/Users.js';
 import multer from 'multer';
 
 import path from 'path';
@@ -14,7 +14,7 @@ router.post("/login", Login);
 
 router.post("/forgot-password", forgotPassword);
 router.post("/verifyEmail",verifyEmail);
-
+router.post("/send-feedback",sendFeedback);
 router.post("/verify-otp", verifyOtp);
 
 router.post("/reset-password", resetPassword);
