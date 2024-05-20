@@ -6,7 +6,7 @@ function ContactUs() {
       <form>
         <div className="pageTitle">Contact Us</div>
         <p className="mt-2 text-gray-500 md:text-md text-sm">
-          You can provide your valuable feedback so that we can imporve our
+          You can provide your valuable feedback so that we can improve our
           website and make it more optimised for users
         </p>
         <div className="mt-5 flex flex-col gap-5">
