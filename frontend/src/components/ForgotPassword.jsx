@@ -195,6 +195,8 @@ const ForgotPassword = ({ setShowforgotPwdModal }) => {
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-10 rounded-full select-none"
               onClick={handleOtpSubmit}
+              disabled={otp.length === 0}
+
             >
               Verify OTP
             </button>
@@ -238,6 +240,7 @@ const ForgotPassword = ({ setShowforgotPwdModal }) => {
             </div>
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-10 rounded-full select-none"
+              disabled={newPassword.length===0}
               onClick={handleResetPassword}
             >
               Reset Password

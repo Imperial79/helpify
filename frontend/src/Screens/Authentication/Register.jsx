@@ -17,6 +17,9 @@ export const Register = () => {
   const [place_id, setPlaceID] = useState("");
   const [addressList, setAddressList] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const [showOTPInput, setShowOTPInput] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [otp, setOtp] = useState("");
   const navigate = useNavigate();
   if (userID) {
     navigate("/");
@@ -105,7 +108,47 @@ export const Register = () => {
       }
     }
   };
+  const handleVerifyEmail = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.post("http://localhost:8080/users/verifyEmail", {
+        email,
+      });
 
+      if (res.data.error) {
+        showAlert(res.data.message, true);
+      } else {
+        showAlert("OTP sent to your email.", false);
+        setShowOTPInput(true);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOTPVerification = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        "http://localhost:8080/users/verify-otp",
+        { email, otp }
+      );
+      if (!response.data.error) {
+        showAlert("Email verified successfully.", false);
+        setShowOTPInput(false);
+        setOtp("");
+        setEmailVerified(true);
+      } else {
+        showAlert(response.data.message, true);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -123,6 +166,7 @@ export const Register = () => {
         });
 
         if (!res.data.error) {
+          await handleVerifyEmail();
           navigate("/login", { replace: true });
         }
 
@@ -165,16 +209,51 @@ export const Register = () => {
               <label htmlFor="email" className="block font-semibold mb-1">
                 E-mail
               </label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="textfield"
-                placeholder="Eg. johndoe@mail.com"
-                required
-              />
+              <div className="flex items-center">
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="textfield w-3/4 p-1 mr-2" // Reduced width and added right margin
+                  placeholder="Eg. johndoe@mail.com"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={handleVerifyEmail}
+                  className="kTextButton"
+                >
+                  Verify
+                </button>
+              </div>
             </div>
+
+            {showOTPInput && (
+              <div>
+                <label htmlFor="otp" className="block font-semibold mb-1">
+                  OTP
+                </label>
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  id="otp"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  className="textfield w-3/4 p-1 mr-2"
+                  placeholder="Enter OTP"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={handleOTPVerification}
+                  className="kTextButton"
+                >
+                  Verify OTP
+                </button>
+                </div>
+              </div>
+            )}
             <div>
               <label htmlFor="password" className="block font-semibold mb-1">
                 Password
@@ -239,7 +318,9 @@ export const Register = () => {
             >
               Get My Location
             </button>
-            <button type="submit" className="kButton w-full">
+            <button type="submit" className="kButton w-full"
+            disabled={!emailVerified}
+            >
               Create Account
             </button>
 

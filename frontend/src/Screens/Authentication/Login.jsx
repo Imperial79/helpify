@@ -50,7 +50,7 @@ export const Login = () => {
           <img src="/register-hero.svg" alt="" />
         </div>
         <div className="md:p-2">
-          <div className="pageTitle">Welcome back</div>
+          <div className="pageTitle">Welcome to Helpify</div>
           <p className="mt-2 text-gray-500 md:text-xl text-sm mb-5">
             Enter your login credentials to get started
           </p>

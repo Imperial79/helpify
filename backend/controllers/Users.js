@@ -157,6 +157,35 @@ export const forgotPassword = async (req, res) => {
   }
 }
 
+export const verifyEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const User = await UserModel.findOne({ email });
+    if(User){
+      return res.json({ error: true, message:"User already exists!" });
+    }
+    const otp = crypto.randomInt(100000, 999999).toString();
+
+      otpStorage[email] = {
+        otp,
+        expiresAt: Date.now() + 60 * 60 * 1000,
+      };
+
+      const mailOptions = {
+        from: "noreply2601@gmail.com",
+        to: email,
+        subject: "Helpify: OTP for email verification",
+        text: `Your OTP for email verification is: ${otp}`,
+      };
+      await transporter.sendMail(mailOptions);
+      res.status(200).send("OTP sent successfully");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Failed to send OTP");
+  }
+}
+
 export const verifyOtp = (req, res) => {
   const { email, otp } = req.body;
 
@@ -167,7 +196,7 @@ export const verifyOtp = (req, res) => {
     return res.json({error:true, message:"Expired OTP"});
   }
 
-  res.status(200).send("OTP verified");
+  res.json({error: false, message:"OTP Verified"});
 }
 
 export const resetPassword = async (req, res) => {
