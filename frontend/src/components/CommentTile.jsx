@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { SendIcon } from "./Icons";
 import axios from "axios";
+import { Context } from "../context/ContextProvider";
 
 function CommentTile({ commentData, replies, userID, postID }) {
   const [newReply, setNewReply] = useState("");
   const [likeComment, setLikeComment] = useState(false);
   const [incomingReplies, setIncomingReplies] = useState(replies);
   //   --------------------------------------------------------------
+  const { usersList } = useContext(Context);
   const handleReplySubmit = async (e, parentCommentId) => {
     e.preventDefault();
     try {
@@ -41,11 +43,31 @@ function CommentTile({ commentData, replies, userID, postID }) {
       console.error("Error Liking Comment:-", e);
     }
   };
+  function formatDateTime(timeString) {
+    const date = new Date(timeString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    return `${day}-${month}-${year} ${hours}:${minutes}`;
+  }
   return (
     <div className="flex space-x-2">
       <div className="h-10 w-10 rounded-full overflow-hidden flex-shrink-0">
         <img
-          src="https://source.unsplash.com/random"
+          src={
+            usersList &&
+            usersList.filter((user) => user._id === commentData.user_id)[0]
+              .avatar
+              ? `http://localhost:8080/users-images/${
+                  usersList.filter(
+                    (user) => user._id === commentData.user_id
+                  )[0].avatar
+                }`
+              : "/no-image.jpg"
+          }
           alt="Profile Picture"
           className="rounded-full w-full h-full object-cover"
         />
@@ -62,10 +84,10 @@ function CommentTile({ commentData, replies, userID, postID }) {
           >
             {likeComment ? "Unlike" : "Like"} ({commentData.likes.length})
           </span>
-          <span>.</span>
+          <span> </span>
           <span className="font-semibold cursor-pointer">Reply</span>
-          <span>.</span>
-          10m
+          <span> </span>
+          {formatDateTime(commentData.createdAt)}
         </div>
         {/* Replies */}
         {incomingReplies.length > 0 &&
@@ -76,7 +98,17 @@ function CommentTile({ commentData, replies, userID, postID }) {
                 <div className="h-8 w-8 rounded-full overflow-hidden flex-shrink-0">
                   {" "}
                   <img
-                    src="https://source.unsplash.com/random"
+                    src={
+                      usersList &&
+                      usersList.filter((user) => user._id === reply.user_id)[0]
+                        .avatar
+                        ? `http://localhost:8080/users-images/${
+                            usersList.filter(
+                              (user) => user._id === reply.user_id
+                            )[0].avatar
+                          }`
+                        : "/no-image.jpg"
+                    }
                     alt="Profile Picture"
                     className="rounded-full w-full h-full object-cover"
                   />
@@ -88,10 +120,10 @@ function CommentTile({ commentData, replies, userID, postID }) {
                   </div>
                   <div className="p-2 text-xs text-gray-500 dark:text-dark-txt">
                     <span className="font-semibold cursor-pointer">Like</span>
-                    <span>.</span>
+                    <span> </span>
                     <span className="font-semibold cursor-pointer">Reply</span>
-                    <span>.</span>
-                    10m
+                    <span> </span>
+                    {formatDateTime(reply.createdAt)}
                   </div>
                   {/* Nested Replies
                     {reply.replies.length > 0 && (
@@ -110,8 +142,11 @@ function CommentTile({ commentData, replies, userID, postID }) {
             );
           })}
 
-        <div className="ml-8">
-          <form onSubmit={(e) => handleReplySubmit(e, commentData._id)}>
+        <div className="ml-8 flex">
+          <form
+            onSubmit={(e) => handleReplySubmit(e, commentData._id)}
+            className="flex flex-grow"
+          >
             <input
               type="text"
               placeholder="Reply..."

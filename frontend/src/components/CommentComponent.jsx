@@ -1,13 +1,15 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { SendIcon } from "./Icons";
 import CommentTile from "./CommentTile";
+import { Context } from "../context/ContextProvider";
 
 export const CommentComponent = ({ postID, userID }) => {
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState([]);
   const [newReply, setNewReply] = useState("");
   const [likeComment, setLikeComment] = useState(false);
+  const { profileUser } = useContext(Context);
   const handlePostComment = async (e) => {
     e.preventDefault();
     try {
@@ -67,10 +69,14 @@ export const CommentComponent = ({ postID, userID }) => {
         <div className="flex space-x-2">
           <div className="h-10 w-10 rounded-full overflow-hidden flex-shrink-0">
             <img
-              src="https://source.unsplash.com/random"
-              alt="Profile Picture"
-              className="rounded-full w-full h-full object-cover"
-            />
+              src={
+                profileUser.avatar
+                  ? `http://localhost:8080/users-images/${profileUser.avatar}`
+                  : "/no-image.jpg"
+              }
+              className="object-cover h-full w-full"
+              alt={profileUser.name}
+            /> 
           </div>
           <div className="flex-1 flex bg-gray-100 dark:bg-dark-third rounded-full items-center">
             <form onSubmit={handlePostComment} className="flex w-full">

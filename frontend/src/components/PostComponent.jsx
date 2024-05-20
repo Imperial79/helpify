@@ -84,7 +84,7 @@ export const PostComponent = ({
   function formatDateTime(timeString) {
     const date = new Date(timeString);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Add leading zero for single-digit months
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
     const hours = String(date.getHours()).padStart(2, "0");
     const minutes = String(date.getMinutes()).padStart(2, "0");
@@ -227,7 +227,7 @@ export const PostComponent = ({
 
       <div className="py-2 px-4">
         <div>
-          <div className="flex space-x-2">
+          <div className="flex justify-evenly">
             <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
               <span
                 className="text-sm font-semibold flex gap-2"
@@ -252,16 +252,16 @@ export const PostComponent = ({
               )}
               <span className="text-sm font-semibold">Comment</span>
             </div>
-            <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
+            {/* <div className="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
               <ShareIcon />
               <span className="text-sm font-semibold">Share</span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
 
       {showCommentComponent && (
-        <CommentComponent postID={postID} userID={userID} />
+        <CommentComponent postID={postID} userID={userID}/>
       )}
     </div>
   );
