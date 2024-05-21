@@ -7,10 +7,14 @@ import { Context } from "../../context/ContextProvider";
 
 export const Register = () => {
   const { showAlert, userID } = useContext(Context);
-
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordValid, setPasswordValid] = useState(false);
+  const [showPasswordRequirements, setShowPasswordRequirements] =
+    useState(false);
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [city, setCity] = useState("");
@@ -24,6 +28,17 @@ export const Register = () => {
   if (userID) {
     navigate("/");
   }
+  const handlePasswordChange = (e) => {
+    const passwordValue = e.target.value;
+    setPassword(passwordValue);
+    setPasswordValid(passwordRegex.test(passwordValue));
+  };
+  const showPasswordRequirementsPopup = () => {
+    setShowPasswordRequirements(true);
+    setTimeout(() => {
+      setShowPasswordRequirements(false);
+    }, 3000);
+  };
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
       positionOptions: {
@@ -234,23 +249,23 @@ export const Register = () => {
                 <label htmlFor="otp" className="block font-semibold mb-1">
                   OTP
                 </label>
-              <div className="flex items-center">
-                <input
-                  type="text"
-                  id="otp"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  className="textfield w-3/4 p-1 mr-2"
-                  placeholder="Enter OTP"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={handleOTPVerification}
-                  className="kTextButton"
-                >
-                  Verify OTP
-                </button>
+                <div className="flex items-center">
+                  <input
+                    type="text"
+                    id="otp"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    className="textfield w-3/4 p-1 mr-2"
+                    placeholder="Enter OTP"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={handleOTPVerification}
+                    className="kTextButton"
+                  >
+                    Verify OTP
+                  </button>
                 </div>
               </div>
             )}
@@ -262,11 +277,24 @@ export const Register = () => {
                 type="password"
                 id="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="textfield"
+                onChange={handlePasswordChange}
+                onFocus={showPasswordRequirementsPopup}
+                className={`textfield ${
+                  passwordValid
+                    ? "border-solid border-2 border-green-600"
+                    : "border-solid border-2 border-red-600"
+                }`}
                 placeholder="Your password here ..."
                 required
               />
+              <div
+                className={`password-requirements-popup ${
+                  showPasswordRequirements ? "show" : ""
+                }`}
+              >
+                At least 8 characters, one uppercase letter, one lowercase
+                letter, one digit, and one special character
+              </div>
             </div>
             {/* list of locality */}
             {/* {addressList &&
@@ -318,8 +346,10 @@ export const Register = () => {
             >
               Get My Location
             </button>
-            <button type="submit" className="kButton w-full"
-            disabled={!emailVerified}
+            <button
+              type="submit"
+              className="kButton w-full"
+              disabled={!emailVerified || !passwordValid}
             >
               Create Account
             </button>
