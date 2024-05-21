@@ -109,7 +109,7 @@ export const PostComponent = ({
                   currentUser &&
                   (currentUser.avatar
                     ? `http://localhost:8080/users-images/${currentUser.avatar}`
-                    : "https://source.unsplash.com/random")
+                    : "/no-image.jpg")
                 }
                 className="h-full w-full object-cover"
                 alt={currentUser && currentUser.name}
