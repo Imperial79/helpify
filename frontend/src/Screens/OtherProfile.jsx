@@ -55,7 +55,7 @@ function OtherProfile() {
                     src={
                       otherProfile.avatar
                         ? `http://localhost:8080/users-images/${otherProfile.avatar}`
-                        : "https://source.unsplash.com/random"
+                        : "http://localhost:8080/users-images/no-image.jpg"
                     }
                     alt={otherProfile.name}
                     className="h-full w-full object-cover"
@@ -111,22 +111,22 @@ export default OtherProfile;
 function PostCard({ postData }) {
   return (
     <div className="bg-white border rounded-xl">
-      <div className="w-full h-[200px] bg-gray-100 mb-2">
-        <img
-          src={
-            postData.image !== ""
-              ? `http://localhost:8080/post-images/${postData.image}`
-              : "https://source.unsplash.com/random"
-          }
-          alt="post-index"
-          className="object-contain h-full w-full"
-        />
-      </div>
+      {postData.image !== "" ? (
+        <div className="w-full rounded-t-xl bg-gray-100 mb-2 overflow-hidden">
+          <img
+            src={`http://localhost:8080/post-images/${postData.image}`}
+            alt="post-index"
+            className="object-contain h-full w-full"
+          />
+        </div>
+      ) : (
+        <></>
+      )}
 
       <div className="p-2">
         <h2 className="font-bold text-gray-700 mb-2">{postData.title}</h2>
 
-        <p className="line-clamp-3">{postData.content}</p>
+        <p className="line-clamp-5">{postData.content}</p>
 
         <div className="flex items-center gap-5 mt-2">
           <button className="flex items-center mt-2 gap-2 hover:bg-gray-200 rounded-full px-2">

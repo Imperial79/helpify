@@ -13,8 +13,7 @@ export const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordValid, setPasswordValid] = useState(false);
-  const [showPasswordRequirements, setShowPasswordRequirements] =
-    useState(false);
+  const [passwordInputFocused, setPasswordInputFocused] = useState(false);
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [city, setCity] = useState("");
@@ -32,12 +31,12 @@ export const Register = () => {
     const passwordValue = e.target.value;
     setPassword(passwordValue);
     setPasswordValid(passwordRegex.test(passwordValue));
-  };
-  const showPasswordRequirementsPopup = () => {
-    setShowPasswordRequirements(true);
-    setTimeout(() => {
-      setShowPasswordRequirements(false);
-    }, 3000);
+
+    if (e.type === "focus") {
+      setPasswordInputFocused(true);
+    } else if (e.type === "blur") {
+      setPasswordInputFocused(false);
+    }
   };
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
@@ -278,23 +277,23 @@ export const Register = () => {
                 id="password"
                 value={password}
                 onChange={handlePasswordChange}
-                onFocus={showPasswordRequirementsPopup}
+                onFocus={(e) => handlePasswordChange(e)}
+                onBlur={(e) => handlePasswordChange(e)}
                 className={`textfield ${
-                  passwordValid
-                    ? "border-solid border-2 border-green-600"
-                    : "border-solid border-2 border-red-600"
-                }`}
+    password.length !==0 &&
+    (passwordValid
+      ? "border-solid border-2 border-green-600"
+      : "border-solid border-2 border-red-600")
+  }`}
                 placeholder="Your password here ..."
                 required
               />
-              <div
-                className={`password-requirements-popup ${
-                  showPasswordRequirements ? "show" : ""
-                }`}
-              >
-                At least 8 characters, one uppercase letter, one lowercase
-                letter, one digit, and one special character
-              </div>
+              {passwordInputFocused && (
+                <div className="password-requirements">
+                  At least 8 characters, one uppercase letter, one lowercase
+                  letter, one digit, and one special character
+                </div>
+              )}
             </div>
             {/* list of locality */}
             {/* {addressList &&

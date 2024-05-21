@@ -40,20 +40,8 @@
 .circleAvatar {
   @apply h-10 w-10 rounded-full overflow-hidden;
 }
-
-.password-requirements-popup {
-  position: absolute;
-  top: 348px;
-  left: 49%;
-  transform: translateX(3%);
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
-  border-radius: 5px;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.password-requirements-popup.show {
-  opacity: 1;
+.password-requirements {
+  color: #666;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
 }

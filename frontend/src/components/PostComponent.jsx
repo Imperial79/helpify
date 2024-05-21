@@ -143,7 +143,7 @@ export const PostComponent = ({
               showPostMenu ? "opacity-100" : "opacity-0 pointer-events-none"
             } absolute shadow-lg py-2 bg-white rounded-lg w-[100px] transition-opacity duration-300 right-1`}
           >
-            <button
+            {/* <button
               onClick={() => {
                 setShowPostMenu(false);
               }}
@@ -152,7 +152,7 @@ export const PostComponent = ({
             >
               <EditIcon size="h-4 w-4" />
               Edit
-            </button>
+            </button> */}
             <button
               type="button"
               className="w-full hover:bg-gray-100 p-2 flex items-center gap-2 text-sm font-medium"

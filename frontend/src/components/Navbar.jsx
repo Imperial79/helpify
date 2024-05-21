@@ -44,6 +44,7 @@ export default function Navbar() {
               <NavLink to="/profile" className="navLink">
                 My Profile
               </NavLink>
+              
               <NavLink to="/about" className="navLink">
                 About Us
               </NavLink>

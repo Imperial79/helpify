@@ -158,7 +158,7 @@ function Profile() {
                     src={
                       profileUser.avatar
                         ? `http://localhost:8080/users-images/${profileUser.avatar}`
-                        : "https://source.unsplash.com/random"
+                        : "no-image.jpg"
                     }
                     alt={profileUser.name}
                     className="h-full w-full object-cover"

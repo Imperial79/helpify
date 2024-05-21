@@ -57,6 +57,7 @@ export const CommentComponent = ({ postID, userID }) => {
                   replies={replyComments(commentData._id)}
                   userID={userID}
                   postID={postID}
+                  setComments={setComments}
                 />
               </div>
             );

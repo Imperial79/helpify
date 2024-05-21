@@ -3,7 +3,7 @@ import { SendIcon } from "./Icons";
 import axios from "axios";
 import { Context } from "../context/ContextProvider";
 
-function CommentTile({ commentData, replies, userID, postID }) {
+function CommentTile({ commentData, replies, userID, postID,setComments }) {
   const [newReply, setNewReply] = useState("");
   const [likeComment, setLikeComment] = useState(false);
   const [incomingReplies, setIncomingReplies] = useState(replies);
