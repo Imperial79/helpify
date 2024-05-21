@@ -184,7 +184,7 @@ function Profile() {
               </div>
             </div>
             {/* Edit Profile Button */}
-            <button
+            {/* <button
               type="button"
               className="border-2 rounded-lg px-5 py-1 text-sm font-medium text-blue-700 hover:border-gray-400 md:w-auto w-full md:mt-0 mt-5"
               onClick={() => {
@@ -192,7 +192,7 @@ function Profile() {
               }}
             >
               Edit Profile
-            </button>
+            </button> */}
           </div>
 
           {/* Create Post Button */}
