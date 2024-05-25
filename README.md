@@ -20,7 +20,7 @@ Helipfy was developed as a College Major Project for MCA degree in Heritage Inst
 ## Technologies Used:
 - Frontend: React JS, Tailwind CSS
 - Backend: Express.js, Node.js, MongoDB Database, Cloud Firestore (Firebase)
-- Geolocation API, Google Maps API
+- Geolocation API, Google Maps API, Nodemailer
 
 ## Installation:
 1. Clone the repository: `git clone https://github.com/Imperial79/helpify.git`
